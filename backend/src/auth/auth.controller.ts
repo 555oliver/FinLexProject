@@ -19,7 +19,7 @@ export class AuthController {
   @Public() @Post('forgot-password') forgotPassword(@Body() dto: ForgotPasswordDto) { return this.authService.forgotPassword(dto); }
   @Public() @Post('reset-password') resetPassword(@Body() dto: ResetPasswordDto) { return this.authService.resetPassword(dto); }
   @Public() @Get('verify-email') async verifyEmail(@Query('token') token: string, @Res() response: Response) {
-    const frontendUrl = this.config.get('FRONTEND_URL', 'http://localhost:4200');
+    const frontendUrl = this.config.get('FRONTEND_URL') ?? this.config.get('URL', 'http://localhost:4200');
     try {
       await this.authService.verifyEmail(token);
       return response.redirect(`${frontendUrl}/portal/login?verification=success`);

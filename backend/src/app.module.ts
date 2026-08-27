@@ -34,7 +34,7 @@ import { MultipleCases1724600000011 } from './database/migrations/1724600000011-
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         type: 'postgres',
-        url: config.getOrThrow<string>('DATABASE_URL'),
+        url: config.get<string>('DATABASE_URL') ?? config.getOrThrow<string>('NETLIFY_DB_URL'),
         entities: [User, UserDocument, PaymentHistory, PaymentMethod, Complaint, CaseRecord],
         synchronize: false,
         migrationsRun: true,

@@ -13,7 +13,7 @@ export class ComplaintsController {
   constructor(private readonly complaints: ComplaintsService) {}
 
   @Post()
-  @UseInterceptors(FileInterceptor('file', { limits: { fileSize: 10 * 1024 * 1024 } }))
+  @UseInterceptors(FileInterceptor('file', { limits: { fileSize: 4 * 1024 * 1024 } }))
   create(@Req() request: Request & { user: AuthUser }, @Body() dto: CreateComplaintDto, @UploadedFile() file?: ComplaintAttachment) {
     return this.complaints.create(request.user.id, dto, file);
   }

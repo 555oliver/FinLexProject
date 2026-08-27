@@ -21,11 +21,11 @@ export class DocumentsController {
 
   @Post()
   @UseInterceptors(FileInterceptor('file', {
-    limits: { fileSize: 10 * 1024 * 1024 },
+    limits: { fileSize: 4 * 1024 * 1024 },
     fileFilter: (_request, file, callback) => callback(null, allowedMimeTypes.has(file.mimetype)),
   }))
   upload(@Req() request: Request & { user: AuthUser }, @UploadedFile() file?: UploadedDocument) {
-    if (!file) throw new BadRequestException('Seleccione una imagen, PDF o documento Word de máximo 10 MB.');
+    if (!file) throw new BadRequestException('Seleccione una imagen, PDF o documento Word de máximo 4 MB.');
     return this.documentsService.create(request.user.id, file);
   }
 }

@@ -24,7 +24,7 @@ export class AuthService {
     const user = await this.users.create(dto);
     const token = randomBytes(32).toString('hex');
     await this.users.setVerificationToken(user.id, this.hashToken(token), new Date(Date.now() + 24 * 60 * 60 * 1000));
-    const apiUrl = this.config.get('API_PUBLIC_URL', 'http://localhost:3000');
+    const apiUrl = this.config.get('API_PUBLIC_URL') ?? this.config.get('URL', 'http://localhost:3000');
     await this.mail.sendVerificationEmail(user.email, user.names, `${apiUrl}/api/auth/verify-email?token=${token}`);
     return {
       message: 'Registro realizado. Revise su correo para activar la cuenta.',
@@ -57,7 +57,7 @@ export class AuthService {
     if (!user) throw new BadRequestException('No fue posible localizar la cuenta.');
     const token = randomBytes(32).toString('hex');
     await this.users.setPasswordResetToken(user.id, this.hashToken(token), new Date(Date.now() + 60 * 60 * 1000));
-    const frontendUrl = this.config.get('FRONTEND_URL', 'http://localhost:4200');
+    const frontendUrl = this.config.get('FRONTEND_URL') ?? this.config.get('URL', 'http://localhost:4200');
     await this.mail.sendPasswordResetEmail(user.email, user.names, `${frontendUrl}/portal/restablecer-clave?token=${token}`);
     return { message: 'Enviamos un enlace a su correo para cambiar la clave.' };
   }
@@ -68,7 +68,7 @@ export class AuthService {
     if (!user || !user.isActive) return { message: genericMessage };
     const token = randomBytes(32).toString('hex');
     await this.users.setPasswordResetToken(user.id, this.hashToken(token), new Date(Date.now() + 60 * 60 * 1000));
-    const frontendUrl = this.config.get('FRONTEND_URL', 'http://localhost:4200');
+    const frontendUrl = this.config.get('FRONTEND_URL') ?? this.config.get('URL', 'http://localhost:4200');
     await this.mail.sendPasswordResetEmail(user.email, user.names, `${frontendUrl}/portal/restablecer-clave?token=${token}`);
     return { message: genericMessage };
   }
