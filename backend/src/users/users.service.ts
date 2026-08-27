@@ -1,7 +1,7 @@
 import { ConflictException, Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { DataSource, Not, Repository } from 'typeorm';
 import { RegisterDto } from '../auth/dto/register.dto';
 import { Role } from './role.enum';

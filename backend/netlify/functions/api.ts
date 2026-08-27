@@ -25,6 +25,15 @@ async function getHandler(): Promise<ServerlessHandler> {
 }
 
 export const handler: Handler = async (event, context) => {
-  const nestHandler = await getHandler();
-  return await nestHandler(event, context) as HandlerResponse;
+  try {
+    const nestHandler = await getHandler();
+    return await nestHandler(event, context) as HandlerResponse;
+  } catch (error) {
+    console.error('No fue posible iniciar la API de FinLex.', error);
+    return {
+      statusCode: 500,
+      headers: { 'content-type': 'application/json; charset=utf-8' },
+      body: JSON.stringify({ message: 'No fue posible iniciar el servicio. Revise los registros de la Function api.' }),
+    };
+  }
 };
