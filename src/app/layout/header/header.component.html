@@ -17,8 +17,8 @@
 <a class="nav-link" routerLink="/legal" routerLinkActive="active">Legal</a>
 </nav>
 <div class="header-actions">
-<button class="btn-gold" style="padding:10px 20px;" routerLink="/portal">Portal Cliente</button>
-<button class="btn-gold btn-gold-solid" style="padding:10px 20px;" routerLink="/contact">Evaluación Privada</button>
+<button class="btn-gold" style="padding:10px 20px;" routerLink="/portal" routerLinkActive="btn-gold-solid">Portal Cliente</button>
+<button class="btn-gold" style="padding:10px 20px;" routerLink="/evaluacion-privada" routerLinkActive="btn-gold-solid" [routerLinkActiveOptions]="{ exact: true }">Evaluación Privada</button>
 </div>
 <button class="mobile-menu-btn" (click)="toggleMenu()">
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
@@ -36,4 +36,5 @@
 <a (click)="closeMenu()" routerLink="/contact">Contacto</a>
 <a (click)="closeMenu()" routerLink="/legal">Legal</a>
 <a (click)="closeMenu()" routerLink="/portal">Portal Cliente</a>
+<a (click)="closeMenu()" routerLink="/evaluacion-privada">Evaluación Privada</a>
 </div>

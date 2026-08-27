@@ -12,6 +12,7 @@ export const routes: Routes = [
   { path: 'testimonials', loadComponent: () => import('./pages/testimonials/testimonials.component').then(m => m.TestimonialsPageComponent) },
   { path: 'contact', loadComponent: () => import('./pages/contact/contact.component').then(m => m.ContactPageComponent) },
   { path: 'legal', loadComponent: () => import('./pages/legal/legal.component').then(m => m.LegalPageComponent) },
+  { path: 'evaluacion-privada', loadComponent: () => import('./pages/private-evaluation/private-evaluation.component').then(m => m.PrivateEvaluationPageComponent) },
   { path: 'portal', pathMatch: 'full', redirectTo: 'portal/login' },
   { path: 'portal/:section', loadComponent: loadPortal },
   { path: '**', redirectTo: 'inicio' },
