@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import type { Handler, HandlerResponse } from '@netlify/functions';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import serverless from 'serverless-http';
+import serverless = require('serverless-http');
 import { AppModule } from '../../src/app.module';
 
 type ServerlessHandler = ReturnType<typeof serverless>;
