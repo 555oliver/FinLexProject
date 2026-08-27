@@ -1,0 +1,32 @@
+import { OnModuleInit } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { DataSource, Repository } from 'typeorm';
+import { RegisterDto } from '../auth/dto/register.dto';
+import { User } from './user.entity';
+import { UpdateFinancialSummaryDto } from './dto/update-financial-summary.dto';
+import { UpdateProfileDto } from './dto/update-profile.dto';
+import { UpdatePaymentSummaryDto } from './dto/update-payment-summary.dto';
+export declare class UsersService implements OnModuleInit {
+    private readonly users;
+    private readonly config;
+    private readonly dataSource;
+    constructor(users: Repository<User>, config: ConfigService, dataSource: DataSource);
+    onModuleInit(): Promise<void>;
+    create(dto: RegisterDto): Promise<User>;
+    findByEmailWithPassword(email: string): Promise<User | null>;
+    findByEmail(email: string): Promise<User | null>;
+    findById(id: string): Promise<User | null>;
+    setVerificationToken(id: string, tokenHash: string, expiresAt: Date): Promise<void>;
+    findByVerificationToken(tokenHash: string): Promise<User | null>;
+    verifyEmail(id: string): Promise<void>;
+    setPasswordResetToken(id: string, tokenHash: string, expiresAt: Date): Promise<void>;
+    findByPasswordResetToken(tokenHash: string): Promise<User | null>;
+    updatePassword(id: string, password: string): Promise<void>;
+    listSafe(): Promise<User[]>;
+    markTermsAccepted(id: string): Promise<void>;
+    updateFinancialSummary(id: string, dto: UpdateFinancialSummaryDto): Promise<User>;
+    updateProfile(id: string, dto: UpdateProfileDto): Promise<User>;
+    updatePaymentSummary(id: string, dto: UpdatePaymentSummaryDto): Promise<User>;
+    private ensureAdminExists;
+    private ensureSecondAdminExists;
+}
