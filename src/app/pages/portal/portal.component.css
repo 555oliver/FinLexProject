@@ -98,6 +98,7 @@ form { display: grid; gap: 20px; }
 .portal-logo { width: 29px; height: 29px; display: inline-grid; place-items: center; border: 1px solid #c9a96e; border-radius: 50%; color: #a0804a; font: 14px var(--font-serif); }
 .portal-identity div { display: grid; line-height: 1.2; }
 .portal-identity small { color: #9ca3af; font-size: 9px; letter-spacing: 1.2px; text-transform: uppercase; }
+.portal-identity small.admin-identity-label { color: #b88937; font-weight: 700; }
 .portal-identity strong { max-width: 210px; overflow: hidden; text-overflow: ellipsis; color: #0a1628; font-size: 13px; font-weight: 600; white-space: nowrap; }
 .portal-navigation { display: flex; align-items: center; gap: 5px; overflow-x: auto; scrollbar-width: thin; }
 .portal-navigation button { min-height: 31px; flex: 0 0 auto; padding: 0 15px; border: 1px solid transparent; border-radius: 2px; background: transparent; color: #465064; font: 500 11px var(--font-sans); letter-spacing: .15px; cursor: pointer; transition: .2s ease; }

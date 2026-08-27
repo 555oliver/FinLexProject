@@ -172,7 +172,12 @@
         <header class="portal-toolbar">
           <div class="portal-identity">
             <span class="portal-logo">F</span>
-            <div><small>Bienvenido</small><strong>{{ auth.currentUser()?.names }}</strong></div>
+            <div>
+              <small [class.admin-identity-label]="auth.currentUser()?.role === 'admin'">
+                {{ auth.currentUser()?.role === 'admin' ? 'Administrador' : 'Bienvenido' }}
+              </small>
+              <strong>{{ auth.currentUser()?.names }}</strong>
+            </div>
           </div>
           <nav class="portal-navigation" aria-label="Navegación del portal">
             @if (auth.currentUser()?.role === 'admin') {
