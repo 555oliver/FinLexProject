@@ -22,8 +22,18 @@ async function getHandler() {
     return cachedHandler;
 }
 const handler = async (event, context) => {
-    const nestHandler = await getHandler();
-    return await nestHandler(event, context);
+    try {
+        const nestHandler = await getHandler();
+        return await nestHandler(event, context);
+    }
+    catch (error) {
+        console.error('No fue posible iniciar la API de FinLex.', error);
+        return {
+            statusCode: 500,
+            headers: { 'content-type': 'application/json; charset=utf-8' },
+            body: JSON.stringify({ message: 'No fue posible iniciar el servicio. Revise los registros de la Function api.' }),
+        };
+    }
 };
 exports.handler = handler;
 //# sourceMappingURL=api.js.map
