@@ -49,7 +49,7 @@ exports.AppModule = AppModule = __decorate([
                     url: config.get('DATABASE_URL') ?? config.getOrThrow('NETLIFY_DB_URL'),
                     entities: [user_entity_1.User, user_document_entity_1.UserDocument, payment_history_entity_1.PaymentHistory, payment_method_entity_1.PaymentMethod, complaint_entity_1.Complaint, case_entity_1.CaseRecord],
                     synchronize: false,
-                    migrationsRun: true,
+                    migrationsRun: !config.get('NETLIFY_DB_URL'),
                     migrations: [_1724600000000_initial_schema_1.InitialSchema1724600000000, _1724600000001_user_financial_summary_1.UserFinancialSummary1724600000001, _1724600000002_user_profile_1.UserProfile1724600000002, _1724600000003_user_documents_1.UserDocuments1724600000003, _1724600000004_email_verification_1.EmailVerification1724600000004, _1724600000005_payment_summary_1.PaymentSummary1724600000005, _1724600000006_fix_encoding_and_payment_status_1.FixEncodingAndPaymentStatus1724600000006, _1724600000007_complaints_1.Complaints1724600000007, _1724600000008_password_reset_1.PasswordReset1724600000008, _1724600000009_payment_methods_1.PaymentMethods1724600000009, _1724600000010_cases_1.Cases1724600000010, _1724600000011_multiple_cases_1.MultipleCases1724600000011],
                 }),
             }),

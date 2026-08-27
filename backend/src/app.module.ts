@@ -37,7 +37,7 @@ import { MultipleCases1724600000011 } from './database/migrations/1724600000011-
         url: config.get<string>('DATABASE_URL') ?? config.getOrThrow<string>('NETLIFY_DB_URL'),
         entities: [User, UserDocument, PaymentHistory, PaymentMethod, Complaint, CaseRecord],
         synchronize: false,
-        migrationsRun: true,
+        migrationsRun: !config.get<string>('NETLIFY_DB_URL'),
         migrations: [InitialSchema1724600000000, UserFinancialSummary1724600000001, UserProfile1724600000002, UserDocuments1724600000003, EmailVerification1724600000004, PaymentSummary1724600000005, FixEncodingAndPaymentStatus1724600000006, Complaints1724600000007, PasswordReset1724600000008, PaymentMethods1724600000009, Cases1724600000010, MultipleCases1724600000011],
       }),
     }),
