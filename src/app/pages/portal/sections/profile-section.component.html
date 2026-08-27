@@ -1,0 +1,51 @@
+<div class="section-stack">
+  <form class="portal-section-card profile-form" [formGroup]="profileForm" (ngSubmit)="save()">
+    <h2>Información personal</h2>
+    <div class="profile-fields">
+      <label>Nombre completo<input formControlName="names"></label>
+      <label>Documento de identidad<input formControlName="identityDocument"></label>
+      <label>Correo electrónico<input type="email" formControlName="email"></label>
+      <label>Teléfono<input formControlName="phone"></label>
+      <label>Dirección<input formControlName="address"></label>
+      <div class="profile-country-field" (keydown.escape)="closeCountryDropdown()">
+        <span class="field-label">País de residencia fiscal</span>
+        <button class="country-select-trigger" type="button" (click)="toggleCountryDropdown()" [attr.aria-expanded]="countryDropdownOpen()" aria-haspopup="listbox">
+          @if (selectedCountry(); as country) {
+            <span>{{ country.flag }} {{ country.name }} — {{ country.code }}</span>
+          } @else {
+            <span class="country-placeholder">Seleccione un país</span>
+          }
+          <span class="country-chevron" aria-hidden="true">⌄</span>
+        </button>
+        @if (countryDropdownOpen()) {
+          <div class="country-dropdown">
+            <div class="country-search-control">
+              <span aria-hidden="true">⌕</span>
+              <input type="search" placeholder="Buscar país o código..." aria-label="Buscar país de residencia fiscal" [value]="countrySearch()" (input)="updateCountrySearch($event)" autofocus>
+              @if (countrySearch()) { <button type="button" (click)="clearCountrySearch()" aria-label="Limpiar búsqueda">×</button> }
+            </div>
+            <div class="country-options" role="listbox" aria-label="Países">
+              @for (country of filteredCountries(); track country.code) {
+                <button type="button" role="option" [attr.aria-selected]="selectedCountryCode() === country.code" [class.selected]="selectedCountryCode() === country.code" (click)="selectFiscalCountry(country)">
+                  <span>{{ country.flag }} {{ country.name }}</span><b>{{ country.code }}</b>
+                </button>
+              } @empty {
+                <p class="country-empty">No se encontraron países.</p>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+    @if (message()) { <p class="profile-success" role="status">{{ message() }}</p> }
+    @if (error()) { <p class="admin-error" role="alert">{{ error() }}</p> }
+    <button class="gold-button" type="submit" [disabled]="profileForm.invalid || saving()">{{ saving() ? 'Guardando…' : 'Guardar cambios' }}</button>
+  </form>
+  <section class="portal-section-card profile-form">
+    <h2>Seguridad de la cuenta</h2>
+    <p class="security-description">Para proteger su cuenta, enviaremos a <strong>{{ user?.email }}</strong> un enlace seguro de un solo uso. El enlace vencerá en una hora.</p>
+    @if (passwordMessage()) { <p class="profile-success" role="status">{{ passwordMessage() }}</p> }
+    @if (passwordError()) { <p class="admin-error" role="alert">{{ passwordError() }}</p> }
+    <button class="gold-button" type="button" [disabled]="passwordLinkSending()" (click)="requestPasswordChange()">{{ passwordLinkSending() ? 'Enviando…' : 'Enviar enlace para cambiar clave' }}</button>
+  </section>
+</div>

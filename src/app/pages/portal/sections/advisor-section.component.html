@@ -1,0 +1,29 @@
+<section class="advisor-grid">
+  <aside class="advisor-card">
+    <span class="advisor-avatar">EV</span>
+    <h2>Dra. Elena Vargas</h2>
+    <p>Abogada · Derecho financiero</p>
+    <dl>
+      <div><dt>Email:</dt><dd>e.vargas@finlexgroup.com</dd></div>
+      <div><dt>Tel:</dt><dd>+34 912 345 678</dd></div>
+      <div><dt>Horario:</dt><dd>Lun–Vie, 9:00–18:00 CET</dd></div>
+    </dl>
+    <button class="gold-button full" type="button">Videollamada</button>
+    <button class="outline-button full" type="button">Agendar cita</button>
+  </aside>
+
+  <div class="chat-card chatbot-card">
+    <header><span></span><div>Asistente virtual FinLex<small>En línea · Respuesta automática</small></div></header>
+    <div class="chat-messages" #chatMessages aria-live="polite">
+      @for (message of messages(); track message.id) {
+        <p [class.advisor-message]="message.author === 'bot'" [class.client-message]="message.author === 'user'">{{ message.text }}</p>
+      }
+      @if (sending()) { <p class="advisor-message typing-message"><i></i><i></i><i></i><span class="sr-only">El asistente está escribiendo</span></p> }
+    </div>
+    <form class="chat-composer" (ngSubmit)="sendMessage()">
+      <input type="text" maxlength="1000" autocomplete="off" placeholder="Escriba su mensaje..." aria-label="Mensaje para el asistente" [value]="messageText()" (input)="updateMessage($event)" [disabled]="sending()">
+      <button class="gold-button" type="submit" [disabled]="!messageText().trim() || sending()">{{ sending() ? 'Enviando…' : 'Enviar' }}</button>
+    </form>
+    <p class="chat-disclaimer">Orientación general. No reemplaza la asesoría profesional de su caso.</p>
+  </div>
+</section>

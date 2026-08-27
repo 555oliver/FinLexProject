@@ -1,0 +1,281 @@
+<section class="portal-auth-page">
+  <div class="portal-auth-visual" aria-hidden="true">
+    <div class="visual-content">
+      <span class="eyebrow">Área privada FinLex</span>
+      <h1>Su patrimonio, bajo una gestión <em>segura y confidencial.</em></h1>
+      <p>Consulte el estado de sus casos, documentos y comunicaciones desde un único espacio protegido.</p>
+      <ul>
+        <li><span>✓</span> Seguimiento centralizado</li>
+        <li><span>✓</span> Información confidencial</li>
+        <li><span>✓</span> Asesoría personalizada</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="portal-auth-panel">
+    @if (!auth.isAuthenticated()) {
+      <div class="auth-card">
+        <div class="auth-brand"><span class="auth-monogram">F</span><span>FinLex <small>Group</small></span></div>
+        @if (mode() === 'login' || mode() === 'register') {
+          <div class="auth-tabs" role="tablist" aria-label="Acceso al portal">
+            <button type="button" role="tab" [attr.aria-selected]="mode() === 'login'" [class.active]="mode() === 'login'" (click)="setMode('login')">Iniciar sesión</button>
+            <button type="button" role="tab" [attr.aria-selected]="mode() === 'register'" [class.active]="mode() === 'register'" (click)="setMode('register')">Crear cuenta</button>
+          </div>
+        }
+
+        @if (mode() === 'login') {
+          <div class="auth-heading"><h2>Bienvenido de nuevo</h2><p>Ingrese sus datos para acceder al portal.</p></div>
+          <form [formGroup]="loginForm" (ngSubmit)="submitLogin()" novalidate>
+            <div class="auth-field">
+              <label for="login-email">Correo electrónico</label>
+              <input id="login-email" type="email" formControlName="email" autocomplete="email" placeholder="nombre@correo.com">
+              @if (hasError('login', 'email')) { <small>Ingrese un correo electrónico válido.</small> }
+            </div>
+            <div class="auth-field">
+              <label for="login-password">Clave</label>
+              <div class="password-control">
+                <input id="login-password" [type]="showLoginPassword() ? 'text' : 'password'" formControlName="password" autocomplete="current-password" placeholder="Mínimo 6 caracteres">
+                <button type="button" (click)="showLoginPassword.set(!showLoginPassword())" [attr.aria-label]="showLoginPassword() ? 'Ocultar clave' : 'Mostrar clave'" [attr.title]="showLoginPassword() ? 'Ocultar clave' : 'Mostrar clave'"><span class="material-symbols-rounded eye-icon" aria-hidden="true">{{ showLoginPassword() ? 'visibility_off' : 'visibility' }}</span></button>
+              </div>
+              @if (hasError('login', 'password')) { <small>La clave debe tener al menos 6 caracteres.</small> }
+            </div>
+            <button class="forgot-password-link" type="button" (click)="showForgotPassword()">¿Olvidó su clave?</button>
+            <label class="terms-check remember-check">
+              <input type="checkbox" formControlName="rememberEmail">
+              <span>Recordar correo en este dispositivo.</span>
+            </label>
+            <label class="terms-check">
+              <input type="checkbox" formControlName="termsAccepted">
+              <span>Acepto los <a routerLink="/legal">términos y condiciones</a>.</span>
+            </label>
+            @if (hasError('login', 'termsAccepted')) { <small class="standalone-error">Debe aceptar los términos para continuar.</small> }
+            <button class="auth-submit" type="submit" [disabled]="loginForm.invalid || submitting()">{{ submitting() ? 'Ingresando…' : 'Ingresar al portal' }} <span>→</span></button>
+          </form>
+        } @else if (mode() === 'forgot') {
+          <div class="auth-heading"><h2>Recupere su acceso</h2><p>Ingrese el correo asociado a su cuenta y le enviaremos un enlace seguro.</p></div>
+          <form [formGroup]="forgotPasswordForm" (ngSubmit)="submitForgotPassword()" novalidate>
+            <div class="auth-field">
+              <label for="forgot-email">Correo electrónico</label>
+              <input id="forgot-email" type="email" formControlName="email" autocomplete="email" placeholder="nombre@correo.com">
+              @if (forgotPasswordForm.controls.email.invalid && (forgotPasswordForm.controls.email.touched || forgotPasswordForm.controls.email.dirty)) { <small>Ingrese un correo electrónico válido.</small> }
+            </div>
+            <button class="auth-submit" type="submit" [disabled]="forgotPasswordForm.invalid || submitting()">{{ submitting() ? 'Enviando…' : 'Enviar enlace' }} <span>→</span></button>
+            <button class="auth-secondary-link" type="button" (click)="setMode('login')">← Volver al inicio de sesión</button>
+          </form>
+        } @else if (mode() === 'register') {
+          <div class="auth-heading"><h2>Cree su cuenta</h2><p>Complete sus datos para solicitar acceso.</p></div>
+          <form [formGroup]="registerForm" (ngSubmit)="submitRegistration()" novalidate>
+            <div class="form-grid">
+              <div class="auth-field full"><label for="register-names">Nombres</label><input id="register-names" type="text" formControlName="names" autocomplete="name" placeholder="Nombres y apellidos">@if (hasError('register', 'names')) { <small>Ingrese su nombre completo.</small> }</div>
+              <div class="auth-field"><label for="register-email">Correo electrónico</label><input id="register-email" type="email" formControlName="email" autocomplete="email" placeholder="nombre@correo.com">@if (hasError('register', 'email')) { <small>Ingrese un correo válido.</small> }</div>
+              <div class="auth-field"><label for="register-username">Usuario</label><input id="register-username" type="text" formControlName="username" autocomplete="username" placeholder="Ej. maria.garcia">@if (hasError('register', 'username')) { <small>Use al menos 4 caracteres.</small> }</div>
+              <div class="auth-field full"><label for="register-password">Clave</label><div class="password-control"><input id="register-password" [type]="showRegisterPassword() ? 'text' : 'password'" formControlName="password" autocomplete="new-password" placeholder="Mínimo 8 caracteres"><button type="button" (click)="showRegisterPassword.set(!showRegisterPassword())" [attr.aria-label]="showRegisterPassword() ? 'Ocultar clave' : 'Mostrar clave'" [attr.title]="showRegisterPassword() ? 'Ocultar clave' : 'Mostrar clave'"><span class="material-symbols-rounded eye-icon" aria-hidden="true">{{ showRegisterPassword() ? 'visibility_off' : 'visibility' }}</span></button></div>@if (hasError('register', 'password')) { <small>Use al menos 8 caracteres.</small> }</div>
+              <div class="auth-field full">
+                <label for="register-country">País</label>
+                <select id="register-country" formControlName="countryCode">
+                  <option value="" disabled>Cargando países…</option>
+                  @for (country of countries$ | async; track country.code) {
+                    <option [value]="country.code">{{ country.flag }} {{ country.name }} @if (country.dialCode) { ({{ country.dialCode }}) }</option>
+                  }
+                </select>
+                @if (hasError('register', 'countryCode')) { <small>Seleccione su país.</small> }
+              </div>
+              <div class="auth-field full">
+                <label for="register-phone">Celular</label>
+                <div class="phone-control"><span class="phone-prefix">{{ selectedCountry()?.flag }} {{ selectedCountry()?.dialCode || '+' }}</span><input id="register-phone" type="tel" formControlName="phone" autocomplete="tel-national" placeholder="300 123 4567"></div>
+                @if (hasError('register', 'phone')) { <small>Ingrese un número de celular válido.</small> }
+              </div>
+            </div>
+            <label class="terms-check">
+              <input type="checkbox" formControlName="termsAccepted">
+              <span>Acepto los <a routerLink="/legal">términos y condiciones</a> y el tratamiento de mis datos.</span>
+            </label>
+            @if (hasError('register', 'termsAccepted')) { <small class="standalone-error">Debe aceptar los términos para registrarse.</small> }
+            <button class="auth-submit" type="submit" [disabled]="registerForm.invalid || submitting()">{{ submitting() ? 'Creando cuenta…' : 'Crear mi cuenta' }} <span>→</span></button>
+          </form>
+        } @else {
+          <div class="auth-heading"><h2>Cree una nueva clave</h2><p>Elija una clave segura para volver a acceder a su cuenta.</p></div>
+          <form [formGroup]="resetPasswordForm" (ngSubmit)="submitPasswordReset()" novalidate>
+            <div class="auth-field">
+              <label for="reset-password">Nueva clave</label>
+              <div class="password-control">
+                <input id="reset-password" [type]="showResetPassword() ? 'text' : 'password'" formControlName="password" autocomplete="new-password" placeholder="Mínimo 8 caracteres">
+                <button type="button" (click)="showResetPassword.set(!showResetPassword())" [attr.aria-label]="showResetPassword() ? 'Ocultar clave' : 'Mostrar clave'"><span class="material-symbols-rounded eye-icon" aria-hidden="true">{{ showResetPassword() ? 'visibility_off' : 'visibility' }}</span></button>
+              </div>
+              <small>Debe incluir mayúscula, minúscula y número.</small>
+            </div>
+            <div class="auth-field">
+              <label for="reset-password-confirm">Confirmar nueva clave</label>
+              <input id="reset-password-confirm" [type]="showResetPassword() ? 'text' : 'password'" formControlName="confirmPassword" autocomplete="new-password" placeholder="Repita la nueva clave">
+            </div>
+            <button class="auth-submit" type="submit" [disabled]="resetPasswordForm.invalid || submitting()">{{ submitting() ? 'Actualizando…' : 'Actualizar clave' }} <span>→</span></button>
+          </form>
+        }
+        @if (message()) { <p class="auth-message" role="status">{{ message() }}</p> }
+        <p class="security-note"><span>◇</span> Sus datos serán tratados de forma confidencial.</p>
+      </div>
+      @if (registrationSuccess()) {
+        <div class="success-modal-backdrop" role="presentation">
+          <section class="success-modal" role="dialog" aria-modal="true" aria-labelledby="registration-success-title">
+            <span class="success-icon" aria-hidden="true">✓</span>
+            <div class="section-label">Registro completado</div>
+            <h2 id="registration-success-title">Revise su correo electrónico</h2>
+            <p>Su cuenta fue creada. Enviamos un enlace de verificación a su correo; debe abrirlo antes de iniciar sesión. El enlace vence en 24 horas.</p>
+            <button class="success-action" type="button" (click)="continueToLogin()">
+              <span class="success-action-label">Ir al inicio de sesión</span>
+              <span class="success-action-arrow" aria-hidden="true">→</span>
+            </button>
+          </section>
+        </div>
+      }
+      @if (forgotPasswordSuccess()) {
+        <div class="success-modal-backdrop" role="presentation">
+          <section class="success-modal" role="dialog" aria-modal="true" aria-labelledby="forgot-success-title">
+            <span class="success-icon" aria-hidden="true">✉</span>
+            <div class="section-label">Solicitud recibida</div>
+            <h2 id="forgot-success-title">Revise su correo electrónico</h2>
+            <p>Si el correo pertenece a una cuenta registrada, recibirá un enlace para crear una nueva clave. El enlace vence en una hora.</p>
+            <button class="success-action" type="button" (click)="finishForgotPassword()"><span class="success-action-label">Volver al inicio de sesión</span><span class="success-action-arrow">→</span></button>
+          </section>
+        </div>
+      }
+      @if (verificationSuccess()) {
+        <div class="success-modal-backdrop" role="presentation">
+          <section class="success-modal verification-modal" role="dialog" aria-modal="true" aria-labelledby="verification-success-title">
+            <span class="success-icon" aria-hidden="true">✓</span>
+            <div class="section-label">Correo confirmado</div>
+            <h2 id="verification-success-title">Correo verificado correctamente</h2>
+            <p>Su cuenta ya está activa. Puede iniciar sesión con el correo y la clave que registró.</p>
+            <button class="success-action" type="button" (click)="closeVerificationModal()">
+              <span class="success-action-label">Continuar al inicio de sesión</span>
+              <span class="success-action-arrow" aria-hidden="true">→</span>
+            </button>
+          </section>
+        </div>
+      }
+      @if (passwordResetSuccess()) {
+        <div class="success-modal-backdrop" role="presentation">
+          <section class="success-modal" role="dialog" aria-modal="true" aria-labelledby="password-reset-success-title">
+            <span class="success-icon" aria-hidden="true">✓</span>
+            <div class="section-label">Seguridad actualizada</div>
+            <h2 id="password-reset-success-title">Clave actualizada correctamente</h2>
+            <p>Ya puede iniciar sesión utilizando su nueva clave.</p>
+            <button class="success-action" type="button" (click)="finishPasswordReset()">
+              <span class="success-action-label">Continuar al inicio de sesión</span>
+              <span class="success-action-arrow" aria-hidden="true">→</span>
+            </button>
+          </section>
+        </div>
+      }
+    } @else {
+      <div class="portal-dashboard">
+        <header class="portal-toolbar">
+          <div class="portal-identity">
+            <span class="portal-logo">F</span>
+            <div><small>Bienvenido</small><strong>{{ auth.currentUser()?.names }}</strong></div>
+          </div>
+          <nav class="portal-navigation" aria-label="Navegación del portal">
+            @if (auth.currentUser()?.role === 'admin') {
+              <button type="button" [class.active]="activePortalTab() === 'adminCases'" (click)="setPortalTab('adminCases')">Casos usuarios</button>
+              <button type="button" [class.active]="activePortalTab() === 'admin'" (click)="setPortalTab('admin')">Administración</button>
+              <button type="button" [class.active]="activePortalTab() === 'adminComplaints'" (click)="setPortalTab('adminComplaints')">Quejas usuarios</button>
+            }
+            <button type="button" [class.active]="activePortalTab() === 'summary'" (click)="setPortalTab('summary')">Resumen</button>
+            <button type="button" [class.active]="activePortalTab() === 'case'" (click)="setPortalTab('case')">Mi caso</button>
+            <button type="button" [class.active]="activePortalTab() === 'solutions'" (click)="setPortalTab('solutions')">Soluciones</button>
+            <button type="button" [class.active]="activePortalTab() === 'payments'" (click)="setPortalTab('payments')">Pagos</button>
+            <button type="button" [class.active]="activePortalTab() === 'complaints'" (click)="setPortalTab('complaints')">Quejas</button>
+            <button type="button" [class.active]="activePortalTab() === 'advisor'" (click)="setPortalTab('advisor')">Asesor</button>
+            <button type="button" [class.active]="activePortalTab() === 'profile'" (click)="setPortalTab('profile')">Perfil</button>
+            <button class="logout-link" type="button" (click)="logout()">Salir</button>
+          </nav>
+        </header>
+
+        @if (activePortalTab() === 'summary') {
+          <main class="portal-summary">
+            <section class="summary-cards" aria-label="Resumen del caso">
+              <article class="summary-card"><span>Saldo en recuperación</span><strong>{{ formatMoney(auth.currentUser()?.recoveryBalance) }}</strong><p>Fondos aún en disputa o negociación</p></article>
+              <article class="summary-card"><span>Fondos recuperados</span><strong>{{ formatMoney(auth.currentUser()?.recoveredFunds) }}</strong><p>Total recuperado a la fecha</p></article>
+              <article class="summary-card status-card">
+                <span>Estado general</span>
+                <b>Recepción de documentación</b>
+                <p>Fase 1 de 6</p>
+                <label class="document-upload" [class.disabled]="uploadingDocument()">
+                  <input type="file" accept="image/jpeg,image/png,image/webp,image/gif,.pdf,.doc,.docx" (change)="onDocumentSelected($event)" [disabled]="uploadingDocument()">
+                  <span>{{ uploadingDocument() ? 'Subiendo…' : 'Subir documento o imagen' }}</span>
+                </label>
+                @if (documentMessage()) { <small class="document-message">{{ documentMessage() }}</small> }
+              </article>
+            </section>
+
+            <section class="dashboard-panel activity-panel">
+              <h2>Actividad reciente</h2>
+              <div class="activity-table" role="table" aria-label="Actividad reciente">
+                <div class="activity-row activity-head" role="row"><span>Fecha</span><span>Concepto</span><span>Monto</span><span>Estado</span></div>
+                @for (document of documents(); track document.id) {
+                  <div class="activity-row activity-document" role="row">
+                    <span>{{ formatUploadDate(document.createdAt) }}</span>
+                    <span><strong>Comprobante</strong><small>{{ document.originalName }}</small></span>
+                    <span>€0</span>
+                    <span><b>Subido</b></span>
+                  </div>
+                } @empty {
+                  <div class="activity-empty">Aún no hay actividad registrada en su caso.</div>
+                }
+              </div>
+            </section>
+
+            <section class="dashboard-panel next-steps">
+              <h2>Próximos pasos</h2>
+              <article class="step-row"><div><h3>Revisión de la documentación aportada</h3><p>Fecha límite: 02 sep 2026 · Nuestro equipo legal valida los contratos y justificantes remitidos.</p></div><span class="pending-tag">Pendiente</span></article>
+              <article class="step-row"><div><h3>Reunión de seguimiento con su asesor</h3><p>Fecha límite: 09 sep 2026 · Videollamada con la Dra. Elena Vargas para revisar la estrategia del caso.</p></div><button type="button" class="confirm-button">Confirmar asistencia</button></article>
+              <article class="step-row"><div><h3>Presentación de la reclamación formal</h3><p>Fecha límite: 25 sep 2026 · Envío del expediente al broker y registro ante el organismo competente.</p></div><span class="pending-tag">Pendiente</span></article>
+            </section>
+          </main>
+        } @else if (activePortalTab() === 'case') {
+          <main class="portal-summary"><app-case-section /></main>
+        } @else if (activePortalTab() === 'case') {
+          <main class="portal-summary case-view">
+            <section class="dashboard-panel case-overview">
+              <div class="case-heading">
+                <div><h2>Caso #LF-2026-3A3A4</h2><p>Evaluación inicial de caso · Abierto el 26 ago 2026</p></div>
+                <span class="case-status">Recepción de documentación</span>
+              </div>
+              <div class="case-progress-label"><span>Progreso del caso</span><strong>17%</strong></div>
+              <div class="case-progress" role="progressbar" aria-label="Progreso del caso" aria-valuemin="0" aria-valuemax="100" aria-valuenow="17"><span></span></div>
+            </section>
+            <section class="dashboard-panel case-timeline-panel">
+              <h2>Línea de tiempo del caso</h2>
+              <ol class="case-timeline">
+                <li class="current"><span class="timeline-dot"></span><div><small>En curso</small><h3>Apertura del caso</h3><p>Recepción de documentación inicial y análisis de transacciones.</p></div></li>
+                <li><span class="timeline-dot"></span><div><small>Pendiente</small><h3>Asignación de asesor</h3><p>Asignación de un asesor especializado y primera reunión de diagnóstico.</p></div></li>
+                <li><span class="timeline-dot"></span><div><small>Pendiente</small><h3>Notificación al broker / entidad</h3><p>Carta formal de reclamación enviada con respaldo legal.</p></div></li>
+                <li><span class="timeline-dot"></span><div><small>Pendiente</small><h3>Negociación y recuperación parcial</h3><p>Negociación activa para la recuperación de fondos.</p></div></li>
+                <li><span class="timeline-dot"></span><div><small>Pendiente</small><h3>Arbitraje / litigio</h3><p>Preparación de demanda arbitral si no hay acuerdo total.</p></div></li>
+                <li><span class="timeline-dot"></span><div><small>Pendiente</small><h3>Cierre y devolución final</h3><p>Liquidación de fondos recuperados al cliente.</p></div></li>
+              </ol>
+            </section>
+          </main>
+        } @else if (activePortalTab() === 'adminCases' && auth.currentUser()?.role === 'admin') {
+          <main class="portal-summary"><app-admin-cases-section /></main>
+        } @else if (activePortalTab() === 'admin' && auth.currentUser()?.role === 'admin') {
+          <main class="portal-summary"><app-admin-section /></main>
+        } @else if (activePortalTab() === 'adminComplaints' && auth.currentUser()?.role === 'admin') {
+          <main class="portal-summary"><app-admin-complaints-section /></main>
+        } @else if (activePortalTab() === 'solutions') {
+          <main class="portal-summary"><app-solutions-section /></main>
+        } @else if (activePortalTab() === 'payments') {
+          <main class="portal-summary"><app-payments-section /></main>
+        } @else if (activePortalTab() === 'complaints') {
+          <main class="portal-summary"><app-complaints-section /></main>
+        } @else if (activePortalTab() === 'advisor') {
+          <main class="portal-summary"><app-advisor-section /></main>
+        } @else if (activePortalTab() === 'profile') {
+          <main class="portal-summary"><app-profile-section /></main>
+        } @else {
+          <main class="portal-summary"><section class="dashboard-panel section-placeholder"><span class="portal-logo">F</span><h2>Portal</h2><p>Sección no disponible.</p></section></main>
+        }
+      </div>
+    }
+  </div>
+</section>

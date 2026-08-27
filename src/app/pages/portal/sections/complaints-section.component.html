@@ -1,0 +1,33 @@
+<div class="section-stack">
+  <form class="portal-section-card complaint-form" (ngSubmit)="submit()">
+    <h2>Nueva queja o incidencia</h2>
+    <p class="intro">Comuníquenos cualquier problema o información adicional sobre su caso.</p>
+    <label>Tipo de incidencia
+      <select name="reason" required [(ngModel)]="reason">
+        <option value="" disabled>Seleccione...</option>
+        <option value="Consulta sobre mi caso">Consulta sobre mi caso</option>
+        <option value="Problema con un pago">Problema con un pago</option>
+        <option value="Queja sobre la atención">Queja sobre la atención</option>
+        <option value="Información adicional">Información adicional</option>
+      </select>
+    </label>
+    <label>Descripción detallada<textarea name="description" required minlength="10" maxlength="3000" [(ngModel)]="description" placeholder="Explique su situación con el mayor detalle posible..."></textarea></label>
+    <label>Adjuntar archivo (opcional)<input type="file" accept="image/*,.pdf,.doc,.docx" (change)="selectFile($event)"></label>
+    @if (message()) { <p class="profile-success" role="status">{{ message() }}</p> }
+    @if (error()) { <p class="admin-error" role="alert">{{ error() }}</p> }
+    <button class="gold-button" type="submit" [disabled]="!reason || description.trim().length < 10 || submitting()">{{ submitting() ? 'Enviando…' : 'Enviar queja' }}</button>
+  </form>
+  <section class="portal-section-card compact">
+    <h2>Historial de quejas</h2>
+    <div class="complaint-history-head"><span>Fecha</span><span>Motivo</span><span>Estado</span></div>
+    @for (complaint of complaints(); track complaint.id) {
+      <article class="complaint-history-row">
+        <span>{{ date(complaint.createdAt) }}</span>
+        <div><strong>{{ complaint.reason }}</strong><small>{{ complaint.description }}</small></div>
+        <b [attr.data-status]="complaint.status">{{ complaint.status }}</b>
+      </article>
+    } @empty {
+      <p class="empty-row">Aún no hay quejas registradas.</p>
+    }
+  </section>
+</div>

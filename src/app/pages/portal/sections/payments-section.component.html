@@ -1,0 +1,39 @@
+<div class="section-stack">
+  <section class="payment-overview">
+    <article><span>Honorarios pendientes</span><strong>{{ money(user()?.pendingFees) }}</strong><p>Según facturación registrada</p></article>
+    <article><span>Total pagado</span><strong>{{ money(user()?.totalPaid) }}</strong><p>Pagos confirmados</p></article>
+    <article><span>Plan de pagos activo</span><b>{{ user()?.activePaymentPlan || 'Pendiente' }}</b><p>Consulte con su asesor</p></article>
+  </section>
+  <section class="portal-section-card compact payment-methods-section">
+    <div class="payment-methods-heading"><div><h2>Métodos de pago registrados</h2><p class="muted">Solo guardamos datos identificativos; nunca almacenamos el número completo ni el CVV.</p></div><button class="outline-button" type="button" (click)="showMethodForm.set(!showMethodForm())">{{ showMethodForm() ? 'Cerrar' : '+ Añadir método de pago' }}</button></div>
+    @if (showMethodForm()) {
+      <form class="payment-method-form" (ngSubmit)="saveMethod()">
+        <label>Tipo de tarjeta<select name="cardType" [(ngModel)]="cardType"><option value="Crédito">Crédito</option><option value="Débito">Débito</option></select></label>
+        <label>Titular de la tarjeta<input name="cardholderName" maxlength="150" placeholder="Nombre como aparece en la tarjeta" [(ngModel)]="cardholderName"></label>
+        <label>Marca<select name="brand" [(ngModel)]="brand"><option value="Visa">Visa</option><option value="Mastercard">Mastercard</option><option value="American Express">American Express</option><option value="Otra">Otra</option></select></label>
+        <label>Últimos 4 dígitos<input name="lastFour" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" placeholder="1234" [(ngModel)]="lastFour"></label>
+        <label>Mes de vencimiento<select name="expiryMonth" [(ngModel)]="expiryMonth">@for (month of [1,2,3,4,5,6,7,8,9,10,11,12]; track month) { <option [ngValue]="month">{{ month.toString().padStart(2, '0') }}</option> }</select></label>
+        <label>Año de vencimiento<select name="expiryYear" [(ngModel)]="expiryYear">@for (year of years; track year) { <option [ngValue]="year">{{ year }}</option> }</select></label>
+        @if (methodError()) { <p class="admin-error method-form-message">{{ methodError() }}</p> }
+        <div class="method-form-actions"><button class="outline-button" type="button" (click)="cancelMethodForm()">Cancelar</button><button class="gold-button" type="submit" [disabled]="cardholderName.trim().length < 3 || !lastFour.match('^[0-9]{4}$') || savingMethod()">{{ savingMethod() ? 'Guardando…' : 'Registrar tarjeta' }}</button></div>
+      </form>
+    }
+    <div class="payment-method-list">
+      @for (method of methods(); track method.id) {
+        <article class="registered-card"><span class="card-chip"></span><div><small>{{ method.cardType }}</small><strong>{{ method.brand }} ···· {{ method.lastFour }}</strong><p>{{ method.cardholderName }} · Vence {{ method.expiryMonth.toString().padStart(2, '0') }}/{{ method.expiryYear }}</p></div>@if (method.isDefault) { <b>Principal</b> }</article>
+      } @empty {
+        <p class="empty-row">Aún no tiene métodos de pago registrados.</p>
+      }
+    </div>
+  </section>
+  <section class="portal-section-card compact">
+    <h2>Historial de pagos</h2>
+    <div class="data-head"><span>Fecha</span><span>Concepto</span><span>Monto</span><span>Estado</span></div>
+    @for (payment of payments(); track payment.id) {
+      <div class="payment-history-row"><span>{{ date(payment.createdAt) }}</span><span>{{ payment.concept }}</span><strong>{{ money(payment.amount) }}</strong><b>{{ payment.status }}</b></div>
+    } @empty {
+      <p class="empty-row">Aún no hay pagos registrados.</p>
+    }
+  </section>
+  <section class="portal-section-card compact"><h2>Facilidades de pago disponibles</h2><p class="intro">Si necesita aplazar o fraccionar sus honorarios, ofrecemos planes flexibles sin intereses para clientes con casos activos.</p><div class="plans"><article><h3>Plan 3 cuotas</h3><p>€450/mes · Sin intereses · Revisión mensual</p><button class="gold-button" type="button">Solicitar</button></article><article><h3>Plan 6 cuotas</h3><p>€225/mes · 2% TIN · Revisión trimestral</p><button class="outline-button" type="button">Solicitar</button></article></div></section>
+</div>

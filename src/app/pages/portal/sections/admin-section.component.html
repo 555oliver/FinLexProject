@@ -1,0 +1,29 @@
+<section class="portal-section-card admin-section">
+  <div class="admin-heading"><div><span>Gestión interna</span><h2>Usuarios registrados</h2><p>Actualice los valores financieros visibles en el resumen de cada usuario.</p></div><b>{{ users().length }} usuarios</b></div>
+  @if (loading()) { <p class="admin-state">Cargando usuarios…</p> }
+  @if (error()) { <p class="admin-error">{{ error() }}</p> }
+  @if (!loading()) {
+    <div class="admin-users">
+      @for (user of users(); track user.id) {
+        <article class="admin-user-row">
+          <div class="admin-user"><span>{{ user.names.charAt(0).toUpperCase() }}</span><div><h3>{{ user.names }}</h3><p>{{ user.email }}</p><small>{{ user.role === 'admin' ? 'Administrador' : 'Usuario' }}</small></div></div>
+          <div class="admin-values">
+            <label>Saldo en recuperación<div class="money-input"><span>€</span><input type="number" min="0" step="0.01" [(ngModel)]="user.recoveryBalanceValue"></div></label>
+            <label>Fondos recuperados<div class="money-input"><span>€</span><input type="number" min="0" step="0.01" [(ngModel)]="user.recoveredFundsValue"></div></label>
+            <label>Honorarios pendientes <small>Acumulado: €{{ user.pendingFees }}</small><div class="money-input"><span>€</span><input type="number" min="0" step="0.01" placeholder="Agregar importe" [(ngModel)]="user.pendingFeesValue"></div></label>
+            <label>Total pagado <small>Acumulado: €{{ user.totalPaid }}</small><div class="money-input"><span>€</span><input type="number" min="0" step="0.01" placeholder="Registrar pago" [(ngModel)]="user.totalPaidValue"></div></label>
+            <label>Plan de pagos activo
+              <select class="plan-input" [(ngModel)]="user.activePaymentPlanValue">
+                <option value="Pagado">Pagado</option>
+                <option value="Anulado">Anulado</option>
+                <option value="Rechazado">Rechazado</option>
+                <option value="Pendiente">Pendiente</option>
+              </select>
+            </label>
+            <button class="gold-button" type="button" [disabled]="user.saving" (click)="save(user)">{{ user.saving ? 'Guardando…' : user.saved ? 'Guardado ✓' : 'Guardar' }}</button>
+          </div>
+        </article>
+      } @empty { <p class="admin-state">No hay usuarios registrados.</p> }
+    </div>
+  }
+</section>

@@ -1,0 +1,43 @@
+@if (loading()) {
+  <section class="portal-section-card case-empty"><p>Cargando información de los casos…</p></section>
+} @else {
+  @if (canCreate()) {
+    <section class="portal-section-card case-create-panel" [class.has-history]="solvedCases().length">
+      <div><small>Gestión de reclamaciones</small><h2>{{ solvedCases().length ? '¿Necesita abrir un nuevo expediente?' : 'Aún no tiene un caso registrado' }}</h2><p>Cree un caso para generar un número de expediente y comenzar el proceso desde la fase de apertura.</p></div>
+      <button class="gold-button" type="button" [disabled]="creating()" (click)="createCase()">{{ creating() ? 'Creando caso…' : solvedCases().length ? 'Crear otro caso' : 'Crear caso' }}</button>
+    </section>
+  }
+
+  @if (error()) { <p class="admin-error">{{ error() }}</p> }
+
+  @if (activeCase(); as caseData) {
+    <div class="section-stack case-view">
+      <section class="portal-section-card case-overview">
+        <div class="case-heading"><div><h2>Caso #{{ caseData.caseNumber }}</h2><p>Evaluación inicial de caso · Abierto el {{ date(caseData.createdAt) }}</p></div><span class="case-status">{{ caseData.currentPhaseName }}</span></div>
+        <div class="case-progress-label"><span>Progreso del caso</span><strong>{{ caseData.progress }}%</strong></div>
+        <div class="case-progress" role="progressbar" aria-label="Progreso del caso" aria-valuemin="0" aria-valuemax="100" [attr.aria-valuenow]="caseData.progress"><span [style.width.%]="caseData.progress"></span></div>
+      </section>
+      <section class="portal-section-card case-timeline-panel">
+        <h2>Línea de tiempo del caso</h2>
+        <ol class="case-timeline">
+          @for (phase of phases; track phase.name; let index = $index) {
+            <li [class.current]="phaseState(index, caseData) === 'En curso'" [class.completed]="phaseState(index, caseData) === 'Completado'"><span class="timeline-dot"></span><div><small>{{ phaseState(index, caseData) }}</small><h3>{{ phase.name }}</h3><p>{{ phase.description }}</p></div></li>
+          }
+        </ol>
+      </section>
+    </div>
+  }
+
+  @if (solvedCases().length) {
+    <section class="solved-cases-section">
+      <div class="solved-cases-heading"><div><small>Historial</small><h2>Casos solucionados</h2></div><b>{{ solvedCases().length }}</b></div>
+      @for (caseData of solvedCases(); track caseData.id) {
+        <article class="portal-section-card solved-case-card">
+          <div class="case-heading"><div><h2>Caso #{{ caseData.caseNumber }}</h2><p>Evaluación inicial de caso · Abierto el {{ date(caseData.createdAt) }}</p></div><span class="case-solved-label">Caso solucionado</span></div>
+          <div class="case-progress-label"><span>Progreso del caso</span><strong>100%</strong></div>
+          <div class="case-progress solved" role="progressbar" aria-label="Caso solucionado" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span></span></div>
+        </article>
+      }
+    </section>
+  }
+}

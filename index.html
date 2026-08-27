@@ -1,0 +1,1863 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FinLex Group — Protección Financiera y Digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+--gold: #c9a96e;
+--gold-light: #d4b87a;
+--gold-dark: #a0804a;
+--navy: #0a1628;
+--navy-light: #111d2e;
+--navy-soft: #152238;
+--black: #050505;
+--white: #ffffff;
+--offwhite: #f8f7f4;
+--cream: #f0ede8;
+--gray: #6b7280;
+--gray-light: #9ca3af;
+--border-light: rgba(255,255,255,0.08);
+--border-dark: rgba(10,22,40,0.08);
+--font-serif: 'Playfair Display', Georgia, serif;
+--font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+--transition-fast: 0.2s cubic-bezier(0.4,0,0.2,1);
+--transition-smooth: 0.4s cubic-bezier(0.4,0,0.2,1);
+--transition-slow: 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+font-family: var(--font-sans);
+background: var(--white);
+color: var(--navy);
+line-height: 1.6;
+overflow-x: hidden;
+-webkit-font-smoothing: antialiased;
+}
+/* ========== ANIMATIONS ========== */
+@keyframes fadeInUp {
+from { opacity: 0; transform: translateY(40px); }
+to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+from { opacity: 0; }
+to { opacity: 1; }
+}
+@keyframes slideInLeft {
+from { opacity: 0; transform: translateX(-60px); }
+to { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideInRight {
+from { opacity: 0; transform: translateX(60px); }
+to { opacity: 1; transform: translateX(0); }
+}
+@keyframes scaleIn {
+from { opacity: 0; transform: scale(0.92); }
+to { opacity: 1; transform: scale(1); }
+}
+@keyframes shimmer {
+0% { background-position: -200% center; }
+100% { background-position: 200% center; }
+}
+@keyframes float {
+0%, 100% { transform: translateY(0); }
+50% { transform: translateY(-8px); }
+}
+@keyframes pulse-gold {
+0%, 100% { box-shadow: 0 0 0 0 rgba(201,169,110,0.4); }
+50% { box-shadow: 0 0 0 12px rgba(201,169,110,0); }
+}
+@keyframes lineGrow {
+from { width: 0; }
+to { width: 60px; }
+}
+.animate-on-scroll {
+opacity: 0;
+transform: translateY(40px);
+transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1), transform 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+.animate-on-scroll.visible {
+opacity: 1;
+transform: translateY(0);
+}
+.animate-delay-1 { transition-delay: 0.1s; }
+.animate-delay-2 { transition-delay: 0.2s; }
+.animate-delay-3 { transition-delay: 0.3s; }
+.animate-delay-4 { transition-delay: 0.4s; }
+.animate-delay-5 { transition-delay: 0.5s; }
+/* ========== HEADER ========== */
+.header {
+position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+transition: background var(--transition-smooth), backdrop-filter var(--transition-smooth), box-shadow var(--transition-smooth);
+padding: 0 40px;
+}
+.header.scrolled {
+background: rgba(10,22,40,0.95);
+backdrop-filter: blur(20px) saturate(180%);
+box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+}
+.header-inner {
+max-width: 1280px; margin: 0 auto;
+display: flex; align-items: center; justify-content: space-between;
+height: 80px;
+}
+.logo {
+display: flex; align-items: center; gap: 14px;
+text-decoration: none; cursor: pointer;
+}
+.logo-icon {
+width: 42px; height: 42px; border-radius: 50%;
+border: 1.5px solid var(--gold); display: flex; align-items: center; justify-content: center;
+font-family: var(--font-serif); font-size: 20px; font-weight: 600;
+color: var(--gold); transition: all var(--transition-fast);
+}
+.logo:hover .logo-icon { background: var(--gold); color: var(--navy); }
+.logo-text {
+display: flex; flex-direction: column;
+}
+.logo-name {
+font-family: var(--font-serif); font-size: 22px; font-weight: 600;
+color: var(--white); letter-spacing: 2px; line-height: 1;
+}
+.logo-tagline {
+font-size: 9px; font-weight: 500; letter-spacing: 3px; text-transform: uppercase;
+color: var(--gold); margin-top: 3px;
+}
+.nav-desktop { display: flex; align-items: center; gap: 8px; }
+.nav-link {
+font-size: 13px; font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase;
+color: rgba(255,255,255,0.7); text-decoration: none; padding: 8px 16px;
+border-radius: 4px; transition: all var(--transition-fast); position: relative;
+}
+.nav-link::after {
+content: ''; position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%);
+width: 0; height: 1px; background: var(--gold); transition: width var(--transition-smooth);
+}
+.nav-link:hover { color: var(--white); }
+.nav-link:hover::after { width: 20px; }
+.nav-link.active { color: var(--gold); }
+.nav-link.active::after { width: 20px; }
+.btn-gold {
+display: inline-flex; align-items: center; gap: 8px;
+padding: 12px 28px; border-radius: 2px; border: 1.5px solid var(--gold);
+background: transparent; color: var(--gold); font-family: var(--font-sans);
+font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
+cursor: pointer; transition: all var(--transition-smooth); position: relative; overflow: hidden;
+}
+.btn-gold::before {
+content: ''; position: absolute; inset: 0; background: var(--gold);
+transform: translateX(-101%); transition: transform var(--transition-smooth); z-index: -1;
+}
+.btn-gold:hover { color: var(--navy); }
+.btn-gold:hover::before { transform: translateX(0); }
+.btn-gold-solid {
+background: var(--gold); color: var(--navy); border-color: var(--gold);
+}
+.btn-gold-solid::before { display: none; }
+.btn-gold-solid:hover { background: var(--gold-light); border-color: var(--gold-light); }
+.btn-white {
+display: inline-flex; align-items: center; gap: 8px;
+padding: 12px 28px; border-radius: 2px; border: 1px solid rgba(255,255,255,0.3);
+background: transparent; color: var(--white); font-size: 12px; font-weight: 500;
+letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
+transition: all var(--transition-smooth);
+}
+.btn-white:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.5); }
+.mobile-menu-btn { display: none; background: none; border: none; cursor: pointer; color: var(--white); }
+.mobile-nav {
+position: fixed; inset: 0; z-index: 2000; background: var(--navy);
+display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 32px;
+opacity: 0; pointer-events: none; transition: opacity 0.4s;
+}
+.mobile-nav.open { opacity: 1; pointer-events: all; }
+.mobile-nav a { color: var(--white); font-size: 20px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; }
+.mobile-nav .close-btn { position: absolute; top: 24px; right: 24px; background: none; border: none; color: var(--white); font-size: 32px; cursor: pointer; }
+/* ========== HERO ========== */
+.hero {
+position: relative; min-height: 100vh;
+background: var(--navy); overflow: hidden;
+display: flex; align-items: center;
+}
+.hero-bg {
+position: absolute; inset: 0; z-index: 0;
+background:
+linear-gradient(135deg, rgba(10,22,40,0.92) 0%, rgba(10,22,40,0.75) 40%, rgba(10,22,40,0.6) 100%),
+url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80') center/cover no-repeat;
+}
+.hero-overlay {
+position: absolute; inset: 0; z-index: 1;
+background: radial-gradient(ellipse at 70% 50%, rgba(201,169,110,0.06) 0%, transparent 50%);
+}
+.hero-grid {
+position: relative; z-index: 2; max-width: 1280px; margin: 0 auto; padding: 140px 40px 80px;
+display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 80px; align-items: center;
+}
+.hero-label {
+display: inline-flex; align-items: center; gap: 12px;
+font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
+color: var(--gold); margin-bottom: 32px; animation: fadeInUp 0.8s ease both;
+}
+.hero-label .line {
+width: 40px; height: 1px; background: var(--gold); animation: lineGrow 1s ease 0.3s both;
+}
+.hero h1 {
+font-family: var(--font-serif); font-size: clamp(40px, 5vw, 68px); font-weight: 400;
+line-height: 1.1; color: var(--white); letter-spacing: -0.5px; margin-bottom: 28px;
+animation: fadeInUp 0.8s ease 0.2s both;
+}
+.hero h1 em {
+font-style: italic; color: var(--gold);
+}
+.hero p {
+font-size: 17px; font-weight: 300; color: rgba(255,255,255,0.65);
+max-width: 480px; line-height: 1.7; margin-bottom: 40px;
+animation: fadeInUp 0.8s ease 0.4s both;
+}
+.hero-actions {
+display: flex; gap: 16px; flex-wrap: wrap;
+animation: fadeInUp 0.8s ease 0.6s both;
+}
+.hero-right {
+position: relative; animation: fadeIn 1.2s ease 0.5s both;
+}
+.hero-card {
+background: rgba(255,255,255,0.03); border: 1px solid var(--border-light);
+backdrop-filter: blur(12px); border-radius: 4px; padding: 28px; margin-bottom: 16px;
+transition: all var(--transition-smooth);
+}
+.hero-card:hover { border-color: rgba(201,169,110,0.3); transform: translateY(-2px); }
+.hero-card-row {
+display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
+}
+.hero-card-label { font-size: 11px; color: rgba(255,255,255,0.5); letter-spacing: 1px; text-transform: uppercase; }
+.hero-card-value { font-size: 22px; font-weight: 600; color: var(--white); font-family: var(--font-serif); }
+.hero-card-value.gold { color: var(--gold); }
+.hero-progress {
+height: 2px; background: rgba(255,255,255,0.1); border-radius: 1px; overflow: hidden;
+}
+.hero-progress-fill { height: 100%; background: var(--gold); border-radius: 1px; transition: width 1.5s ease; }
+.hero-card-tag {
+display: inline-block; padding: 4px 12px; border-radius: 2px;
+font-size: 11px; font-weight: 500; letter-spacing: 0.5px;
+background: rgba(201,169,110,0.15); color: var(--gold); border: 1px solid rgba(201,169,110,0.2);
+}
+/* ========== SECTIONS COMMON ========== */
+.section { padding: 100px 40px; }
+.section-light { background: var(--offwhite); }
+.section-white { background: var(--white); }
+.section-dark { background: var(--navy); color: var(--white); }
+.container { max-width: 1280px; margin: 0 auto; }
+.section-label {
+display: inline-flex; align-items: center; gap: 12px;
+font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
+color: var(--gold); margin-bottom: 20px;
+}
+.section-label .line { width: 40px; height: 1px; background: var(--gold); }
+.section-label.dark { color: var(--navy); }
+.section-label.dark .line { background: var(--navy); }
+.section-title {
+font-family: var(--font-serif); font-size: clamp(32px, 3.5vw, 48px); font-weight: 400;
+line-height: 1.15; color: var(--navy); letter-spacing: -0.3px; margin-bottom: 20px;
+}
+.section-title.white { color: var(--white); }
+.section-title em { font-style: italic; color: var(--gold); }
+.section-desc {
+font-size: 17px; font-weight: 300; color: var(--gray); max-width: 560px; line-height: 1.7;
+}
+.section-desc.white { color: rgba(255,255,255,0.6); }
+/* ========== STATS BAR ========== */
+.stats-bar {
+background: var(--white); border-bottom: 1px solid var(--border-dark);
+padding: 48px 40px;
+}
+.stats-grid {
+max-width: 1280px; margin: 0 auto;
+display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px;
+}
+.stat-item { text-align: center; position: relative; }
+.stat-item:not(:last-child)::after {
+content: ''; position: absolute; right: -20px; top: 50%; transform: translateY(-50%);
+width: 1px; height: 40px; background: var(--border-dark);
+}
+.stat-number {
+font-family: var(--font-serif); font-size: 42px; font-weight: 400; color: var(--navy);
+line-height: 1; margin-bottom: 8px;
+}
+.stat-number em { color: var(--gold); font-style: italic; }
+.stat-label { font-size: 12px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray); }
+/* ========== SERVICES ========== */
+.services-grid {
+display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 56px;
+}
+.service-card {
+background: var(--white); border: 1px solid var(--border-dark); border-radius: 2px;
+padding: 40px 32px; transition: all var(--transition-smooth); cursor: pointer; position: relative;
+}
+.service-card::before {
+content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+background: var(--gold); transform: scaleX(0); transition: transform var(--transition-smooth); transform-origin: left;
+}
+.service-card:hover {
+box-shadow: 0 20px 60px rgba(10,22,40,0.08); transform: translateY(-4px); border-color: transparent;
+}
+.service-card:hover::before { transform: scaleX(1); }
+.service-icon {
+width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--border-dark);
+display: flex; align-items: center; justify-content: center; margin-bottom: 24px;
+font-size: 20px; transition: all var(--transition-smooth);
+}
+.service-card:hover .service-icon { border-color: var(--gold); background: rgba(201,169,110,0.05); }
+.service-card h3 {
+font-family: var(--font-serif); font-size: 22px; font-weight: 500; color: var(--navy); margin-bottom: 12px;
+}
+.service-card p {
+font-size: 14px; color: var(--gray); line-height: 1.7; margin-bottom: 24px;
+}
+.service-link {
+font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
+color: var(--gold); text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+transition: gap var(--transition-fast);
+}
+.service-link:hover { gap: 12px; }
+/* ========== ABOUT / PHILOSOPHY ========== */
+.about-grid {
+display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+}
+.about-text { font-size: 16px; color: var(--gray); line-height: 1.8; }
+.about-text p { margin-bottom: 20px; }
+.about-text strong { color: var(--navy); font-weight: 600; }
+.about-image {
+position: relative; overflow: hidden; border-radius: 2px;
+}
+.about-image img {
+width: 100%; height: 500px; object-fit: cover;
+transition: transform 8s ease;
+}
+.about-image:hover img { transform: scale(1.05); }
+.about-image::after {
+content: ''; position: absolute; inset: 0;
+background: linear-gradient(to top, rgba(10,22,40,0.3), transparent 50%);
+}
+.about-badge {
+position: absolute; bottom: 32px; left: 32px; z-index: 2;
+background: rgba(10,22,40,0.85); backdrop-filter: blur(8px);
+border: 1px solid var(--border-light); border-radius: 2px;
+padding: 20px 24px; max-width: 280px;
+}
+.about-badge-label { font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+.about-badge-text { font-size: 14px; font-weight: 500; color: var(--white); line-height: 1.5; }
+/* ========== TIMELINE ========== */
+.timeline-section { position: relative; }
+.timeline {
+position: relative; padding-left: 32px;
+}
+.timeline::before {
+content: ''; position: absolute; left: 7px; top: 8px; bottom: 8px;
+width: 1px; background: rgba(201,169,110,0.3);
+}
+.t-item { position: relative; margin-bottom: 36px; }
+.t-dot {
+position: absolute; left: -28px; top: 4px;
+width: 16px; height: 16px; border-radius: 50%;
+border: 2px solid var(--gold); background: var(--navy); transition: all var(--transition-fast);
+}
+.t-item:hover .t-dot { background: var(--gold); transform: scale(1.2); }
+.t-year { font-size: 13px; font-weight: 700; color: var(--gold); letter-spacing: 1px; }
+.t-title { font-family: var(--font-serif); font-size: 18px; font-weight: 500; color: var(--white); margin-top: 4px; }
+.t-desc { font-size: 14px; color: rgba(255,255,255,0.55); margin-top: 6px; line-height: 1.6; }
+/* ========== TIMELINE ABOUT (light background) ========== */
+.timeline-about { position: relative; padding-left: 32px; }
+.timeline-about::before {
+content: ''; position: absolute; left: 7px; top: 8px; bottom: 8px;
+width: 1px; background: var(--border-dark);
+}
+.t-item-about { position: relative; margin-bottom: 36px; }
+.t-dot-about {
+position: absolute; left: -28px; top: 4px;
+width: 16px; height: 16px; border-radius: 50%;
+border: 2px solid var(--gold); background: var(--white); transition: all var(--transition-fast);
+}
+.t-item-about:hover .t-dot-about { background: var(--gold); transform: scale(1.2); }
+.t-year-about { font-size: 13px; font-weight: 700; color: var(--gold); letter-spacing: 1px; }
+.t-title-about { font-family: var(--font-serif); font-size: 18px; font-weight: 500; color: var(--navy); margin-top: 4px; }
+.t-desc-about { font-size: 14px; color: var(--gray); margin-top: 6px; line-height: 1.6; }
+/* ========== TESTIMONIALS ========== */
+.reviews-grid {
+display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 56px;
+}
+.review-card {
+background: var(--white); border: 1px solid var(--border-dark); border-radius: 2px;
+padding: 36px 32px; transition: all var(--transition-smooth); position: relative;
+}
+.review-card::before {
+content: '"'; position: absolute; top: 20px; right: 28px;
+font-family: var(--font-serif); font-size: 80px; color: rgba(201,169,110,0.15); line-height: 1;
+}
+.review-card:hover { box-shadow: 0 16px 48px rgba(10,22,40,0.06); transform: translateY(-3px); }
+.review-stars { display: flex; gap: 4px; margin-bottom: 20px; }
+.star { color: var(--gold); font-size: 15px; }
+.star.empty { color: #e5e5e5; }
+.review-text {
+font-size: 15px; color: var(--gray); line-height: 1.7; margin-bottom: 24px; font-style: italic;
+}
+.review-author { display: flex; align-items: center; gap: 14px; }
+.review-avatar {
+width: 40px; height: 40px; border-radius: 50%; background: var(--navy);
+display: flex; align-items: center; justify-content: center;
+font-size: 13px; font-weight: 600; color: var(--gold); font-family: var(--font-serif);
+}
+.review-name { font-size: 14px; font-weight: 600; color: var(--navy); }
+.review-meta { font-size: 12px; color: var(--gray-light); }
+.review-tag {
+display: inline-block; margin-top: 14px; padding: 4px 12px; border-radius: 2px;
+font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+background: var(--offwhite); color: var(--gray);
+}
+/* ========== PRODUCTS ========== */
+.products-grid {
+display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 56px;
+}
+.product-card {
+background: var(--white); border: 1px solid var(--border-dark); border-radius: 2px;
+overflow: hidden; transition: all var(--transition-smooth);
+}
+.product-card:hover { box-shadow: 0 20px 60px rgba(10,22,40,0.08); transform: translateY(-4px); }
+.product-header { padding: 32px 32px 20px; border-bottom: 1px solid var(--border-dark); }
+.product-type { font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+.product-name { font-family: var(--font-serif); font-size: 22px; font-weight: 500; color: var(--navy); }
+.product-body { padding: 24px 32px; }
+.product-feature {
+display: flex; align-items: flex-start; gap: 10px;
+font-size: 14px; color: var(--gray); margin-bottom: 12px; line-height: 1.5;
+}
+.product-check { color: var(--gold); font-weight: 700; font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.product-footer {
+padding: 20px 32px; border-top: 1px solid var(--border-dark);
+display: flex; justify-content: space-between; align-items: center;
+}
+.product-price { font-family: var(--font-serif); font-size: 28px; font-weight: 400; color: var(--navy); }
+.product-price span { font-size: 13px; font-weight: 400; color: var(--gray-light); font-family: var(--font-sans); }
+/* ========== CTA SECTION ========== */
+.cta-section {
+position: relative; background: var(--navy); overflow: hidden;
+padding: 100px 40px;
+}
+.cta-bg {
+position: absolute; inset: 0;
+background:
+linear-gradient(135deg, rgba(10,22,40,0.95) 0%, rgba(10,22,40,0.85) 100%),
+url('https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1920&q=80') center/cover no-repeat;
+opacity: 0.4;
+}
+.cta-content {
+position: relative; z-index: 2; max-width: 1280px; margin: 0 auto;
+display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+}
+.cta-left h2 {
+font-family: var(--font-serif); font-size: clamp(32px, 3vw, 44px); font-weight: 400;
+color: var(--white); line-height: 1.2; margin-bottom: 20px;
+}
+.cta-left h2 em { font-style: italic; color: var(--gold); }
+.cta-left p { font-size: 16px; color: rgba(255,255,255,0.6); line-height: 1.7; margin-bottom: 32px; }
+.cta-form { display: flex; gap: 12px; }
+.cta-form input {
+flex: 1; padding: 14px 20px; border: 1px solid var(--border-light); border-radius: 2px;
+background: rgba(255,255,255,0.05); color: var(--white); font-size: 14px;
+outline: none; transition: border-color var(--transition-fast);
+}
+.cta-form input::placeholder { color: rgba(255,255,255,0.4); }
+.cta-form input:focus { border-color: var(--gold); }
+/* ========== FOOTER ========== */
+.footer {
+background: var(--navy); color: rgba(255,255,255,0.5); border-top: 1px solid var(--border-light);
+padding: 80px 40px 32px;
+}
+.footer-grid {
+max-width: 1280px; margin: 0 auto;
+display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 60px;
+}
+.footer-brand { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+.footer-brand-icon {
+width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--gold);
+display: flex; align-items: center; justify-content: center;
+font-family: var(--font-serif); font-size: 16px; font-weight: 600; color: var(--gold);
+}
+.footer-brand-name { font-family: var(--font-serif); font-size: 20px; font-weight: 600; color: var(--white); letter-spacing: 1px; }
+.footer-desc { font-size: 14px; line-height: 1.7; color: rgba(255,255,255,0.4); max-width: 320px; }
+.footer-title { font-size: 11px; font-weight: 600; color: var(--white); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; }
+.footer-links { list-style: none; }
+.footer-links li { margin-bottom: 12px; }
+.footer-links a {
+font-size: 14px; color: rgba(255,255,255,0.45); text-decoration: none;
+transition: color var(--transition-fast); position: relative;
+}
+.footer-links a:hover { color: var(--gold); }
+.footer-bottom {
+max-width: 1280px; margin: 0 auto;
+border-top: 1px solid var(--border-light); padding-top: 24px;
+display: flex; justify-content: space-between; align-items: center;
+font-size: 12px; color: rgba(255,255,255,0.3); flex-wrap: wrap; gap: 12px;
+}
+/* ========== PORTAL ========== */
+.portal-wrap { padding-top: 80px; background: var(--offwhite); min-height: 100vh; }
+.portal-topbar {
+display: flex; align-items: center; justify-content: space-between;
+padding: 16px 32px; background: var(--white); border-bottom: 1px solid var(--border-dark);
+margin-bottom: 32px; border-radius: 2px;
+}
+.portal-nav { display: flex; gap: 4px; flex-wrap: wrap; }
+.portal-nav-btn {
+padding: 8px 16px; border-radius: 2px; border: none; background: transparent;
+color: var(--gray); cursor: pointer; font-size: 12px; font-weight: 500; letter-spacing: 0.5px;
+transition: all var(--transition-fast);
+}
+.portal-nav-btn:hover { background: var(--offwhite); color: var(--navy); }
+.portal-nav-btn.active { background: var(--navy); color: var(--white); }
+.portal-card {
+background: var(--white); border: 1px solid var(--border-dark); border-radius: 2px;
+padding: 28px; margin-bottom: 20px; transition: box-shadow var(--transition-smooth);
+}
+.portal-card:hover { box-shadow: 0 8px 32px rgba(10,22,40,0.04); }
+.portal-card-title { font-family: var(--font-serif); font-size: 20px; font-weight: 500; color: var(--navy); margin-bottom: 16px; }
+.portal-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.portal-stat {
+background: var(--white); border: 1px solid var(--border-dark); border-radius: 2px; padding: 24px;
+transition: all var(--transition-smooth);
+}
+.portal-stat:hover { border-color: var(--gold); }
+.portal-stat-label { font-size: 11px; color: var(--gray-light); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+.portal-stat-value { font-family: var(--font-serif); font-size: 32px; font-weight: 400; color: var(--navy); }
+.portal-stat-delta { font-size: 13px; margin-top: 6px; }
+.portal-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.portal-table th, .portal-table td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border-dark); }
+.portal-table th { font-weight: 500; color: var(--gray-light); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+.timeline-portal { position: relative; padding-left: 28px; }
+.timeline-portal::before { content: ''; position: absolute; left: 7px; top: 4px; bottom: 4px; width: 1px; background: var(--border-dark); }
+.t-item-portal { position: relative; margin-bottom: 28px; }
+.t-dot-portal { position: absolute; left: -24px; top: 2px; width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--border-dark); background: var(--white); transition: all var(--transition-fast); }
+.t-dot-portal.done { background: var(--navy); border-color: var(--navy); }
+.t-dot-portal.active { background: var(--gold); border-color: var(--gold); }
+.t-item-portal:hover .t-dot-portal { transform: scale(1.2); }
+.t-date-portal { font-size: 12px; color: var(--gray-light); }
+.t-title-portal { font-family: var(--font-serif); font-size: 16px; font-weight: 500; color: var(--navy); margin-top: 2px; }
+.t-desc-portal { font-size: 14px; color: var(--gray); margin-top: 4px; line-height: 1.5; }
+.chat-box {
+border: 1px solid var(--border-dark); border-radius: 2px; height: 380px;
+display: flex; flex-direction: column; background: var(--white);
+}
+.chat-header {
+padding: 16px 20px; border-bottom: 1px solid var(--border-dark);
+font-size: 14px; font-weight: 600; color: var(--navy); display: flex; align-items: center; gap: 8px;
+}
+.chat-status { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); animation: pulse-gold 2s infinite; }
+.chat-messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.msg { max-width: 78%; padding: 12px 16px; border-radius: 2px; font-size: 14px; line-height: 1.5; transition: all var(--transition-fast); }
+.msg-in { align-self: flex-start; background: var(--offwhite); color: var(--navy); border-left: 2px solid var(--gold); }
+.msg-out { align-self: flex-end; background: var(--navy); color: var(--white); }
+.chat-input-row { display: flex; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--border-dark); }
+.chat-input-row input { flex: 1; padding: 10px 14px; border: 1px solid var(--border-dark); border-radius: 2px; font-size: 14px; outline: none; background: var(--offwhite); transition: border-color var(--transition-fast); }
+.chat-input-row input:focus { border-color: var(--gold); }
+.form-group { margin-bottom: 20px; }
+.form-label { display: block; font-size: 12px; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+.form-input, .form-select, .form-textarea {
+width: 100%; padding: 12px 16px; border: 1px solid var(--border-dark); border-radius: 2px;
+font-size: 14px; outline: none; background: var(--white); transition: all var(--transition-fast); color: var(--navy);
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,169,110,0.1); }
+.form-textarea { min-height: 100px; resize: vertical; }
+.profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.progress-bar { height: 3px; border-radius: 1px; background: var(--border-dark); overflow: hidden; margin-top: 8px; }
+.progress-fill { height: 100%; background: var(--gold); border-radius: 1px; transition: width 1s ease; }
+.advisor-layout { display: grid; grid-template-columns: 300px 1fr; gap: 20px; }
+.solution-row {
+display: flex; align-items: center; justify-content: space-between;
+padding: 16px 0; border-bottom: 1px solid var(--border-dark); transition: all var(--transition-fast);
+}
+.solution-row:hover { padding-left: 8px; }
+.solution-row:last-child { border-bottom: none; }
+.solution-info h4 { font-family: var(--font-serif); font-size: 16px; font-weight: 500; color: var(--navy); }
+.solution-info p { font-size: 13px; color: var(--gray-light); margin-top: 2px; }
+.complaint-item {
+padding: 20px; border: 1px solid var(--border-dark); border-radius: 2px;
+margin-bottom: 12px; background: var(--white); transition: all var(--transition-smooth);
+}
+.complaint-item:hover { border-color: var(--gold); box-shadow: 0 4px 16px rgba(10,22,40,0.04); }
+.complaint-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.complaint-id { font-size: 12px; color: var(--gray-light); font-variant-numeric: tabular-nums; font-family: var(--font-sans); }
+.complaint-text { font-size: 14px; color: var(--gray); line-height: 1.6; }
+.login-wrap {
+max-width: 440px; margin: 120px auto;
+background: var(--white); border: 1px solid var(--border-dark); border-radius: 2px;
+padding: 48px; box-shadow: 0 20px 60px rgba(10,22,40,0.06);
+}
+.login-title { font-family: var(--font-serif); font-size: 28px; font-weight: 500; text-align: center; margin-bottom: 6px; color: var(--navy); }
+.login-sub { text-align: center; color: var(--gray-light); font-size: 14px; margin-bottom: 36px; }
+.login-tabs { display: flex; gap: 8px; margin-bottom: 28px; }
+.login-tab { flex: 1; padding: 12px; border: 1px solid var(--border-dark); background: transparent; cursor: pointer;
+font-size: 13px; font-weight: 500; border-radius: 2px; letter-spacing: 0.5px; transition: all var(--transition-fast); }
+.login-tab.active { background: var(--navy); color: var(--white); border-color: var(--navy); }
+.tag {
+display: inline-block; padding: 4px 12px; border-radius: 2px; font-size: 11px; font-weight: 600; letter-spacing: 0.5px;
+}
+.tag-green { background: rgba(201,169,110,0.1); color: var(--gold-dark); }
+.tag-amber { background: rgba(201,169,110,0.08); color: var(--gold); border: 1px solid rgba(201,169,110,0.2); }
+.tag-red { background: rgba(220,38,38,0.08); color: #c0392b; }
+.tag-blue { background: rgba(10,22,40,0.06); color: var(--navy); }
+.hidden { display: none !important; }
+/* ========== RESPONSIVE ========== */
+@media (max-width: 1024px) {
+.hero-grid, .about-grid, .cta-content, .advisor-layout { grid-template-columns: 1fr; }
+.services-grid, .products-grid, .reviews-grid, .stats-grid, .portal-grid-3 { grid-template-columns: 1fr; }
+.footer-grid { grid-template-columns: 1fr 1fr; }
+.nav-desktop { display: none; }
+.mobile-menu-btn { display: block; }
+.header-actions .btn-gold { display: none; }
+.hero { min-height: auto; padding: 120px 0 60px; }
+.hero-grid { padding: 0 24px; gap: 40px; }
+.section { padding: 60px 24px; }
+.stats-bar { padding: 32px 24px; }
+.stats-grid { grid-template-columns: 1fr 1fr; gap: 24px; }
+.stat-item:not(:last-child)::after { display: none; }
+}
+@media (max-width: 640px) {
+.footer-grid { grid-template-columns: 1fr; }
+.profile-grid { grid-template-columns: 1fr; }
+.stats-grid { grid-template-columns: 1fr; }
+.header { padding: 0 20px; }
+.header-inner { height: 64px; }
+.login-wrap { margin: 80px 16px; padding: 32px 24px; }
+}
+</style>
+<script type='text/javascript' src='https://prod-chat-kimi.tos-cn-beijing.volces.com/5gqn7Ul2oz4jQAPhAdSwhCh4NOUkSkqhDRWxMv89TcYd5_6o1qfdGyLvtueoUG5MsSILuHI2B-U24T52OEdsRUc-gSwBr36DnZM5vjKgf5UqV5I7h4VPS9x_akD9X2Px2uzxbhC5Fu-elvZSbWau5foc6RJwkTYMGa8r3WTFB4ko_2C1UoDn7DmEGUNz4WqE87fG9vHTgBAJWliUY0z1NaUm0t3it1saoC-ZZjeHx9E-f15mVnP8qfsfSUT4OgB1n6iej7yhD0L97LDSRxV5_KPvELVFcpjgfKn1RIvaNLpBYDHJ9xtCqK_Y7RlJOJQIp6tWW2ViuK0TabEdszMdqT3ipnvmPb5HLFFIukDHL57KYj9bdTjYbo_krhCEYGF7E__PxP7JaB4mZbBEb0_gcupV5ol_W6VJsKKZl8DAjiFwBVKJZWBjCFlrjpNq6l7iASePE8WtCN9uWx_nVLqjg0RRXzlaQxdUWECjj647W-uSllvMxloU5_7VUCQmCIKbbmV62R_4OzLZJimSWUCFeDSxOZgsowsaFkZuwL5GmSo6nFcfAHhV_eTg2THxthGhDAuRMNq6nn67skWdzjhPRAQwMgPZbdSKW7t14CDN8d06a_ItmtON1-V3u6Y83gn72_df-KhiHZwD9RhKHWG-y-loF6VNf94a2nngv3OQJlAzoXIUJdMf30dIB7F-4tc-Qrj9JwBYSLwvSBNb_9WTkSS8W_jASaenAvgYii5dzNvkwertQWdB4dnKFi6uZVDYqB4gMn4myUj6vuNoPKdVozNsuT9-9znNurEbkLaEk1G-xQYikUWtgJDOQZILO0IoTOIJnze3WJdWCIVsRquIH99WRj1hN-sfB12jJDkMTSTRRw2WirC_2DoeRT793pMR9h-1gXDZuxlY68Sj9vxT8xAxt8ZydfuMc4w7n-OC7JQvqRwYItAPaN2So52uRRXVQhtHDlAeO_Xl5UrZQzstkqPwiR_EyG-6qZhnM-oWn7epwiEfHOZAGnr-9iTROFEDF04HbeMJIisB2oBcxRuGXvojtrh5S9B7HUqAxlZIromPhT_r61-1E9XDWFtUnCnUrc7vGEM'></script><base target="_blank">
+</head>
+<body>
+<!-- ==================== HEADER ==================== -->
+<header class="header" id="header">
+<div class="header-inner">
+<div class="logo" onclick="showPublicPage('home')">
+<div class="logo-icon">F</div>
+<div class="logo-text">
+<div class="logo-name">FinLex</div>
+<div class="logo-tagline">Group</div>
+</div>
+</div>
+<nav class="nav-desktop">
+<a class="nav-link active" onclick="showPublicPage('home')">Inicio</a>
+<a class="nav-link" onclick="showPublicPage('services')">Servicios</a>
+<a class="nav-link" onclick="showPublicPage('products')">Productos</a>
+<a class="nav-link" onclick="showPublicPage('about')">Nosotros</a>
+<a class="nav-link" onclick="showPublicPage('testimonials')">Testimonios</a>
+<a class="nav-link" onclick="showPublicPage('contact')">Contacto</a>
+<a class="nav-link" onclick="showPublicPage('legal')">Legal</a>
+</nav>
+<div class="header-actions" style="display:flex;align-items:center;gap:12px;">
+<button class="btn-gold" style="padding:10px 20px;" onclick="enterPortal()">Portal Cliente</button>
+<button class="btn-gold btn-gold-solid" style="padding:10px 20px;" onclick="showPublicPage('contact')">Evaluación Privada</button>
+</div>
+<button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+</button>
+</div>
+</header>
+<!-- Mobile Menu -->
+<div class="mobile-nav" id="mobileNav">
+<button class="close-btn" onclick="toggleMobileMenu()">&times;</button>
+<a onclick="toggleMobileMenu();showPublicPage('home')">Inicio</a>
+<a onclick="toggleMobileMenu();showPublicPage('services')">Servicios</a>
+<a onclick="toggleMobileMenu();showPublicPage('products')">Productos</a>
+<a onclick="toggleMobileMenu();showPublicPage('about')">Nosotros</a>
+<a onclick="toggleMobileMenu();showPublicPage('testimonials')">Testimonios</a>
+<a onclick="toggleMobileMenu();showPublicPage('contact')">Contacto</a>
+<a onclick="toggleMobileMenu();showPublicPage('legal')">Legal</a>
+<a onclick="toggleMobileMenu();enterPortal()">Portal Cliente</a>
+</div>
+<!-- ==================== PUBLIC PAGES ==================== -->
+<div id="public-pages">
+<!-- HOME -->
+<section id="page-home">
+<section class="hero">
+<div class="hero-bg"></div>
+<div class="hero-overlay"></div>
+<div class="hero-grid">
+<div>
+<div class="hero-label"><span class="line"></span> Protección Financiera y Digital</div>
+<h1>Protegemos lo que <em>ha construido.</em> Hoy y siempre.</h1>
+<p>Soluciones integrales de protección financiera, ciberseguridad y gestión de riesgos para personas y empresas que exigen absoluta confianza.</p>
+<div class="hero-actions">
+<button class="btn-gold btn-gold-solid" onclick="showPublicPage('contact')">Solicitar evaluación privada →</button>
+<button class="btn-white" onclick="showPublicPage('services')">Conocer nuestras soluciones</button>
+</div>
+</div>
+<div class="hero-right">
+<div class="hero-card">
+<div class="hero-card-row">
+<span class="hero-card-label">Saldo en recuperación</span>
+<span class="hero-card-value">€42.750</span>
+</div>
+<div class="hero-progress"><div class="hero-progress-fill" style="width:60%"></div></div>
+</div>
+<div class="hero-card">
+<div class="hero-card-row">
+<span class="hero-card-label">Fondos recuperados</span>
+<span class="hero-card-value gold">€8.230</span>
+</div>
+<div class="hero-progress"><div class="hero-progress-fill" style="width:22%"></div></div>
+</div>
+<div class="hero-card">
+<div class="hero-card-row">
+<span class="hero-card-label">Estado del caso</span>
+<span class="hero-card-tag">En proceso</span>
+</div>
+<div style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:8px;">Fase 3 de 5 · Asesor: Dra. Elena Vargas</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Stats Bar -->
+<section class="stats-bar">
+<div class="stats-grid">
+<div class="stat-item animate-on-scroll">
+<div class="stat-number">12<em>+</em></div>
+<div class="stat-label">Años de experiencia</div>
+</div>
+<div class="stat-item animate-on-scroll animate-delay-1">
+<div class="stat-number">3.200<em>+</em></div>
+<div class="stat-label">Clientes protegidos</div>
+</div>
+<div class="stat-item animate-on-scroll animate-delay-2">
+<div class="stat-number">12</div>
+<div class="stat-label">Países de cobertura</div>
+</div>
+<div class="stat-item animate-on-scroll animate-delay-3">
+<div class="stat-number">84<em>M€</em></div>
+<div class="stat-label">En activos recuperados</div>
+</div>
+</div>
+</section>
+<!-- Services -->
+<section class="section section-white">
+<div class="container">
+<div class="text-center" style="text-align:center;">
+<div class="section-label dark"><span class="line"></span> Nuestras soluciones</div>
+<h2 class="section-title">Protección integral. <em>En cada dimensión.</em></h2>
+<p class="section-desc" style="margin:0 auto;">Desde la recuperación de capitales perdidos hasta la protección tecnológica de su empresa. Un solo socio para todas sus necesidades.</p>
+</div>
+<div class="services-grid">
+<div class="service-card animate-on-scroll" onclick="showPublicPage('services')">
+<div class="service-icon">🛡️</div>
+<h3>Protección Financiera</h3>
+<p>Estrategias para resguardar activos, inversiones y patrimonio frente a riesgos financieros y económicos.</p>
+<span class="service-link">Más información →</span>
+</div>
+<div class="service-card animate-on-scroll animate-delay-1" onclick="showPublicPage('services')">
+<div class="service-icon">🔒</div>
+<h3>Ciberseguridad Corporativa</h3>
+<p>Defendemos su empresa ante amenazas digitales con tecnología, procesos y monitoreo continuo.</p>
+<span class="service-link">Más información →</span>
+</div>
+<div class="service-card animate-on-scroll animate-delay-2" onclick="showPublicPage('services')">
+<div class="service-icon">🗄️</div>
+<h3>Protección de Datos</h3>
+<p>Seguridad avanzada para su información crítica durante todo su ciclo de vida.</p>
+<span class="service-link">Más información →</span>
+</div>
+<div class="service-card animate-on-scroll animate-delay-3" onclick="showPublicPage('services')">
+<div class="service-icon">📊</div>
+<h3>Gestión de Riesgos</h3>
+<p>Identificamos, evaluamos y mitigamos riesgos financieros, operacionales y tecnológicos.</p>
+<span class="service-link">Más información →</span>
+</div>
+<div class="service-card animate-on-scroll animate-delay-4" onclick="showPublicPage('services')">
+<div class="service-icon">💼</div>
+<h3>Protección Empresarial</h3>
+<p>Soluciones a la medida para empresas, directivos y familias empresarias.</p>
+<span class="service-link">Más información →</span>
+</div>
+<div class="service-card animate-on-scroll animate-delay-5" onclick="showPublicPage('services')">
+<div class="service-icon">🔍</div>
+<h3>Recuperación de Activos</h3>
+<p>Especialistas en reclamación de fondos invertidos en plataformas no reguladas y estafas online.</p>
+<span class="service-link">Más información →</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Philosophy -->
+<section class="section section-light">
+<div class="container">
+<div class="about-grid">
+<div class="animate-on-scroll">
+<div class="section-label dark"><span class="line"></span> Experiencia que genera confianza</div>
+<h2 class="section-title">Una firma con visión, <em>experiencia y compromiso.</em></h2>
+<div class="about-text">
+<p>Combinamos experiencia financiera, conocimiento regulatorio y tecnología de vanguardia para brindar soluciones que protegen lo que más importa.</p>
+<p>No cobramos por adelantado en recuperación de activos. Nuestro modelo de éxito nos alinea con sus resultados: solo facturamos honorarios cuando usted recupera su dinero.</p>
+<p>En el área de productos financieros, seleccionamos únicamente instrumentos que entendemos a fondo y que cumplen con nuestros criterios de solvencia, liquidez y coste razonable.</p>
+</div>
+<div style="margin-top:32px;display:flex;gap:32px;flex-wrap:wrap;">
+<div>
+<div style="font-family:var(--font-serif);font-size:28px;color:var(--gold);font-weight:400;">94%</div>
+<div style="font-size:12px;color:var(--gray);text-transform:uppercase;letter-spacing:1px;">Tasa de satisfacción</div>
+</div>
+<div>
+<div style="font-family:var(--font-serif);font-size:28px;color:var(--gold);font-weight:400;">€84M+</div>
+<div style="font-size:12px;color:var(--gray);text-transform:uppercase;letter-spacing:1px;">Activos recuperados</div>
+</div>
+</div>
+</div>
+<div class="about-image animate-on-scroll animate-delay-2">
+<img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80" alt="Oficina FinLex">
+<div class="about-badge">
+<div class="about-badge-label">Nuestra prioridad</div>
+<div class="about-badge-text">Protegemos su patrimonio, su información y su futuro con estrategia, tecnología y experiencia.</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Methodology -->
+<section class="section section-dark">
+<div class="container">
+<div class="text-center" style="text-align:center;margin-bottom:56px;">
+<div class="section-label"><span class="line"></span> Nuestra metodología</div>
+<h2 class="section-title white">Un proceso riguroso. <em>Resultados confiables.</em></h2>
+</div>
+<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-bottom:60px;">
+<div class="animate-on-scroll" style="text-align:center;padding:24px 16px;border:1px solid var(--border-light);border-radius:2px;transition:all var(--transition-smooth);" onmouseover="this.style.borderColor='var(--gold)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='var(--border-light)';this.style.transform='translateY(0)'">
+<div style="font-family:var(--font-serif);font-size:32px;color:var(--gold);font-weight:400;margin-bottom:12px;">01</div>
+<div style="font-family:var(--font-serif);font-size:18px;color:var(--white);font-weight:500;margin-bottom:8px;">Identificar</div>
+<div style="font-size:13px;color:rgba(255,255,255,0.5);line-height:1.6;">Entendemos su entorno, activos y amenazas potenciales.</div>
+</div>
+<div class="animate-on-scroll animate-delay-1" style="text-align:center;padding:24px 16px;border:1px solid var(--border-light);border-radius:2px;transition:all var(--transition-smooth);" onmouseover="this.style.borderColor='var(--gold)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='var(--border-light)';this.style.transform='translateY(0)'">
+<div style="font-family:var(--font-serif);font-size:32px;color:var(--gold);font-weight:400;margin-bottom:12px;">02</div>
+<div style="font-family:var(--font-serif);font-size:18px;color:var(--white);font-weight:500;margin-bottom:8px;">Analizar</div>
+<div style="font-size:13px;color:rgba(255,255,255,0.5);line-height:1.6;">Evaluamos riesgos y vulnerabilidades con inteligencia avanzada.</div>
+</div>
+<div class="animate-on-scroll animate-delay-2" style="text-align:center;padding:24px 16px;border:1px solid var(--border-light);border-radius:2px;transition:all var(--transition-smooth);" onmouseover="this.style.borderColor='var(--gold)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='var(--border-light)';this.style.transform='translateY(0)'">
+<div style="font-family:var(--font-serif);font-size:32px;color:var(--gold);font-weight:400;margin-bottom:12px;">03</div>
+<div style="font-family:var(--font-serif);font-size:18px;color:var(--white);font-weight:500;margin-bottom:8px;">Diseñar</div>
+<div style="font-size:13px;color:rgba(255,255,255,0.5);line-height:1.6;">Desarrollamos estrategias y controles a la medida de sus objetivos.</div>
+</div>
+<div class="animate-on-scroll animate-delay-3" style="text-align:center;padding:24px 16px;border:1px solid var(--border-light);border-radius:2px;transition:all var(--transition-smooth);" onmouseover="this.style.borderColor='var(--gold)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='var(--border-light)';this.style.transform='translateY(0)'">
+<div style="font-family:var(--font-serif);font-size:32px;color:var(--gold);font-weight:400;margin-bottom:12px;">04</div>
+<div style="font-family:var(--font-serif);font-size:18px;color:var(--white);font-weight:500;margin-bottom:8px;">Proteger</div>
+<div style="font-size:13px;color:rgba(255,255,255,0.5);line-height:1.6;">Implementamos soluciones tecnológicas y operativas de alto nivel.</div>
+</div>
+<div class="animate-on-scroll animate-delay-4" style="text-align:center;padding:24px 16px;border:1px solid var(--border-light);border-radius:2px;transition:all var(--transition-smooth);" onmouseover="this.style.borderColor='var(--gold)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='var(--border-light)';this.style.transform='translateY(0)'">
+<div style="font-family:var(--font-serif);font-size:32px;color:var(--gold);font-weight:400;margin-bottom:12px;">05</div>
+<div style="font-family:var(--font-serif);font-size:18px;color:var(--white);font-weight:500;margin-bottom:8px;">Monitorear</div>
+<div style="font-size:13px;color:rgba(255,255,255,0.5);line-height:1.6;">Vigilancia continua 24/7 con inteligencia global de amenazas.</div>
+</div>
+<div class="animate-on-scroll animate-delay-5" style="text-align:center;padding:24px 16px;border:1px solid var(--border-light);border-radius:2px;transition:all var(--transition-smooth);" onmouseover="this.style.borderColor='var(--gold)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='var(--border-light)';this.style.transform='translateY(0)'">
+<div style="font-family:var(--font-serif);font-size:32px;color:var(--gold);font-weight:400;margin-bottom:12px;">06</div>
+<div style="font-family:var(--font-serif);font-size:18px;color:var(--white);font-weight:500;margin-bottom:8px;">Responder</div>
+<div style="font-size:13px;color:rgba(255,255,255,0.5);line-height:1.6;">Actuamos con rapidez y precisión ante cualquier incidente.</div>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px;">
+<div class="animate-on-scroll">
+<div class="section-label"><span class="line"></span> Tecnología e inteligencia</div>
+<h3 style="font-family:var(--font-serif);font-size:24px;color:var(--white);font-weight:400;margin-bottom:12px;">Infraestructura robusta. <em>Protección continua.</em></h3>
+<p style="font-size:14px;color:rgba(255,255,255,0.5);line-height:1.7;">Sistemas de última generación y analistas de inteligencia 24/7 para anticiparse a los riesgos y responder en tiempo real.</p>
+</div>
+<div class="animate-on-scroll animate-delay-1">
+<div class="section-label"><span class="line"></span> Escenarios que prevenimos</div>
+<ul style="list-style:none;padding:0;">
+<li style="font-size:14px;color:rgba(255,255,255,0.55);margin-bottom:10px;display:flex;align-items:center;gap:10px;"><span style="color:var(--gold);font-weight:700;">✓</span> Fraude financiero y transaccional</li>
+<li style="font-size:14px;color:rgba(255,255,255,0.55);margin-bottom:10px;display:flex;align-items:center;gap:10px;"><span style="color:var(--gold);font-weight:700;">✓</span> Suplantación de identidad y extorsión</li>
+<li style="font-size:14px;color:rgba(255,255,255,0.55);margin-bottom:10px;display:flex;align-items:center;gap:10px;"><span style="color:var(--gold);font-weight:700;">✓</span> Atracción de datos comprometidos</li>
+<li style="font-size:14px;color:rgba(255,255,255,0.55);margin-bottom:10px;display:flex;align-items:center;gap:10px;"><span style="color:var(--gold);font-weight:700;">✓</span> Riesgos en inversiones y terceros</li>
+<li style="font-size:14px;color:rgba(255,255,255,0.55);margin-bottom:10px;display:flex;align-items:center;gap:10px;"><span style="color:var(--gold);font-weight:700;">✓</span> Exposición de activos digitales y físicos</li>
+</ul>
+</div>
+<div class="animate-on-scroll animate-delay-2">
+<div class="section-label"><span class="line"></span> Lo que dicen nuestros clientes</div>
+<div style="background:rgba(255,255,255,0.03);border:1px solid var(--border-light);border-radius:2px;padding:24px;margin-bottom:16px;">
+<p style="font-size:14px;color:rgba(255,255,255,0.6);font-style:italic;line-height:1.7;margin-bottom:12px;">"Su enfoque estratégico y discreto nos brinda la confianza para tomar decisiones sin exposición innecesaria."</p>
+<div style="font-size:12px;color:var(--gold);font-weight:600;">— Cliente Corporativo</div>
+</div>
+<div style="background:rgba(255,255,255,0.03);border:1px solid var(--border-light);border-radius:2px;padding:24px;">
+<p style="font-size:14px;color:rgba(255,255,255,0.6);font-style:italic;line-height:1.7;margin-bottom:12px;">"El acompañamiento del equipo ha sido clave para fortalecer nuestra seguridad y proteger nuestra información."</p>
+<div style="font-size:12px;color:var(--gold);font-weight:600;">— Cliente Privado</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<!-- SERVICES DETAIL -->
+<section id="page-services" class="hidden">
+<div style="padding:140px 40px 60px;background:var(--navy);color:var(--white);">
+<div class="container">
+<div class="section-label"><span class="line"></span> Servicios</div>
+<h1 style="font-family:var(--font-serif);font-size:clamp(36px,4vw,56px);font-weight:400;margin-bottom:16px;line-height:1.1;">Soluciones a la medida <em>de cada necesidad</em></h1>
+<p style="font-size:17px;color:rgba(255,255,255,0.6);max-width:600px;line-height:1.7;">Desde la recuperación de fondos perdidos hasta la protección tecnológica de su empresa. Un solo socio para todas sus necesidades financieras y digitales.</p>
+</div>
+</div>
+<div class="section section-white">
+<div class="container">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-bottom:60px;">
+<div class="animate-on-scroll">
+<h3 style="font-family:var(--font-serif);font-size:26px;color:var(--navy);margin-bottom:16px;font-weight:400;">Recuperación de activos</h3>
+<p style="font-size:15px;color:var(--gray);line-height:1.8;margin-bottom:16px;">Nuestro servicio estrella. Analizamos su caso sin coste inicial, identificamos las vías legales viables (chargeback, arbitraje, demanda civil) y ejecutamos la estrategia con un asesor dedicado.</p>
+<ul style="font-size:14px;color:var(--gray);line-height:2;margin-left:0;list-style:none;padding:0;">
+<li style="display:flex;align-items:center;gap:10px;"><span style="color:var(--gold);font-weight:700;">✓</span> Análisis forense de transacciones</li>
+<li style="display:flex;align-items:center;gap:10px;"><span style="color:var(--gold);font-weight:700;">✓</span> Negociación directa con brokers</li>
+<li style="display:flex;align-items:center;gap:10px;"><span style="color:var(--gold);font-weight:700;">✓</span> Arbitraje financiero (CNMV, FOGAIN)</li>
+<li style="display:flex;align-items:center;gap:10px;"><span style="color:var(--gold);font-weight:700;">✓</span> Chargeback bancario (plazo hasta 540 días)</li>
+<li style="display:flex;align-items:center;gap:10px;"><span style="color:var(--gold);font-weight:700;">✓</span> Denuncia ante autoridades (Policía, Europol, FBI)</li>
+</ul>
+</div>
+<div class="animate-on-scroll animate-delay-1">
+<h3 style="font-family:var(--font-serif);font-size:26px;color:var(--navy);margin-bottom:16px;font-weight:400;">Seguridad informática y forense</h3>
+<p style="font-size:15px;color:var(--gray);line-height:1.8;margin-bottom:16px;">Rastreamos capitales en blockchain, analizamos malware financiero y elaboramos informes periciales válidos en juicio. Colaboramos activamente con Europol y la Brigada de Cibercrimen.</p>
+<ul style="font-size:14px;color:var(--gray);line-height:2;margin-left:0;list-style:none;padding:0;">
+<li style="display:flex;align-items:center;gap:10px;"><span style="color:var(--gold);font-weight:700;">✓</span> Rastreo de criptoactivos (BTC, ETH, USDT)</li>
+<li style="display:flex;align-items:center;gap:10px;"><span style="color:var(--gold);font-weight:700;">✓</span> Análisis forense de dispositivos</li>
+<li style="display:flex;align-items:center;gap:10px;"><span style="color:var(--gold);font-weight:700;">✓</span> OSINT e investigación digital</li>
+<li style="display:flex;align-items:center;gap:10px;"><span style="color:var(--gold);font-weight:700;">✓</span> Informes periciales para tribunales</li>
+<li style="display:flex;align-items:center;gap:10px;"><span style="color:var(--gold);font-weight:700;">✓</span> Protección preventiva para empresas</li>
+</ul>
+</div>
+</div>
+<div class="portal-card" style="background:var(--navy);color:var(--white);border:none;padding:40px;text-align:center;">
+<h3 style="font-family:var(--font-serif);font-size:24px;font-weight:400;margin-bottom:12px;">¿No sabe por dónde empezar?</h3>
+<p style="color:rgba(255,255,255,0.6);margin-bottom:28px;">Ofrecemos una consulta inicial gratuita y confidencial. Un especialista analizará su caso sin compromiso.</p>
+<button class="btn-gold btn-gold-solid" onclick="showPublicPage('contact')">Solicitar evaluación gratuita</button>
+</div>
+</div>
+</div>
+</section>
+<!-- PRODUCTS -->
+<section id="page-products" class="hidden">
+<div style="padding:140px 40px 60px;background:var(--offwhite);border-bottom:1px solid var(--border-dark);">
+<div class="container" style="text-align:center;">
+<div class="section-label dark"><span class="line"></span> Productos financieros</div>
+<h1 class="section-title">Proteja lo que <em>más le importa</em></h1>
+<p class="section-desc" style="margin:0 auto;">Seguros, planes de pensiones y fondos de inversión seleccionados. Como entidad regulada, operamos con las principales aseguradoras y gestoras del mercado europeo.</p>
+</div>
+</div>
+<div class="section section-white">
+<div class="container">
+<div class="products-grid">
+<div class="product-card animate-on-scroll">
+<div class="product-header">
+<div class="product-type">Protección Familiar · AXA / Allianz</div>
+<div class="product-name">Seguro de Vida Integral</div>
+</div>
+<div class="product-body">
+<div class="product-feature"><span class="product-check">✓</span> Cobertura por fallecimiento e invalidez</div>
+<div class="product-feature"><span class="product-check">✓</span> Capital asegurado desde €50.000</div>
+<div class="product-feature"><span class="product-check">✓</span> Beneficiarios modificables online</div>
+<div class="product-feature"><span class="product-check">✓</span> Descuento por póliza anual</div>
+</div>
+<div class="product-footer">
+<div class="product-price">€28<span>/mes</span></div>
+<button class="btn-gold" style="padding:8px 20px;font-size:11px;">Contratar</button>
+</div>
+</div>
+<div class="product-card animate-on-scroll animate-delay-1">
+<div class="product-header">
+<div class="product-type">Multiriesgo · Mapfre / Mutua</div>
+<div class="product-name">Hogar Premium</div>
+</div>
+<div class="product-body">
+<div class="product-feature"><span class="product-check">✓</span> Daños por agua, fuego y robo</div>
+<div class="product-feature"><span class="product-check">✓</span> Responsabilidad civil hasta €300.000</div>
+<div class="product-feature"><span class="product-check">✓</span> Asistencia 24h en el hogar</div>
+<div class="product-feature"><span class="product-check">✓</span> Cubre vivienda habitual y segunda residencia</div>
+</div>
+<div class="product-footer">
+<div class="product-price">€42<span>/mes</span></div>
+<button class="btn-gold" style="padding:8px 20px;font-size:11px;">Contratar</button>
+</div>
+</div>
+<div class="product-card animate-on-scroll animate-delay-2">
+<div class="product-header">
+<div class="product-type">Ahorro a largo plazo · Gestora propia</div>
+<div class="product-name">Plan de Pensiones FinLex 2050</div>
+</div>
+<div class="product-body">
+<div class="product-feature"><span class="product-check">✓</span> Rentabilidad media histórica 4.8% anual</div>
+<div class="product-feature"><span class="product-check">✓</span> Desgravación fiscal en IRPF</div>
+<div class="product-feature"><span class="product-check">✓</span> Traspasable sin coste</div>
+<div class="product-feature"><span class="product-check">✓</span> Perfil de riesgo ajustable</div>
+</div>
+<div class="product-footer">
+<div class="product-price">€100<span>/mes mín.</span></div>
+<button class="btn-gold" style="padding:8px 20px;font-size:11px;">Simular</button>
+</div>
+</div>
+<div class="product-card animate-on-scroll">
+<div class="product-header">
+<div class="product-type">Autónomos y PYMES · Zurich</div>
+<div class="product-name">Responsabilidad Civil Profesional</div>
+</div>
+<div class="product-body">
+<div class="product-feature"><span class="product-check">✓</span> Cobertura por errores profesionales</div>
+<div class="product-feature"><span class="product-check">✓</span> Defensa jurídica incluida</div>
+<div class="product-feature"><span class="product-check">✓</span> Límites hasta €1M</div>
+<div class="product-feature"><span class="product-check">✓</span> Sector tecnológico y financiero</div>
+</div>
+<div class="product-footer">
+<div class="product-price">€65<span>/mes</span></div>
+<button class="btn-gold" style="padding:8px 20px;font-size:11px;">Contratar</button>
+</div>
+</div>
+<div class="product-card animate-on-scroll animate-delay-1">
+<div class="product-header">
+<div class="product-type">Rentabilidad estable · BlackRock</div>
+<div class="product-name">Fondo de Inversión Conservador</div>
+</div>
+<div class="product-body">
+<div class="product-feature"><span class="product-check">✓</span> Cartera diversificada bonos y renta fija</div>
+<div class="product-feature"><span class="product-check">✓</span> Liquidez inmediata</div>
+<div class="product-feature"><span class="product-check">✓</span> Comisión de gestión 0.85%</div>
+<div class="product-feature"><span class="product-check">✓</span> Apto para perfiles moderados</div>
+</div>
+<div class="product-footer">
+<div class="product-price">€500<span>/entrada mín.</span></div>
+<button class="btn-gold" style="padding:8px 20px;font-size:11px;">Suscribir</button>
+</div>
+</div>
+<div class="product-card animate-on-scroll animate-delay-2">
+<div class="product-header">
+<div class="product-type">Empresas · Hiscox / Beazley</div>
+<div class="product-name">Seguro de Ciberriesgo</div>
+</div>
+<div class="product-body">
+<div class="product-feature"><span class="product-check">✓</span> Cubre ransomware y filtración de datos</div>
+<div class="product-feature"><span class="product-check">✓</span> Gestor de crisis incluido</div>
+<div class="product-feature"><span class="product-check">✓</span> Multas RGPD cubiertas hasta €100.000</div>
+<div class="product-feature"><span class="product-check">✓</span> Respuesta en 2 horas</div>
+</div>
+<div class="product-footer">
+<div class="product-price">Desde €150<span>/mes</span></div>
+<button class="btn-gold" style="padding:8px 20px;font-size:11px;">Cotizar</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ABOUT -->
+<section id="page-about" class="hidden">
+<div style="padding:140px 40px 60px;background:var(--navy);color:var(--white);">
+<div class="container">
+<div class="section-label"><span class="line"></span> Sobre nosotros</div>
+<h1 style="font-family:var(--font-serif);font-size:clamp(36px,4vw,56px);font-weight:400;margin-bottom:16px;line-height:1.1;">Un equipo multidisciplinar <em>a su servicio</em></h1>
+<p style="font-size:17px;color:rgba(255,255,255,0.6);max-width:600px;line-height:1.7;">Abogados, economistas, ingenieros y analistas de riesgo trabajando bajo un mismo techo para ofrecerle la mejor protección integral.</p>
+</div>
+</div>
+<div class="section section-white">
+<div class="container">
+<div class="about-grid">
+<div class="animate-on-scroll">
+<div class="section-label dark"><span class="line"></span> Nuestra filosofía</div>
+<h2 class="section-title">De un pequeño bufete a un <em>grupo financiero integral</em></h2>
+<div class="about-text">
+<p>FinLex Group nació en 2012 como un modesto despacho de abogados especializado en derecho financiero en el centro de Madrid. Nuestros fundadores detectaron una necesidad creciente: miles de personas habían sido engañadas por plataformas de inversión online opacas.</p>
+<p>En 2015, tras recuperar los primeros 3 millones de euros para nuestros clientes, expandimos nuestros servicios hacia la consultoría tecnológica y la ciberseguridad.</p>
+<p>Hoy somos un grupo regulado que opera en 12 países, con más de 120 profesionales entre abogados, economistas, ingenieros informáticos y analistas de riesgo.</p>
+</div>
+</div>
+<div class="timeline-about animate-on-scroll animate-delay-2">
+<div class="t-item-about"><div class="t-dot-about"></div><div class="t-year-about">2012</div><div class="t-title-about">Fundación del bufete FinLex</div><div class="t-desc-about">Tres abogados, una oficina en Madrid, especialización en reclamaciones bancarias.</div></div>
+<div class="t-item-about"><div class="t-dot-about"></div><div class="t-year-about">2015</div><div class="t-title-about">Primera recuperación millonaria</div><div class="t-desc-about">Superamos los €3M recuperados. Apertura de división de ciberseguridad.</div></div>
+<div class="t-item-about"><div class="t-dot-about"></div><div class="t-year-about">2018</div><div class="t-title-about">Licencia de entidad de pago</div><div class="t-desc-about">Regulados por el Banco de España. Lanzamiento de productos financieros propios.</div></div>
+<div class="t-item-about"><div class="t-dot-about"></div><div class="t-year-about">2021</div><div class="t-title-about">Expansión internacional</div><div class="t-desc-about">Oficinas en Lisboa, Milán y Ciudad de México. Alianza con Europol.</div></div>
+<div class="t-item-about"><div class="t-dot-about"></div><div class="t-year-about">2024</div><div class="t-title-about">Plataforma integral de cliente</div><div class="t-desc-about">Lanzamiento del portal digital con seguimiento 1 a 1 y firma electrónica.</div></div>
+<div class="t-item-about"><div class="t-dot-about"></div><div class="t-year-about">2026</div><div class="t-title-about">3.200 casos y €84M recuperados</div><div class="t-desc-about">Consolidados como referente europeo en recuperación de activos digitales.</div></div>
+</div>
+</div>
+<div style="margin-top:80px;">
+<h3 style="font-family:var(--font-serif);font-size:28px;color:var(--navy);margin-bottom:40px;text-align:center;font-weight:400;">Nuestro equipo directivo</h3>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;">
+<div class="portal-card text-center animate-on-scroll" style="padding:40px 24px;">
+<div style="width:72px;height:72px;border-radius:50%;background:var(--navy);margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:600;color:var(--gold);font-family:var(--font-serif);">MR</div>
+<div style="font-family:var(--font-serif);font-size:20px;font-weight:500;color:var(--navy);margin-bottom:4px;">Miguel Rovira</div>
+<div style="font-size:13px;color:var(--gray-light);">CEO & Co-fundador · Derecho financiero</div>
+</div>
+<div class="portal-card text-center animate-on-scroll animate-delay-1" style="padding:40px 24px;">
+<div style="width:72px;height:72px;border-radius:50%;background:var(--navy);margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:600;color:var(--gold);font-family:var(--font-serif);">LC</div>
+<div style="font-family:var(--font-serif);font-size:20px;font-weight:500;color:var(--navy);margin-bottom:4px;">Laura Castellanos</div>
+<div style="font-size:13px;color:var(--gray-light);">Directora de Ciberseguridad · Ex-Europol</div>
+</div>
+<div class="portal-card text-center animate-on-scroll animate-delay-2" style="padding:40px 24px;">
+<div style="width:72px;height:72px;border-radius:50%;background:var(--navy);margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:600;color:var(--gold);font-family:var(--font-serif);">AP</div>
+<div style="font-family:var(--font-serif);font-size:20px;font-weight:500;color:var(--navy);margin-bottom:4px;">Andrés Paredes</div>
+<div style="font-size:13px;color:var(--gray-light);">Director de Productos · CFA, CIIA</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- TESTIMONIALS -->
+<section id="page-testimonials" class="hidden">
+<div style="padding:140px 40px 60px;background:var(--offwhite);border-bottom:1px solid var(--border-dark);">
+<div class="container" style="text-align:center;">
+<div class="section-label dark"><span class="line"></span> Testimonios</div>
+<h1 class="section-title">Lo que dicen <em>nuestros clientes</em></h1>
+<p class="section-desc" style="margin:0 auto;">Transparencia total: publicamos reseñas reales, incluidas las críticas constructivas. Nos esforzamos cada día para mejorar.</p>
+</div>
+</div>
+<div class="section section-white">
+<div class="container">
+<div class="reviews-grid">
+<div class="review-card animate-on-scroll">
+<div class="review-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+<div class="review-text">"Pensé que había perdido €18.000 para siempre. FinLex no solo recuperó el 85% en 4 meses, sino que me asignaron a la Dra. Vargas, que me explicaba cada paso por teléfono. Un servicio humano en un mundo de robots."</div>
+<div class="review-author">
+<div class="review-avatar">RM</div>
+<div><div class="review-name">Roberto Méndez</div><div class="review-meta">Madrid · Caso resuelto en ago 2026</div></div>
+</div>
+<span class="review-tag">Recuperación de activos</span>
+</div>
+<div class="review-card animate-on-scroll animate-delay-1">
+<div class="review-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+<div class="review-text">"Contraté el seguro de ciberriesgo para mi agencia de marketing. En marzo sufrimos un ataque de ransomware y en menos de 3 horas teníamos al gestor de crisis de FinLex en línea. Cubrieron todo sin pegas."</div>
+<div class="review-author">
+<div class="review-avatar">CG</div>
+<div><div class="review-name">Carmen Gómez</div><div class="review-meta">Barcelona · Clienta de productos</div></div>
+</div>
+<span class="review-tag">Seguro ciberriesgo</span>
+</div>
+<div class="review-card animate-on-scroll animate-delay-2">
+<div class="review-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star empty">★</span></div>
+<div class="review-text">"El servicio de recuperación funcionó bien al final, pero los primeros dos meses fueron lentos. Tuve que insistir varias veces para obtener actualizaciones. Una vez pasó eso, todo fluyó y recuperé €7.200 de €10.000."</div>
+<div class="review-author">
+<div class="review-avatar">JF</div>
+<div><div class="review-name">Javier Fernández</div><div class="review-meta">Valencia · Caso resuelto en jul 2026</div></div>
+</div>
+<span class="review-tag">Recuperación de activos</span>
+</div>
+<div class="review-card animate-on-scroll">
+<div class="review-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star empty">★</span></div>
+<div class="review-text">"Me ayudaron a estructurar mi patrimonio familiar tras una herencia compleja. Muy profesionales, aunque los informes fiscales me llegaron con una semana de retraso respecto a lo prometido. El resultado fue excelente."</div>
+<div class="review-author">
+<div class="review-avatar">AS</div>
+<div><div class="review-name">Ana Serrano</div><div class="review-meta">Sevilla · Asesoría patrimonial</div></div>
+</div>
+<span class="review-tag">Asesoría fiscal</span>
+</div>
+<div class="review-card animate-on-scroll animate-delay-1">
+<div class="review-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star empty">★</span><span class="star empty">★</span></div>
+<div class="review-text">"Contraté el plan de pensiones y la plataforma es un poco confusa al principio. Tuve que llamar al soporte para entender cómo hacer un traspaso. El fondo renta bien, pero la UX del portal debería mejorar."</div>
+<div class="review-author">
+<div class="review-avatar">PL</div>
+<div><div class="review-name">Pedro López</div><div class="review-meta">Bilbao · Cliente de productos</div></div>
+</div>
+<span class="review-tag">Plan de pensiones</span>
+</div>
+<div class="review-card animate-on-scroll animate-delay-2">
+<div class="review-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+<div class="review-text">"Mi empresa fue víctima de una estafa de CEO (BEC). El equipo forense de FinLex rastreó los fondos hasta tres wallets en diferentes exchanges y elaboró un informe que la Policía Nacional calificó como 'ejemplar'. Recuperamos el 40%."</div>
+<div class="review-author">
+<div class="review-avatar">DT</div>
+<div><div class="review-name">David Torres</div><div class="review-meta">Lisboa · Seguridad informática</div></div>
+</div>
+<span class="review-tag">Forense digital</span>
+</div>
+<div class="review-card animate-on-scroll">
+<div class="review-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star empty">★</span></div>
+<div class="review-text">"Buen seguro de hogar, precio competitivo. El único pero es que el parte de daños por agua requirió dos visitas del perito cuando con mi antigua aseguradora fue en una. Al final todo se arregló."</div>
+<div class="review-author">
+<div class="review-avatar">MR</div>
+<div><div class="review-name">María Ruiz</div><div class="review-meta">Zaragoza · Seguro de hogar</div></div>
+</div>
+<span class="review-tag">Hogar Premium</span>
+</div>
+<div class="review-card animate-on-scroll animate-delay-1">
+<div class="review-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+<div class="review-text">"Llevaba 8 meses intentando recuperar €45.000 de un broker estafador sin éxito. FinLex presentó la demanda arbitral, consiguió una medida cautelar y en 6 meses tuve el dinero de vuelta. No tengo palabras."</div>
+<div class="review-author">
+<div class="review-avatar">IC</div>
+<div><div class="review-name">Isabel Carrasco</div><div class="review-meta">México D.F. · Caso resuelto en jun 2026</div></div>
+</div>
+<span class="review-tag">Recuperación internacional</span>
+</div>
+<div class="review-card animate-on-scroll animate-delay-2">
+<div class="review-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star empty">★</span><span class="star empty">★</span></div>
+<div class="review-text">"La asesoría es correcta, pero sentí que al principio me vendieron más servicios de los que realmente necesitaba. Tras hablar con otro asesor senior, ajustaron el plan y todo fue mejor. Recomiendo pedir segunda opinión interna."</div>
+<div class="review-author">
+<div class="review-avatar">FA</div>
+<div><div class="review-name">Fernando Alonso</div><div class="review-meta">Málaga · Asesoría integral</div></div>
+</div>
+<span class="review-tag">Asesoría general</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- CONTACT -->
+<section id="page-contact" class="hidden">
+<div style="padding:140px 40px 60px;background:var(--navy);color:var(--white);">
+<div class="container">
+<div class="section-label"><span class="line"></span> Contacto</div>
+<h1 style="font-family:var(--font-serif);font-size:clamp(36px,4vw,56px);font-weight:400;margin-bottom:16px;line-height:1.1;">Hablemos de <em>su caso</em></h1>
+<p style="font-size:17px;color:rgba(255,255,255,0.6);max-width:600px;line-height:1.7;">Primera consulta gratuita y sin compromiso. Un especialista le responderá en menos de 24 horas.</p>
+</div>
+</div>
+<div class="section section-white">
+<div class="container">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;">
+<div class="animate-on-scroll">
+<h3 style="font-family:var(--font-serif);font-size:24px;color:var(--navy);margin-bottom:24px;font-weight:400;">Formulario de contacto</h3>
+<form onsubmit="event.preventDefault(); alert('Mensaje enviado. Un asesor le contactará en menos de 24 horas.'); this.reset();">
+<div class="form-group">
+<label class="form-label">Nombre completo</label>
+<input class="form-input" type="text" required placeholder="Su nombre">
+</div>
+<div class="form-group">
+<label class="form-label">Correo electrónico</label>
+<input class="form-input" type="email" required placeholder="correo@ejemplo.com">
+</div>
+<div class="form-group">
+<label class="form-label">Teléfono</label>
+<input class="form-input" type="tel" placeholder="+34 600 000 000">
+</div>
+<div class="form-group">
+<label class="form-label">Tipo de consulta</label>
+<select class="form-select" required>
+<option value="">Seleccione...</option>
+<option>Recuperación de fondos</option>
+<option>Asesoría financiera / legal</option>
+<option>Seguridad informática / forense</option>
+<option>Productos financieros / seguros</option>
+<option>Soporte tecnológico empresarial</option>
+<option>Otros</option>
+</select>
+</div>
+<div class="form-group">
+<label class="form-label">Mensaje</label>
+<textarea class="form-textarea" required placeholder="Describa su situación..."></textarea>
+</div>
+<label style="display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--gray);margin-bottom:24px;cursor:pointer;">
+<input type="checkbox" required style="margin-top:3px;">
+<span>He leído y acepto la <a href="#" onclick="showPublicPage('legal')" style="color:var(--gold);text-decoration:underline;">política de privacidad</a> y el tratamiento de mis datos.</span>
+</label>
+<button class="btn-gold btn-gold-solid" style="width:100%;justify-content:center;">Enviar consulta</button>
+</form>
+</div>
+<div class="animate-on-scroll animate-delay-1">
+<h3 style="font-family:var(--font-serif);font-size:24px;color:var(--navy);margin-bottom:24px;font-weight:400;">Información de contacto</h3>
+<div class="portal-card" style="margin-bottom:20px;">
+<div style="font-size:14px;color:var(--gray);line-height:2;">
+<p><strong style="color:var(--navy);font-family:var(--font-serif);font-weight:500;">Dirección:</strong><br>Calle de Alcalá 255, 4º Izq.<br>28027 Madrid, España</p>
+<p><strong style="color:var(--navy);font-family:var(--font-serif);font-weight:500;">Teléfono:</strong><br>+34 91 234 56 78 (Lun–Vie, 9:00–19:00)</p>
+<p><strong style="color:var(--navy);font-family:var(--font-serif);font-weight:500;">Email:</strong><br>info@finlexgroup.com<br>urgencias@finlexgroup.com</p>
+<p><strong style="color:var(--navy);font-family:var(--font-serif);font-weight:500;">Registro:</strong><br>CNMV Nº 08472<br>Banco de España Nº 1563<br>DGSFP Agencia Nº AS-08472</p>
+</div>
+</div>
+<div class="portal-card" style="background:var(--navy);color:var(--white);border:none;">
+<h4 style="font-family:var(--font-serif);font-size:20px;font-weight:400;margin-bottom:8px;">¿Es cliente y tiene una emergencia?</h4>
+<p style="font-size:14px;color:rgba(255,255,255,0.6);margin-bottom:20px;">Acceda a su portal de cliente para contactar directamente con su asesor asignado o abrir una incidencia prioritaria.</p>
+<button class="btn-gold btn-gold-solid" style="width:100%;justify-content:center;" onclick="enterPortal()">Acceder al portal cliente</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- LEGAL -->
+<section id="page-legal" class="hidden">
+<div style="padding:140px 40px 60px;background:var(--offwhite);">
+<div class="container" style="max-width:800px;margin:0 auto;">
+<div class="section-label dark"><span class="line"></span> Documentación legal</div>
+<h1 style="font-family:var(--font-serif);font-size:36px;color:var(--navy);font-weight:400;margin-bottom:40px;">Aviso legal, políticas <em>y disclaimer</em></h1>
+<h2 style="font-family:var(--font-serif);font-size:24px;color:var(--navy);margin:40px 0 16px;font-weight:400;">1. Información legal de la entidad</h2>
+<p style="font-size:15px;color:var(--gray);line-height:1.8;margin-bottom:14px;"><strong style="color:var(--navy);">Denominación social:</strong> FinLex Group, S.A.</p>
+<p style="font-size:15px;color:var(--gray);line-height:1.8;margin-bottom:14px;"><strong style="color:var(--navy);">CIF:</strong> A-12345678</p>
+<p style="font-size:15px;color:var(--gray);line-height:1.8;margin-bottom:14px;"><strong style="color:var(--navy);">Domicilio social:</strong> Calle de Alcalá 255, 4º Izquierda, 28027 Madrid, España.</p>
+<p style="font-size:15px;color:var(--gray);line-height:1.8;margin-bottom:14px;"><strong style="color:var(--navy);">Regulación:</strong> Entidad de pago registrada en el Banco de España con el número 1563. Agencia de Seguros Exclusiva inscrita en la DGSFP con el número AS-08472. Asesor financiero registrado en la CNMV con el número 08472.</p>
+<h2 style="font-family:var(--font-serif);font-size:24px;color:var(--navy);margin:40px 0 16px;font-weight:400;">2. Disclaimer de servicios de recuperación</h2>
+<p style="font-size:15px;color:var(--gray);line-height:1.8;margin-bottom:14px;">Los servicios de recuperación de activos ofrecidos por FinLex Group no garantizan la devolución total ni parcial de los fondos invertidos. Cada caso es único y depende de múltiples factores ajenos a nuestra voluntad.</p>
+<p style="font-size:15px;color:var(--gray);line-height:1.8;margin-bottom:14px;">Los porcentajes de éxito mencionados son estimaciones basadas en casos históricos similares y no constituyen una promesa de resultado. El cliente será informado de forma transparente de las probabilidades reales antes de contratar.</p>
+<h2 style="font-family:var(--font-serif);font-size:24px;color:var(--navy);margin:40px 0 16px;font-weight:400;">3. Política de privacidad</h2>
+<p style="font-size:15px;color:var(--gray);line-height:1.8;margin-bottom:14px;">En cumplimiento del RGPD y la LOPDGDD, FinLex Group informa de que los datos personales serán tratados para:</p>
+<ul style="margin:12px 0 12px 24px;">
+<li style="font-size:15px;color:var(--gray);line-height:1.8;margin-bottom:6px;">Gestión de la relación contractual y prestación de servicios solicitados.</li>
+<li style="font-size:15px;color:var(--gray);line-height:1.8;margin-bottom:6px;">Cumplimiento de obligaciones legales derivadas de nuestra condición de entidad regulada.</li>
+<li style="font-size:15px;color:var(--gray);line-height:1.8;margin-bottom:6px;">Envío de comunicaciones comerciales previo consentimiento.</li>
+<li style="font-size:15px;color:var(--gray);line-height:1.8;margin-bottom:6px;">Prevención de blanqueo de capitales y financiación del terrorismo.</li>
+</ul>
+<h2 style="font-family:var(--font-serif);font-size:24px;color:var(--navy);margin:40px 0 16px;font-weight:400;">4. Términos y condiciones del portal</h2>
+<p style="font-size:15px;color:var(--gray);line-height:1.8;margin-bottom:14px;">El acceso al portal implica la aceptación íntegra de los presentes términos. El usuario se compromete a mantener la confidencialidad de sus credenciales y a notificar inmediatamente cualquier uso no autorizado.</p>
+<p style="font-size:15px;color:var(--gray);line-height:1.8;margin-bottom:14px;">FinLex Group nunca solicitará contraseñas, códigos OTP ni datos de tarjetas a través del chat, correo o llamadas no solicitadas. Cualquier comunicación de este tipo debe ser reportada como intento de phishing.</p>
+<div style="margin-top:40px;padding:24px;background:var(--offwhite);border-radius:2px;border-left:3px solid var(--gold);">
+<p style="font-size:14px;color:var(--gray);margin:0;"><strong>Advertencia de riesgo:</strong> Las inversiones en productos financieros conllevan riesgo de pérdida de capital. Los rendimientos pasados no garantizan rendimientos futuros. Antes de contratar, lea detenidamente la documentación contractual.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="cta-section">
+<div class="cta-bg"></div>
+<div class="cta-content">
+<div class="cta-left animate-on-scroll">
+<h2>Dé el siguiente paso <em>hacia la tranquilidad.</em></h2>
+<p>Solicite una evaluación confidencial y personalizada. Nuestros especialistas analizarán su situación sin compromiso.</p>
+<div class="cta-form">
+<input type="email" placeholder="Su correo electrónico">
+<button class="btn-gold btn-gold-solid">Solicitar evaluación privada →</button>
+</div>
+</div>
+<div class="animate-on-scroll animate-delay-2" style="display:flex;gap:16px;flex-wrap:wrap;justify-content:flex-end;">
+<button class="btn-white" onclick="showPublicPage('contact')">Hablar con un experto →</button>
+</div>
+</div>
+</section>
+<!-- FOOTER -->
+<footer class="footer">
+<div class="footer-grid">
+<div>
+<div class="footer-brand">
+<div class="footer-brand-icon">F</div>
+<div class="footer-brand-name">FinLex Group</div>
+</div>
+<div class="footer-desc">Entidad financiera integral especializada en recuperación de activos, asesoría patrimonial, ciberseguridad y productos de protección. Regulada por el Banco de España y la CNMV.</div>
+</div>
+<div>
+<div class="footer-title">Soluciones</div>
+<ul class="footer-links">
+<li><a onclick="showPublicPage('services')">Recuperación de activos</a></li>
+<li><a onclick="showPublicPage('services')">Asesoría financiera</a></li>
+<li><a onclick="showPublicPage('services')">Ciberseguridad</a></li>
+<li><a onclick="showPublicPage('services')">Soporte tecnológico</a></li>
+</ul>
+</div>
+<div>
+<div class="footer-title">Empresa</div>
+<ul class="footer-links">
+<li><a onclick="showPublicPage('about')">Nosotros</a></li>
+<li><a onclick="showPublicPage('about')">Nuestro enfoque</a></li>
+<li><a onclick="showPublicPage('about')">Alianzas estratégicas</a></li>
+<li><a onclick="showPublicPage('about')">Carreras</a></li>
+</ul>
+</div>
+<div>
+<div class="footer-title">Recursos</div>
+<ul class="footer-links">
+<li><a onclick="showPublicPage('legal')">Blog</a></li>
+<li><a onclick="showPublicPage('legal')">Informes</a></li>
+<li><a onclick="showPublicPage('legal')">Guías</a></li>
+<li><a onclick="showPublicPage('legal')">Webinars</a></li>
+</ul>
+</div>
+<div>
+<div class="footer-title">Legal</div>
+<ul class="footer-links">
+<li><a onclick="showPublicPage('legal')">Privacidad</a></li>
+<li><a onclick="showPublicPage('legal')">Términos de Uso</a></li>
+<li><a onclick="showPublicPage('legal')">Aviso Legal</a></li>
+<li><a onclick="showPublicPage('legal')">Política de Cookies</a></li>
+</ul>
+</div>
+</div>
+<div class="footer-bottom">
+<span>&copy; 2026 FinLex Group, S.A. Todos los derechos reservados.</span>
+<span>CNMV Nº 08472 · Banco de España Nº 1563 · DGSFP AS-08472</span>
+</div>
+</footer>
+</div>
+<!-- ==================== CLIENT PORTAL ==================== -->
+<div id="portal-area" class="hidden">
+<div class="portal-wrap">
+<div class="container">
+<!-- AUTH -->
+<div id="portal-auth">
+<div class="login-wrap">
+<div style="text-align:center;margin-bottom:32px;">
+<div style="width:56px;height:56px;border-radius:50%;border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-family:var(--font-serif);font-size:24px;font-weight:600;color:var(--gold);">F</div>
+<div class="login-title">Portal de Clientes</div>
+<div class="login-sub">FinLex Group · Acceso seguro</div>
+</div>
+<div class="login-tabs">
+<button class="login-tab active" onclick="switchPortalTab('login',this)">Iniciar sesión</button>
+<button class="login-tab" onclick="switchPortalTab('register',this)">Registrarse</button>
+</div>
+<form id="p-form-login" onsubmit="handlePortalLogin(event)">
+<div class="form-group">
+<label class="form-label">Correo electrónico</label>
+<input class="form-input" type="email" required value="cliente@demo.com">
+</div>
+<div class="form-group">
+<label class="form-label">Contraseña</label>
+<input class="form-input" type="password" required value="demo1234">
+</div>
+<button class="btn-gold btn-gold-solid" style="width:100%;justify-content:center;">Acceder al portal</button>
+<p style="text-align:center;font-size:13px;color:var(--gray-light);margin-top:20px;">¿Olvidó su contraseña? <a href="#" style="color:var(--gold);text-decoration:underline;">Recuperar acceso</a></p>
+</form>
+<form id="p-form-register" class="hidden" onsubmit="handlePortalLogin(event)">
+<div class="form-group">
+<label class="form-label">Nombre completo</label>
+<input class="form-input" type="text" required placeholder="Juan Pérez">
+</div>
+<div class="form-group">
+<label class="form-label">Correo electrónico</label>
+<input class="form-input" type="email" required placeholder="cliente@ejemplo.com">
+</div>
+<div class="form-group">
+<label class="form-label">Teléfono</label>
+<input class="form-input" type="tel" required placeholder="+34 600 000 000">
+</div>
+<div class="form-group">
+<label class="form-label">Documento de identidad</label>
+<input class="form-input" type="text" required placeholder="DNI / NIE / Pasaporte">
+</div>
+<div class="form-group">
+<label class="form-label">Contraseña</label>
+<input class="form-input" type="password" required placeholder="Mínimo 8 caracteres">
+</div>
+<button class="btn-gold btn-gold-solid" style="width:100%;justify-content:center;">Crear cuenta</button>
+</form>
+</div>
+</div>
+<!-- DASHBOARD -->
+<div id="portal-dashboard" class="hidden">
+<div class="portal-topbar">
+<div class="logo" style="font-size:15px;cursor:pointer;" onclick="exitPortal()">
+<div class="logo-icon" style="width:28px;height:28px;font-size:13px;">F</div>
+<div class="logo-text"><div class="logo-name" style="font-size:15px;">FinLex</div></div>
+</div>
+<div class="portal-nav">
+<button class="portal-nav-btn active" onclick="portalNav('dashboard')">Resumen</button>
+<button class="portal-nav-btn" onclick="portalNav('case')">Mi caso</button>
+<button class="portal-nav-btn" onclick="portalNav('solutions')">Soluciones</button>
+<button class="portal-nav-btn" onclick="portalNav('payments')">Pagos</button>
+<button class="portal-nav-btn" onclick="portalNav('complaints')">Quejas</button>
+<button class="portal-nav-btn" onclick="portalNav('advisor')">Asesor</button>
+<button class="portal-nav-btn" onclick="portalNav('profile')">Perfil</button>
+<button class="portal-nav-btn" onclick="exitPortal()">Salir</button>
+</div>
+</div>
+<div class="portal-grid-3">
+<div class="portal-stat animate-on-scroll">
+<div class="portal-stat-label">saldo en recuperación</div>
+<div class="portal-stat-value">€42.750</div>
+<div class="portal-stat-delta" style="color:var(--gold-dark);">↑ 12% vs mes anterior</div>
+</div>
+<div class="portal-stat animate-on-scroll animate-delay-1">
+<div class="portal-stat-label">fondos recuperados</div>
+<div class="portal-stat-value">€8.230</div>
+<div class="portal-stat-delta" style="color:var(--gold-dark);">↑ 3 transacciones</div>
+</div>
+<div class="portal-stat animate-on-scroll animate-delay-2">
+<div class="portal-stat-label">estado general</div>
+<div style="font-size:20px;font-weight:500;margin-top:6px;"><span class="tag tag-amber">En proceso</span></div>
+<div style="font-size:13px;color:var(--gray-light);margin-top:6px;">Fase 3 de 5</div>
+</div>
+</div>
+<div class="portal-card animate-on-scroll">
+<div class="portal-card-title">Actividad reciente</div>
+<table class="portal-table">
+<thead><tr><th>fecha</th><th>concepto</th><th>monto</th><th>estado</th></tr></thead>
+<tbody>
+<tr><td>14 ago 2026</td><td>Depósito bloqueado — Broker X</td><td>€15.000</td><td><span class="tag tag-amber">En disputa</span></td></tr>
+<tr><td>10 ago 2026</td><td>Recuperación parcial — Broker Y</td><td>€3.500</td><td><span class="tag tag-green">Recuperado</span></td></tr>
+<tr><td>02 ago 2026</td><td>Comisión de asesoría</td><td>€450</td><td><span class="tag tag-blue">Pagado</span></td></tr>
+<tr><td>28 jul 2026</td><td>Recuperación parcial — Broker Z</td><td>€4.730</td><td><span class="tag tag-green">Recuperado</span></td></tr>
+</tbody>
+</table>
+</div>
+<div class="portal-card animate-on-scroll">
+<div class="portal-card-title">Próximos pasos</div>
+<div class="solution-row">
+<div class="solution-info"><h4>Presentación de demanda arbitral</h4><p>Fecha límite: 25 ago 2026 · Asesor: Dra. Elena Vargas</p></div>
+<span class="tag tag-amber">Pendiente</span>
+</div>
+<div class="solution-row">
+<div class="solution-info"><h4>Reunión de seguimiento semanal</h4><p>18 ago 2026, 10:00 CET · Videollamada</p></div>
+<button class="btn-gold" style="padding:6px 16px;font-size:11px;">Unirse</button>
+</div>
+</div>
+</div>
+<!-- CASE -->
+<div id="portal-case" class="hidden">
+<div class="portal-topbar">
+<div class="logo" style="font-size:15px;cursor:pointer;" onclick="exitPortal()"><div class="logo-icon" style="width:28px;height:28px;font-size:13px;">F</div><div class="logo-text"><div class="logo-name" style="font-size:15px;">FinLex</div></div></div>
+<div class="portal-nav">
+<button class="portal-nav-btn" onclick="portalNav('dashboard')">Resumen</button>
+<button class="portal-nav-btn active" onclick="portalNav('case')">Mi caso</button>
+<button class="portal-nav-btn" onclick="portalNav('solutions')">Soluciones</button>
+<button class="portal-nav-btn" onclick="portalNav('payments')">Pagos</button>
+<button class="portal-nav-btn" onclick="portalNav('complaints')">Quejas</button>
+<button class="portal-nav-btn" onclick="portalNav('advisor')">Asesor</button>
+<button class="portal-nav-btn" onclick="portalNav('profile')">Perfil</button>
+<button class="portal-nav-btn" onclick="exitPortal()">Salir</button>
+</div>
+</div>
+<div class="portal-card animate-on-scroll">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+<div>
+<div class="portal-card-title" style="margin-bottom:4px;">Caso #LF-2026-08472</div>
+<div style="font-size:14px;color:var(--gray-light);">Recuperación de fondos por inversión en broker no regulado · Abierto el 15 jun 2026</div>
+</div>
+<span class="tag tag-amber">En proceso</span>
+</div>
+<div style="margin-bottom:24px;">
+<div style="display:flex;justify-content:space-between;font-size:13px;color:var(--gray-light);margin-bottom:6px;"><span>Progreso del caso</span><span>60%</span></div>
+<div class="progress-bar"><div class="progress-fill" style="width:60%"></div></div>
+</div>
+</div>
+<div class="portal-card animate-on-scroll">
+<div class="portal-card-title">Línea de tiempo del caso</div>
+<div class="timeline-portal">
+<div class="t-item-portal"><div class="t-dot-portal done"></div><div class="t-date-portal">15 jun 2026</div><div class="t-title-portal">Apertura del caso</div><div class="t-desc-portal">Recepción de documentación inicial y análisis de transacciones.</div></div>
+<div class="t-item-portal"><div class="t-dot-portal done"></div><div class="t-date-portal">22 jun 2026</div><div class="t-title-portal">Asignación de asesor</div><div class="t-desc-portal">Dra. Elena Vargas asignada. Primera reunión de diagnóstico realizada.</div></div>
+<div class="t-item-portal"><div class="t-dot-portal done"></div><div class="t-date-portal">10 jul 2026</div><div class="t-title-portal">Notificación al broker</div><div class="t-desc-portal">Carta formal de reclamación enviada con respaldo legal.</div></div>
+<div class="t-item-portal"><div class="t-dot-portal active"></div><div class="t-date-portal">En curso</div><div class="t-title-portal">Negociación y recuperación parcial</div><div class="t-desc-portal">Recuperados €8.230. Negociación continua para el remanente.</div></div>
+<div class="t-item-portal"><div class="t-dot-portal"></div><div class="t-date-portal">Pendiente</div><div class="t-title-portal">Arbitraje / litigio</div><div class="t-desc-portal">Preparación de demanda arbitral si no hay acuerdo total.</div></div>
+<div class="t-item-portal"><div class="t-dot-portal"></div><div class="t-date-portal">Pendiente</div><div class="t-title-portal">Cierre y devolución final</div><div class="t-desc-portal">Liquidación de fondos recuperados al cliente.</div></div>
+</div>
+</div>
+</div>
+<!-- SOLUTIONS -->
+<div id="portal-solutions" class="hidden">
+<div class="portal-topbar">
+<div class="logo" style="font-size:15px;cursor:pointer;" onclick="exitPortal()"><div class="logo-icon" style="width:28px;height:28px;font-size:13px;">F</div><div class="logo-text"><div class="logo-name" style="font-size:15px;">FinLex</div></div></div>
+<div class="portal-nav">
+<button class="portal-nav-btn" onclick="portalNav('dashboard')">Resumen</button>
+<button class="portal-nav-btn" onclick="portalNav('case')">Mi caso</button>
+<button class="portal-nav-btn active" onclick="portalNav('solutions')">Soluciones</button>
+<button class="portal-nav-btn" onclick="portalNav('payments')">Pagos</button>
+<button class="portal-nav-btn" onclick="portalNav('complaints')">Quejas</button>
+<button class="portal-nav-btn" onclick="portalNav('advisor')">Asesor</button>
+<button class="portal-nav-btn" onclick="portalNav('profile')">Perfil</button>
+<button class="portal-nav-btn" onclick="exitPortal()">Salir</button>
+</div>
+</div>
+<div class="portal-card animate-on-scroll">
+<div class="portal-card-title">Soluciones disponibles</div>
+<div class="solution-row"><div class="solution-info"><h4>Reclamación al broker</h4><p>Carta formal · Negociación directa · Plazo: 30 días</p></div><span class="tag tag-green">Activo</span></div>
+<div class="solution-row"><div class="solution-info"><h4>Arbitraje financiero</h4><p>CNMV · FOGAIN · Coste: incluido</p></div><span class="tag tag-amber">En preparación</span></div>
+<div class="solution-row"><div class="solution-info"><h4>Chargeback bancario</h4><p>Tarjeta crédito/débito · Plazo: 120 días</p></div><span class="tag tag-green">Activo</span></div>
+<div class="solution-row"><div class="solution-info"><h4>Denuncia ante autoridades</h4><p>Policía Nacional · Europol · Registro de estafas</p></div><button class="btn-gold" style="padding:6px 16px;font-size:11px;">Solicitar</button></div>
+<div class="solution-row"><div class="solution-info"><h4>Peritaje informático</h4><p>Rastreo de criptoactivos · Blockchain forense</p></div><button class="btn-gold" style="padding:6px 16px;font-size:11px;">Solicitar</button></div>
+<div class="solution-row"><div class="solution-info"><h4>Asesoría fiscal</h4><p>Declaración de pérdidas · Compensación en IRPF</p></div><button class="btn-gold" style="padding:6px 16px;font-size:11px;">Solicitar</button></div>
+</div>
+</div>
+<!-- PAYMENTS -->
+<div id="portal-payments" class="hidden">
+<div class="portal-topbar">
+<div class="logo" style="font-size:15px;cursor:pointer;" onclick="exitPortal()"><div class="logo-icon" style="width:28px;height:28px;font-size:13px;">F</div><div class="logo-text"><div class="logo-name" style="font-size:15px;">FinLex</div></div></div>
+<div class="portal-nav">
+<button class="portal-nav-btn" onclick="portalNav('dashboard')">Resumen</button>
+<button class="portal-nav-btn" onclick="portalNav('case')">Mi caso</button>
+<button class="portal-nav-btn" onclick="portalNav('solutions')">Soluciones</button>
+<button class="portal-nav-btn active" onclick="portalNav('payments')">Pagos</button>
+<button class="portal-nav-btn" onclick="portalNav('complaints')">Quejas</button>
+<button class="portal-nav-btn" onclick="portalNav('advisor')">Asesor</button>
+<button class="portal-nav-btn" onclick="portalNav('profile')">Perfil</button>
+<button class="portal-nav-btn" onclick="exitPortal()">Salir</button>
+</div>
+</div>
+<div class="portal-grid-3">
+<div class="portal-stat animate-on-scroll"><div class="portal-stat-label">honorarios pendientes</div><div class="portal-stat-value">€1.350</div><div class="portal-stat-delta" style="color:var(--gray-light);">Vencimiento: 30 ago 2026</div></div>
+<div class="portal-stat animate-on-scroll animate-delay-1"><div class="portal-stat-label">total pagado (2026)</div><div class="portal-stat-value">€2.100</div><div class="portal-stat-delta" style="color:var(--gold-dark);">Al corriente de pagos</div></div>
+<div class="portal-stat animate-on-scroll animate-delay-2"><div class="portal-stat-label">plan de pagos activo</div><div style="font-size:18px;font-weight:500;margin-top:6px;"><span class="tag tag-blue">3 cuotas</span></div><div class="portal-stat-delta" style="color:var(--gray-light);">€450/mes · Sin intereses</div></div>
+</div>
+<div class="portal-card animate-on-scroll">
+<div class="portal-card-title">Métodos de pago registrados</div>
+<div class="solution-row"><div class="solution-info"><h4>Visa terminada en 4582</h4><p>Expira 09/28 · Débito automático activo</p></div><span class="tag tag-green">Principal</span></div>
+<div class="solution-row"><div class="solution-info"><h4>Cuenta ES91 2100 1234 56 7890123456</h4><p>Banco Santander · Domiciliación</p></div><button class="btn-gold" style="padding:6px 16px;font-size:11px;">Configurar</button></div>
+<div style="margin-top:16px;"><button class="btn-gold" style="padding:8px 20px;font-size:11px;">+ Añadir método de pago</button></div>
+</div>
+<div class="portal-card animate-on-scroll">
+<div class="portal-card-title">Historial de pagos</div>
+<table class="portal-table">
+<thead><tr><th>fecha</th><th>concepto</th><th>monto</th><th>método</th><th>estado</th></tr></thead>
+<tbody>
+<tr><td>02 ago 2026</td><td>Comisión asesoría — Fase 2</td><td>€450</td><td>Visa ···4582</td><td><span class="tag tag-green">Pagado</span></td></tr>
+<tr><td>05 jul 2026</td><td>Comisión asesoría — Fase 1</td><td>€450</td><td>Visa ···4582</td><td><span class="tag tag-green">Pagado</span></td></tr>
+<tr><td>10 jun 2026</td><td>Depósito inicial caso</td><td>€1.200</td><td>Transferencia</td><td><span class="tag tag-green">Pagado</span></td></tr>
+</tbody>
+</table>
+</div>
+<div class="portal-card animate-on-scroll">
+<div class="portal-card-title">Facilidades de pago disponibles</div>
+<p style="font-size:14px;color:var(--gray);margin-bottom:20px;">Si necesita aplazar o fraccionar sus honorarios, ofrecemos planes flexibles sin intereses para clientes con casos activos.</p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+<div style="padding:20px;border:1px solid var(--border-dark);border-radius:2px;transition:all var(--transition-smooth);" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--border-dark)'">
+<div style="font-family:var(--font-serif);font-size:18px;font-weight:500;color:var(--navy);margin-bottom:4px;">Plan 3 cuotas</div>
+<div style="font-size:13px;color:var(--gray-light);margin-bottom:16px;">€450/mes · Sin intereses · Revisión mensual</div>
+<button class="btn-gold btn-gold-solid" style="padding:8px 20px;font-size:11px;">Solicitar</button>
+</div>
+<div style="padding:20px;border:1px solid var(--border-dark);border-radius:2px;transition:all var(--transition-smooth);" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--border-dark)'">
+<div style="font-family:var(--font-serif);font-size:18px;font-weight:500;color:var(--navy);margin-bottom:4px;">Plan 6 cuotas</div>
+<div style="font-size:13px;color:var(--gray-light);margin-bottom:16px;">€225/mes · 2% TIN · Revisión trimestral</div>
+<button class="btn-gold" style="padding:8px 20px;font-size:11px;">Solicitar</button>
+</div>
+</div>
+</div>
+</div>
+<!-- COMPLAINTS -->
+<div id="portal-complaints" class="hidden">
+<div class="portal-topbar">
+<div class="logo" style="font-size:15px;cursor:pointer;" onclick="exitPortal()"><div class="logo-icon" style="width:28px;height:28px;font-size:13px;">F</div><div class="logo-text"><div class="logo-name" style="font-size:15px;">FinLex</div></div></div>
+<div class="portal-nav">
+<button class="portal-nav-btn" onclick="portalNav('dashboard')">Resumen</button>
+<button class="portal-nav-btn" onclick="portalNav('case')">Mi caso</button>
+<button class="portal-nav-btn" onclick="portalNav('solutions')">Soluciones</button>
+<button class="portal-nav-btn" onclick="portalNav('payments')">Pagos</button>
+<button class="portal-nav-btn active" onclick="portalNav('complaints')">Quejas</button>
+<button class="portal-nav-btn" onclick="portalNav('advisor')">Asesor</button>
+<button class="portal-nav-btn" onclick="portalNav('profile')">Perfil</button>
+<button class="portal-nav-btn" onclick="exitPortal()">Salir</button>
+</div>
+</div>
+<div class="portal-card animate-on-scroll">
+<div class="portal-card-title">Nueva queja o incidencia</div>
+<div style="font-size:14px;color:var(--gray);margin-bottom:16px;">Comuníquenos cualquier problema o información adicional sobre su caso.</div>
+<form onsubmit="submitPortalComplaint(event)">
+<div class="form-group">
+<label class="form-label">Tipo de incidencia</label>
+<select class="form-select" required>
+<option value="">Seleccione...</option>
+<option>Nueva información del broker</option>
+<option>Contacto no solicitado del broker</option>
+<option>Error en mis datos personales</option>
+<option>Disconformidad con la estrategia</option>
+<option>Problema técnico con el portal</option>
+<option>Incidencia de facturación</option>
+<option>Otros</option>
+</select>
+</div>
+<div class="form-group">
+<label class="form-label">Descripción detallada</label>
+<textarea class="form-textarea" required placeholder="Explique su situación con el mayor detalle posible..."></textarea>
+</div>
+<div class="form-group">
+<label class="form-label">Adjuntar archivo (opcional)</label>
+<input class="form-input" type="file">
+</div>
+<button class="btn-gold btn-gold-solid">Enviar queja</button>
+</form>
+</div>
+<div class="portal-card animate-on-scroll">
+<div class="portal-card-title">Historial de quejas</div>
+<div id="portal-complaint-list">
+<div class="complaint-item">
+<div class="complaint-top"><span class="complaint-id">#Q-2026-0041</span><span class="tag tag-green">Resuelta</span></div>
+<div class="complaint-text">El broker siguió contactándome por teléfono pese a haber cesado comunicaciones. Se registró la incidencia y se bloquearon los números.</div>
+</div>
+<div class="complaint-item">
+<div class="complaint-top"><span class="complaint-id">#Q-2026-0038</span><span class="tag tag-green">Resuelta</span></div>
+<div class="complaint-text">Solicitud de actualización de dirección postal para envío de documentación legal.</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ADVISOR -->
+<div id="portal-advisor" class="hidden">
+<div class="portal-topbar">
+<div class="logo" style="font-size:15px;cursor:pointer;" onclick="exitPortal()"><div class="logo-icon" style="width:28px;height:28px;font-size:13px;">F</div><div class="logo-text"><div class="logo-name" style="font-size:15px;">FinLex</div></div></div>
+<div class="portal-nav">
+<button class="portal-nav-btn" onclick="portalNav('dashboard')">Resumen</button>
+<button class="portal-nav-btn" onclick="portalNav('case')">Mi caso</button>
+<button class="portal-nav-btn" onclick="portalNav('solutions')">Soluciones</button>
+<button class="portal-nav-btn" onclick="portalNav('payments')">Pagos</button>
+<button class="portal-nav-btn" onclick="portalNav('complaints')">Quejas</button>
+<button class="portal-nav-btn active" onclick="portalNav('advisor')">Asesor</button>
+<button class="portal-nav-btn" onclick="portalNav('profile')">Perfil</button>
+<button class="portal-nav-btn" onclick="exitPortal()">Salir</button>
+</div>
+</div>
+<div class="advisor-layout">
+<div>
+<div class="portal-card" style="text-align:center;padding:32px 24px;">
+<div style="width:80px;height:80px;border-radius:50%;background:var(--navy);margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:600;color:var(--gold);font-family:var(--font-serif);">EV</div>
+<div style="font-family:var(--font-serif);font-size:20px;font-weight:500;color:var(--navy);margin-bottom:4px;">Dra. Elena Vargas</div>
+<div style="font-size:13px;color:var(--gray-light);margin-bottom:20px;">Abogada · Derecho financiero</div>
+<div style="font-size:13px;color:var(--gray);line-height:1.8;text-align:left;">
+<div style="margin-bottom:8px;"><strong style="color:var(--navy);font-family:var(--font-serif);font-weight:500;">Email:</strong> e.vargas@finlexgroup.com</div>
+<div style="margin-bottom:8px;"><strong style="color:var(--navy);font-family:var(--font-serif);font-weight:500;">Tel:</strong> +34 912 345 678</div>
+<div><strong style="color:var(--navy);font-family:var(--font-serif);font-weight:500;">Horario:</strong> Lun–Vie, 9:00–18:00 CET</div>
+</div>
+<div style="margin-top:24px;">
+<button class="btn-gold btn-gold-solid" style="width:100%;margin-bottom:8px;justify-content:center;">Videollamada</button>
+<button class="btn-gold" style="width:100%;justify-content:center;">Agendar cita</button>
+</div>
+</div>
+</div>
+<div>
+<div class="chat-box">
+<div class="chat-header"><div class="chat-status"></div> Asesoría en línea — Dra. Vargas</div>
+<div class="chat-messages" id="chat-messages">
+<div class="msg msg-in">Buenos días, soy la Dra. Vargas. He revisado el último informe del broker y tenemos una ventana favorable para la negociación esta semana.</div>
+<div class="msg msg-out">Buenos días. ¿Qué probabilidad hay de recuperar el importe total?</div>
+<div class="msg msg-in">Basándonos en casos similares, estimamos entre un 65% y 80% de recuperación total. La clave será la presentación de la demanda arbitral si no responden antes del 25.</div>
+<div class="msg msg-out">Perfecto, confío en el proceso. ¿Necesito firmar algo adicional?</div>
+<div class="msg msg-in">Sí, le enviaré hoy el poder notarial ampliado por correo certificado. Revíselo y me confirma.</div>
+</div>
+<div class="chat-input-row">
+<input type="text" id="chat-input" placeholder="Escriba su mensaje..." onkeydown="if(event.key==='Enter') sendChat()">
+<button class="btn-gold btn-gold-solid" onclick="sendChat()">Enviar</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- PROFILE -->
+<div id="portal-profile" class="hidden">
+<div class="portal-topbar">
+<div class="logo" style="font-size:15px;cursor:pointer;" onclick="exitPortal()"><div class="logo-icon" style="width:28px;height:28px;font-size:13px;">F</div><div class="logo-text"><div class="logo-name" style="font-size:15px;">FinLex</div></div></div>
+<div class="portal-nav">
+<button class="portal-nav-btn" onclick="portalNav('dashboard')">Resumen</button>
+<button class="portal-nav-btn" onclick="portalNav('case')">Mi caso</button>
+<button class="portal-nav-btn" onclick="portalNav('solutions')">Soluciones</button>
+<button class="portal-nav-btn" onclick="portalNav('payments')">Pagos</button>
+<button class="portal-nav-btn" onclick="portalNav('complaints')">Quejas</button>
+<button class="portal-nav-btn" onclick="portalNav('advisor')">Asesor</button>
+<button class="portal-nav-btn active" onclick="portalNav('profile')">Perfil</button>
+<button class="portal-nav-btn" onclick="exitPortal()">Salir</button>
+</div>
+</div>
+<div class="portal-card animate-on-scroll">
+<div class="portal-card-title">Información personal</div>
+<div class="profile-grid">
+<div class="form-group"><label class="form-label">Nombre completo</label><input class="form-input" type="text" value="Juan Pérez García" readonly></div>
+<div class="form-group"><label class="form-label">Documento de identidad</label><input class="form-input" type="text" value="12345678A" readonly></div>
+<div class="form-group"><label class="form-label">Correo electrónico</label><input class="form-input" type="email" value="cliente@demo.com"></div>
+<div class="form-group"><label class="form-label">Teléfono</label><input class="form-input" type="tel" value="+34 600 123 456"></div>
+<div class="form-group"><label class="form-label">Dirección</label><input class="form-input" type="text" value="Calle Mayor 45, 28013 Madrid"></div>
+<div class="form-group"><label class="form-label">País de residencia fiscal</label><input class="form-input" type="text" value="España" readonly></div>
+</div>
+<div style="margin-top:20px;"><button class="btn-gold btn-gold-solid">Guardar cambios</button></div>
+</div>
+<div class="portal-card animate-on-scroll">
+<div class="portal-card-title">Seguridad de la cuenta</div>
+<div class="profile-grid">
+<div class="form-group"><label class="form-label">Contraseña actual</label><input class="form-input" type="password" placeholder="••••••••"></div>
+<div class="form-group"><label class="form-label">Nueva contraseña</label><input class="form-input" type="password" placeholder="Mínimo 8 caracteres"></div>
+</div>
+<div style="margin-top:20px;"><button class="btn-gold btn-gold-solid">Actualizar contraseña</button></div>
+</div>
+<div class="portal-card animate-on-scroll">
+<div class="portal-card-title">Documentos del caso</div>
+<table class="portal-table">
+<thead><tr><th>documento</th><th>fecha</th><th>estado</th></tr></thead>
+<tbody>
+<tr><td>Contrato de servicios</td><td>15 jun 2026</td><td><span class="tag tag-green">Firmado</span></td></tr>
+<tr><td>Poder notarial</td><td>20 jun 2026</td><td><span class="tag tag-green">Firmado</span></td></tr>
+<tr><td>Informe pericial</td><td>05 jul 2026</td><td><span class="tag tag-green">Recibido</span></td></tr>
+<tr><td>Poder notarial ampliado</td><td>—</td><td><span class="tag tag-amber">Pendiente</span></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+// Header scroll effect
+window.addEventListener('scroll', () => {
+const header = document.getElementById('header');
+if (window.scrollY > 50) header.classList.add('scrolled');
+else header.classList.remove('scrolled');
+});
+// Intersection Observer for scroll animations
+const observer = new IntersectionObserver((entries) => {
+entries.forEach(entry => {
+if (entry.isIntersecting) {
+entry.target.classList.add('visible');
+}
+});
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+// Public navigation
+function showPublicPage(pageId) {
+document.getElementById('public-pages').classList.remove('hidden');
+document.getElementById('portal-area').classList.add('hidden');
+document.querySelectorAll('[id^="page-"]').forEach(el => el.classList.add('hidden'));
+const target = document.getElementById('page-' + pageId);
+if (target) { target.classList.remove('hidden'); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+const activeLink = document.querySelector('.nav-link[onclick="showPublicPage(\'' + pageId + '\')"]');
+if (activeLink) activeLink.classList.add('active');
+}
+function toggleMobileMenu() {
+document.getElementById('mobileNav').classList.toggle('open');
+}
+// Portal navigation
+function enterPortal() {
+document.getElementById('public-pages').classList.add('hidden');
+document.getElementById('portal-area').classList.remove('hidden');
+document.getElementById('portal-auth').classList.remove('hidden');
+document.querySelectorAll('[id^="portal-"]').forEach(el => {
+if (el.id !== 'portal-area' && el.id !== 'portal-auth') el.classList.add('hidden');
+});
+window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function exitPortal() {
+document.getElementById('portal-area').classList.add('hidden');
+document.getElementById('public-pages').classList.remove('hidden');
+showPublicPage('home');
+}
+function switchPortalTab(tab, btn) {
+document.querySelectorAll('.login-tab').forEach(b => b.classList.remove('active'));
+btn.classList.add('active');
+if (tab === 'login') {
+document.getElementById('p-form-login').classList.remove('hidden');
+document.getElementById('p-form-register').classList.add('hidden');
+} else {
+document.getElementById('p-form-login').classList.add('hidden');
+document.getElementById('p-form-register').classList.remove('hidden');
+}
+}
+function handlePortalLogin(e) {
+e.preventDefault();
+document.getElementById('portal-auth').classList.add('hidden');
+document.getElementById('portal-dashboard').classList.remove('hidden');
+}
+function portalNav(view) {
+document.querySelectorAll('[id^="portal-"]').forEach(el => {
+if (el.id !== 'portal-area') el.classList.add('hidden');
+});
+document.getElementById('portal-' + view).classList.remove('hidden');
+document.querySelectorAll('.portal-nav-btn').forEach(b => b.classList.remove('active'));
+const btn = document.querySelector('#portal-' + view + ' .portal-nav-btn[onclick="portalNav(\\\'' + view + '\\\')"]');
+if (btn) btn.classList.add('active');
+window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function sendChat() {
+const input = document.getElementById('chat-input');
+const text = input.value.trim();
+if (!text) return;
+const container = document.getElementById('chat-messages');
+const out = document.createElement('div');
+out.className = 'msg msg-out';
+out.textContent = text;
+container.appendChild(out);
+input.value = '';
+container.scrollTop = container.scrollHeight;
+setTimeout(() => {
+const reply = document.createElement('div');
+reply.className = 'msg msg-in';
+reply.textContent = 'Entendido. Lo reviso y le respondo a la mayor brevedad.';
+container.appendChild(reply);
+container.scrollTop = container.scrollHeight;
+}, 1200);
+}
+let portalComplaintCount = 42;
+function submitPortalComplaint(e) {
+e.preventDefault();
+portalComplaintCount++;
+const list = document.getElementById('portal-complaint-list');
+const item = document.createElement('div');
+item.className = 'complaint-item';
+item.innerHTML = '<div class="complaint-top"><span class="complaint-id">#Q-2026-00' + portalComplaintCount + '</span><span class="tag tag-amber">En revisión</span></div><div class="complaint-text">' + e.target.querySelector('textarea').value.substring(0, 120) + '...</div>';
+list.insertBefore(item, list.firstChild);
+e.target.reset();
+alert('Queja enviada correctamente. Su asesor la revisará en un plazo de 24 horas.');
+}
+showPublicPage('home');
+</script>
+</body>
+</html>

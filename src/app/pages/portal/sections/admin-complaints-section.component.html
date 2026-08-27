@@ -1,0 +1,22 @@
+<section class="portal-section-card admin-complaints">
+  <div class="admin-heading"><div><span>Gestión interna</span><h2>Quejas de usuarios</h2><p>Revise las incidencias recibidas y actualice su estado.</p></div><b>{{ complaints().length }} quejas</b></div>
+  @if (loading()) { <p class="admin-state">Cargando quejas…</p> }
+  @if (error()) { <p class="admin-error">{{ error() }}</p> }
+  @for (complaint of complaints(); track complaint.id) {
+    <article class="admin-complaint-row">
+      <div class="complaint-owner"><span>{{ complaint.user?.names?.charAt(0)?.toUpperCase() }}</span><div><h3>{{ complaint.user?.names }}</h3><p>{{ complaint.user?.email }}</p><small>{{ date(complaint.createdAt) }}</small></div></div>
+      <div class="complaint-detail"><strong>{{ complaint.reason }}</strong><p>{{ complaint.description }}</p>@if (complaint.attachmentName) { <small>Adjunto: {{ complaint.attachmentName }}</small> }</div>
+      <label>Estado
+        <select [(ngModel)]="complaint.selectedStatus">
+          <option value="En revisión">En revisión</option>
+          <option value="Solucionada">Solucionada</option>
+          <option value="Anulada">Anulada</option>
+          <option value="Cancelada">Cancelada</option>
+        </select>
+      </label>
+      <button class="gold-button" type="button" [disabled]="complaint.saving || complaint.selectedStatus === complaint.status" (click)="save(complaint)">{{ complaint.saving ? 'Guardando…' : complaint.saved ? 'Actualizada ✓' : 'Actualizar' }}</button>
+    </article>
+  } @empty {
+    @if (!loading()) { <p class="admin-state">No hay quejas registradas.</p> }
+  }
+</section>

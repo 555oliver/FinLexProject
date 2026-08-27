@@ -1,0 +1,15 @@
+<section class="portal-section-card admin-cases">
+  <div class="admin-heading"><div><span>Gestión interna</span><h2>Casos de usuarios</h2><p>Cambie la fase actual y el portal actualizará automáticamente la línea de tiempo y el porcentaje.</p></div><b>{{ cases().length }} casos</b></div>
+  @if (loading()) { <p class="admin-state">Cargando casos…</p> }
+  @if (error()) { <p class="admin-error">{{ error() }}</p> }
+  @for (caseData of cases(); track caseData.id) {
+    <article class="admin-case-row">
+      <div class="complaint-owner"><span>{{ caseData.user?.names?.charAt(0)?.toUpperCase() }}</span><div><h3>{{ caseData.user?.names }}</h3><p>{{ caseData.user?.email }}</p><small>{{ caseData.caseNumber }} · {{ date(caseData.createdAt) }}</small></div></div>
+      <div class="case-admin-progress"><span>Progreso actual</span><strong>{{ caseData.progress }}%</strong><div><i [style.width.%]="caseData.progress"></i></div>@if (caseData.progress === 100) { <b class="case-solved-label">Caso solucionado</b> }</div>
+      <label>Fase del caso<select [(ngModel)]="caseData.selectedPhase">@for (phase of phases; track phase; let index = $index) { <option [ngValue]="index">{{ index + 1 }}. {{ phase }}</option> }</select></label>
+      <button class="gold-button" type="button" [disabled]="caseData.saving || caseData.selectedPhase === caseData.currentPhase" (click)="save(caseData)">{{ caseData.saving ? 'Guardando…' : caseData.saved ? 'Actualizado ✓' : 'Actualizar fase' }}</button>
+    </article>
+  } @empty {
+    @if (!loading()) { <p class="admin-state">Aún no hay casos creados por los usuarios.</p> }
+  }
+</section>

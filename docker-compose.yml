@@ -1,0 +1,36 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: finlex-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: finlex
+      POSTGRES_USER: finlex
+      POSTGRES_PASSWORD: finlex_local_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - finlex_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U finlex -d finlex"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend
+    container_name: finlex-backend
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    environment:
+      DATABASE_URL: postgresql://finlex:finlex_local_password@postgres:5432/finlex
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  finlex_postgres_data:
