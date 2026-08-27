@@ -50,6 +50,18 @@ p, .muted { color: #969eae; font-size: 11px; line-height: 1.6; }
 .complaint-form select, .complaint-form textarea, .complaint-form input, .profile-form input, .profile-form select { width: 100%; border: 1px solid rgba(10,22,40,.12); background: #fff; padding: 10px 12px; color: #0a1628; font: 12px var(--font-sans); text-transform: none; letter-spacing: 0; }
 .complaint-form textarea { min-height: 90px; resize: vertical; }
 .complaint-form .gold-button, .profile-form .gold-button { width: max-content; min-height: 36px; padding-inline: 25px; }
+.profile-photo-editor { display: flex; align-items: center; gap: 18px; margin: -6px 0 24px; padding: 18px; border: 1px solid rgba(10,22,40,.1); background: #faf8f4; }
+.profile-photo-editor > img, .profile-photo-editor > span { width: 76px; height: 76px; flex: 0 0 76px; border: 2px solid #c9a96e; border-radius: 50%; object-fit: cover; }
+.profile-photo-editor > span { display: grid; place-items: center; background: #07162a; color: #c9a96e; font: 26px var(--font-serif); }
+.profile-photo-editor > div { display: grid; gap: 5px; }
+.profile-photo-editor strong { color: #0a1628; font-size: 13px; }
+.profile-photo-editor small { color: #838c9d; font-size: 9px; }
+.profile-photo-actions { display: flex; gap: 8px; margin-top: 5px; }
+.profile-photo-actions label, .profile-photo-actions button { min-height: 30px; display: inline-flex; align-items: center; padding: 0 13px; border: 1px solid #c9a96e; background: #cfaa67; color: #07162a; font: 700 8px var(--font-sans); letter-spacing: .8px; text-transform: uppercase; cursor: pointer; }
+.profile-photo-actions label input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.profile-photo-actions button { background: #fff; color: #8f5e52; }
+.profile-photo-actions .disabled, .profile-photo-actions button:disabled { opacity: .5; cursor: wait; }
+.profile-photo-editor .profile-photo-error { color: #a13d3d; }
 .complaint-form .gold-button:disabled { opacity: .5; cursor: not-allowed; }
 .complaint-history-head, .complaint-history-row { display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 18px; align-items: center; }
 .complaint-history-head { padding: 4px 10px 12px; border-bottom: 1px solid rgba(10,22,40,.1); color: #979faf; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; }

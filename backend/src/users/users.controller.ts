@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Param, ParseUUIDPipe, Patch, Req } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post, Req, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { Request } from 'express';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { Roles } from '../auth/roles.decorator';
 import { Role } from './role.enum';
 import { UsersService } from './users.service';
@@ -38,5 +39,20 @@ export class UsersController {
   @Patch('me/profile')
   updateProfile(@Req() request: Request & { user: AuthUser }, @Body() dto: UpdateProfileDto) {
     return this.usersService.updateProfile(request.user.id, dto);
+  }
+
+  @Post('me/profile-image')
+  @UseInterceptors(FileInterceptor('file', {
+    limits: { fileSize: 1024 * 1024 },
+    fileFilter: (_request, file, callback) => callback(null, ['image/jpeg', 'image/png', 'image/webp'].includes(file.mimetype)),
+  }))
+  updateProfileImage(@Req() request: Request & { user: AuthUser }, @UploadedFile() file?: { buffer: Buffer; mimetype: string }) {
+    if (!file) throw new BadRequestException('Seleccione una imagen JPG, PNG o WebP de máximo 1 MB.');
+    return this.usersService.updateProfileImage(request.user.id, file.mimetype, file.buffer);
+  }
+
+  @Delete('me/profile-image')
+  removeProfileImage(@Req() request: Request & { user: AuthUser }) {
+    return this.usersService.removeProfileImage(request.user.id);
   }
 }

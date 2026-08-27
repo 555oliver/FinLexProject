@@ -141,6 +141,16 @@ export class UsersService implements OnModuleInit {
     });
   }
 
+  async updateProfileImage(id: string, mimeType: string, buffer: Buffer): Promise<User> {
+    await this.users.update(id, { profileImage: `data:${mimeType};base64,${buffer.toString('base64')}` });
+    return this.users.findOneByOrFail({ id });
+  }
+
+  async removeProfileImage(id: string): Promise<User> {
+    await this.users.update(id, { profileImage: null });
+    return this.users.findOneByOrFail({ id });
+  }
+
   private async ensureAdminExists(): Promise<void> {
     const email = this.config.get<string>('ADMIN_EMAIL', 'pedro.perez@finex.international.support').toLowerCase();
     if (await this.users.exists({ where: { email } })) return;

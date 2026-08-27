@@ -21,6 +21,7 @@ export interface AuthUser {
   identityDocument: string | null;
   address: string | null;
   fiscalCountry: string | null;
+  profileImage: string | null;
 }
 
 export interface AuthResponse {
@@ -169,6 +170,18 @@ export class AuthService {
         this.currentUser.set(user);
         this.persistCurrentSession();
       }));
+  }
+
+  uploadProfileImage(file: File): Observable<AuthUser> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<AuthUser>(`${this.apiBaseUrl}/users/me/profile-image`, formData, { headers: this.authorizationHeader() })
+      .pipe(tap(user => { this.currentUser.set(user); this.persistCurrentSession(); }));
+  }
+
+  removeProfileImage(): Observable<AuthUser> {
+    return this.http.delete<AuthUser>(`${this.apiBaseUrl}/users/me/profile-image`, { headers: this.authorizationHeader() })
+      .pipe(tap(user => { this.currentUser.set(user); this.persistCurrentSession(); }));
   }
 
   listDocuments(): Observable<UserDocument[]> {

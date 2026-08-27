@@ -8,7 +8,7 @@ import { Country } from '../../../core/models/country.model';
 
 @Component({ selector: 'app-profile-section', standalone: true, imports: [ReactiveFormsModule], templateUrl: './profile-section.component.html', styleUrl: './portal-sections.css', changeDetection: ChangeDetectionStrategy.OnPush })
 export class ProfileSectionComponent {
-  private readonly auth = inject(AuthService);
+  readonly auth = inject(AuthService);
   private readonly fb = inject(FormBuilder);
   private readonly countryService = inject(CountryService);
   private readonly destroyRef = inject(DestroyRef);
@@ -31,6 +31,8 @@ export class ProfileSectionComponent {
   readonly passwordLinkSending = signal(false);
   readonly passwordMessage = signal('');
   readonly passwordError = signal('');
+  readonly imageSaving = signal(false);
+  readonly imageError = signal('');
   readonly user = this.auth.currentUser();
 
   readonly profileForm = this.fb.nonNullable.group({
@@ -100,6 +102,30 @@ export class ProfileSectionComponent {
     this.auth.requestPasswordChange().subscribe({
       next: response => { this.passwordLinkSending.set(false); this.passwordMessage.set(response.message); },
       error: () => { this.passwordLinkSending.set(false); this.passwordError.set('No fue posible enviar el enlace.'); },
+    });
+  }
+
+  selectProfileImage(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    input.value = '';
+    if (!file) return;
+    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type) || file.size > 1024 * 1024) {
+      this.imageError.set('Seleccione una imagen JPG, PNG o WebP de máximo 1 MB.');
+      return;
+    }
+    this.imageSaving.set(true); this.imageError.set('');
+    this.auth.uploadProfileImage(file).subscribe({
+      next: () => this.imageSaving.set(false),
+      error: (error: HttpErrorResponse) => { this.imageSaving.set(false); this.imageError.set(error.error?.message || 'No fue posible subir la imagen.'); },
+    });
+  }
+
+  removeProfileImage(): void {
+    this.imageSaving.set(true); this.imageError.set('');
+    this.auth.removeProfileImage().subscribe({
+      next: () => this.imageSaving.set(false),
+      error: () => { this.imageSaving.set(false); this.imageError.set('No fue posible eliminar la imagen.'); },
     });
   }
 

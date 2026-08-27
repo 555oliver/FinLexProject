@@ -23,6 +23,7 @@ export class User {
   @Column({ name: 'identity_document', type: 'varchar', length: 50, nullable: true }) identityDocument: string | null;
   @Column({ type: 'varchar', length: 255, nullable: true }) address: string | null;
   @Column({ name: 'fiscal_country', type: 'varchar', length: 100, nullable: true }) fiscalCountry: string | null;
+  @Column({ name: 'profile_image', type: 'text', nullable: true }) profileImage: string | null;
   @Column({ name: 'email_verified_at', type: 'timestamptz', nullable: true }) emailVerifiedAt: Date | null;
   @Index()
   @Column({ name: 'verification_token_hash', type: 'varchar', length: 64, nullable: true, select: false }) verificationTokenHash: string | null;

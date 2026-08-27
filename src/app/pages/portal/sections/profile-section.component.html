@@ -1,6 +1,27 @@
 <div class="section-stack">
   <form class="portal-section-card profile-form" [formGroup]="profileForm" (ngSubmit)="save()">
     <h2>Información personal</h2>
+    <div class="profile-photo-editor">
+      @if (auth.currentUser()?.profileImage; as profileImage) {
+        <img [src]="profileImage" alt="Foto de perfil actual">
+      } @else {
+        <span aria-hidden="true">{{ auth.currentUser()?.names?.charAt(0)?.toUpperCase() || 'F' }}</span>
+      }
+      <div>
+        <strong>Foto de perfil</strong>
+        <small>JPG, PNG o WebP · máximo 1 MB</small>
+        <div class="profile-photo-actions">
+          <label [class.disabled]="imageSaving()">
+            <input type="file" accept="image/jpeg,image/png,image/webp" [disabled]="imageSaving()" (change)="selectProfileImage($event)">
+            {{ imageSaving() ? 'Procesando…' : 'Subir imagen' }}
+          </label>
+          @if (auth.currentUser()?.profileImage) {
+            <button type="button" [disabled]="imageSaving()" (click)="removeProfileImage()">Eliminar</button>
+          }
+        </div>
+        @if (imageError()) { <small class="profile-photo-error" role="alert">{{ imageError() }}</small> }
+      </div>
+    </div>
     <div class="profile-fields">
       <label>Nombre completo<input formControlName="names"></label>
       <label>Documento de identidad<input formControlName="identityDocument"></label>

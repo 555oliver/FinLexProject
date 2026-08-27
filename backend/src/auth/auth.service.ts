@@ -91,7 +91,7 @@ export class AuthService {
     return {
       id: user.id, names: user.names, email: user.email, username: user.username, role: user.role,
       phone: user.phone, countryCode: user.countryCode, dialCode: user.dialCode,
-      identityDocument: user.identityDocument, address: user.address, fiscalCountry: user.fiscalCountry,
+      identityDocument: user.identityDocument, address: user.address, fiscalCountry: user.fiscalCountry, profileImage: user.profileImage,
       recoveryBalance: user.recoveryBalance, recoveredFunds: user.recoveredFunds,
       pendingFees: user.pendingFees, totalPaid: user.totalPaid, activePaymentPlan: user.activePaymentPlan,
     };
