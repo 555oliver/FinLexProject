@@ -1,4 +1,4 @@
-<div style="padding:140px 40px 60px;background:var(--navy);color:var(--white);">
+<div class="contact-hero" style="padding:140px 40px 60px;background:var(--navy);color:var(--white);">
 <div class="container">
 <div class="section-label"><span class="line"></span> Contacto</div>
 <h1 style="font-family:var(--font-serif);font-size:clamp(36px,4vw,56px);font-weight:400;margin-bottom:16px;line-height:1.1;">Hablemos de <em>su caso</em></h1>
@@ -7,10 +7,10 @@
 </div>
 <div class="section section-white">
 <div class="container">
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;">
-<div class="animate-on-scroll">
+<div class="contact-page-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:48px;">
+<div class="contact-form-column animate-on-scroll">
 <h3 style="font-family:var(--font-serif);font-size:24px;color:var(--navy);margin-bottom:24px;font-weight:400;">Formulario de contacto</h3>
-<form>
+<form class="contact-form">
 <div class="form-group">
 <label class="form-label">Nombre completo</label>
 <input class="form-input" type="text" required placeholder="Su nombre">
@@ -39,24 +39,23 @@
 <label class="form-label">Mensaje</label>
 <textarea class="form-textarea" required placeholder="Describa su situación..."></textarea>
 </div>
-<label style="display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--gray);margin-bottom:24px;cursor:pointer;">
+<label class="contact-consent" style="display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--gray);margin-bottom:24px;cursor:pointer;">
 <input type="checkbox" required style="margin-top:3px;">
 <span>He leído y acepto la <a href="#" routerLink="/legal" style="color:var(--gold);text-decoration:underline;">política de privacidad</a> y el tratamiento de mis datos.</span>
 </label>
 <button class="btn-gold btn-gold-solid" style="width:100%;justify-content:center;">Enviar consulta</button>
 </form>
 </div>
-<div class="animate-on-scroll animate-delay-1">
+<div class="contact-info-column animate-on-scroll animate-delay-1">
 <h3 style="font-family:var(--font-serif);font-size:24px;color:var(--navy);margin-bottom:24px;font-weight:400;">Información de contacto</h3>
-<div class="portal-card" style="margin-bottom:20px;">
-<div style="font-size:14px;color:var(--gray);line-height:2;">
+<div class="portal-card contact-info-card" style="margin-bottom:20px;">
+<div class="contact-details" style="font-size:14px;color:var(--gray);line-height:2;">
 <p><strong style="color:var(--navy);font-family:var(--font-serif);font-weight:500;">Dirección:</strong><br>Calle de Alcalá 255, 4º Izq.<br>28027 Madrid, España</p>
 <p><strong style="color:var(--navy);font-family:var(--font-serif);font-weight:500;">Teléfono:</strong><br>+34 91 234 56 78 (Lun–Vie, 9:00–19:00)</p>
 <p><strong style="color:var(--navy);font-family:var(--font-serif);font-weight:500;">Email:</strong><br>info@finlexgroup.com<br>urgencias@finlexgroup.com</p>
-<p><strong style="color:var(--navy);font-family:var(--font-serif);font-weight:500;">Registro:</strong><br>CNMV Nº 08472<br>Banco de España Nº 1563<br>DGSFP Agencia Nº AS-08472</p>
 </div>
 </div>
-<div class="portal-card" style="background:var(--navy);color:var(--white);border:none;">
+<div class="portal-card contact-emergency-card" style="background:var(--navy);color:var(--white);border:none;">
 <h4 style="font-family:var(--font-serif);font-size:20px;font-weight:400;margin-bottom:8px;">¿Es cliente y tiene una emergencia?</h4>
 <p style="font-size:14px;color:rgba(255,255,255,0.6);margin-bottom:20px;">Acceda a su portal de cliente para contactar directamente con su asesor asignado o abrir una incidencia prioritaria.</p>
 <button class="btn-gold btn-gold-solid" style="width:100%;justify-content:center;" routerLink="/portal">Acceder al portal cliente</button>
