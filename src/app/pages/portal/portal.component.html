@@ -185,6 +185,7 @@
           </div>
           <nav class="portal-navigation" aria-label="Navegación del portal">
             @if (auth.currentUser()?.role === 'admin') {
+              <button type="button" [class.active]="activePortalTab() === 'adminEvaluations'" (click)="setPortalTab('adminEvaluations')">Evaluación confidencial</button>
               <button type="button" [class.active]="activePortalTab() === 'adminCases'" (click)="setPortalTab('adminCases')">Casos usuarios</button>
               <button type="button" [class.active]="activePortalTab() === 'admin'" (click)="setPortalTab('admin')">Administración</button>
               <button type="button" [class.active]="activePortalTab() === 'adminComplaints'" (click)="setPortalTab('adminComplaints')">Quejas usuarios</button>
@@ -265,6 +266,8 @@
               </ol>
             </section>
           </main>
+        } @else if (activePortalTab() === 'adminEvaluations' && auth.currentUser()?.role === 'admin') {
+          <main class="portal-summary"><app-admin-confidential-evaluations-section /></main>
         } @else if (activePortalTab() === 'adminCases' && auth.currentUser()?.role === 'admin') {
           <main class="portal-summary"><app-admin-cases-section /></main>
         } @else if (activePortalTab() === 'admin' && auth.currentUser()?.role === 'admin') {

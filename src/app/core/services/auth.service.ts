@@ -111,6 +111,16 @@ export interface UserCase {
   user?: { id: string; names: string; email: string };
 }
 
+export type ConfidentialEvaluationStatus = 'Solicitada' | 'En revisión' | 'Contactada' | 'Aprobada' | 'Rechazada' | 'Cancelada';
+
+export interface ConfidentialEvaluation {
+  id: string;
+  email: string;
+  status: ConfidentialEvaluationStatus;
+  createdAt: string;
+  updatedAt: string;
+}
+
 interface PersistedSession {
   accessToken: string;
   user: AuthUser;
@@ -256,6 +266,18 @@ export class AuthService {
 
   updateCasePhase(id: string, currentPhase: number): Observable<UserCase> {
     return this.http.patch<UserCase>(`${this.apiBaseUrl}/cases/${id}/phase`, { currentPhase }, { headers: this.authorizationHeader() });
+  }
+
+  requestConfidentialEvaluation(email: string): Observable<ConfidentialEvaluation> {
+    return this.http.post<ConfidentialEvaluation>(`${this.apiBaseUrl}/confidential-evaluations`, { email });
+  }
+
+  listConfidentialEvaluations(): Observable<ConfidentialEvaluation[]> {
+    return this.http.get<ConfidentialEvaluation[]>(`${this.apiBaseUrl}/confidential-evaluations/admin`, { headers: this.authorizationHeader() });
+  }
+
+  updateConfidentialEvaluationStatus(id: string, status: ConfidentialEvaluationStatus): Observable<ConfidentialEvaluation> {
+    return this.http.patch<ConfidentialEvaluation>(`${this.apiBaseUrl}/confidential-evaluations/${id}/status`, { status }, { headers: this.authorizationHeader() });
   }
 
   logout(): void {

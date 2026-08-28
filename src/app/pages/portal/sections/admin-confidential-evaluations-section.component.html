@@ -1,0 +1,40 @@
+<section class="portal-section-card admin-confidential-evaluations">
+  <div class="admin-heading">
+    <div>
+      <span>Gestión comercial</span>
+      <h2>Evaluación confidencial</h2>
+      <p>Revise las solicitudes recibidas desde el sitio y actualice su estado.</p>
+    </div>
+    <b>{{ evaluations().length }} solicitudes</b>
+  </div>
+
+  @if (loading()) { <p class="admin-state">Cargando evaluaciones…</p> }
+  @if (error()) { <p class="admin-error" role="alert">{{ error() }}</p> }
+
+  @for (evaluation of evaluations(); track evaluation.id) {
+    <article class="admin-evaluation-row">
+      <div class="evaluation-owner">
+        <span>{{ evaluation.email.charAt(0).toUpperCase() }}</span>
+        <div>
+          <h3>{{ evaluation.email }}</h3>
+          <p>Solicitud recibida</p>
+          <small>{{ date(evaluation.createdAt) }}</small>
+        </div>
+      </div>
+      <div class="evaluation-current-status">
+        <small>Estado actual</small>
+        <b [attr.data-status]="evaluation.status">{{ evaluation.status }}</b>
+      </div>
+      <label>Nuevo estado
+        <select [(ngModel)]="evaluation.selectedStatus" [disabled]="evaluation.saving">
+          @for (status of statuses; track status) { <option [ngValue]="status">{{ status }}</option> }
+        </select>
+      </label>
+      <button class="gold-button" type="button" [disabled]="evaluation.saving || evaluation.selectedStatus === evaluation.status" (click)="save(evaluation)">
+        {{ evaluation.saving ? 'Guardando…' : evaluation.saved ? 'Actualizada ✓' : 'Actualizar' }}
+      </button>
+    </article>
+  } @empty {
+    @if (!loading()) { <p class="admin-state">Aún no hay solicitudes de evaluación confidencial.</p> }
+  }
+</section>

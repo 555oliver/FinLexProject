@@ -149,12 +149,26 @@ p, .muted { color: #969eae; font-size: 11px; line-height: 1.6; }
 .admin-complaint-row > label { display: grid; gap: 6px; color: #657083; font-size: 8px; font-weight: 600; letter-spacing: .8px; text-transform: uppercase; }
 .admin-complaint-row select { min-height: 37px; border: 1px solid rgba(10,22,40,.14); background: #fff; padding: 7px 9px; color: #0a1628; }
 .admin-complaint-row .gold-button:disabled { opacity: .5; cursor: not-allowed; }
+.admin-evaluation-row { display: grid; grid-template-columns: minmax(240px, 1.5fr) minmax(120px, .6fr) 170px auto; gap: 18px; align-items: center; padding: 18px 0; border-top: 1px solid rgba(10,22,40,.09); }
+.evaluation-owner { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.evaluation-owner > span { width: 40px; height: 40px; flex: 0 0 40px; display: grid; place-items: center; border-radius: 50%; background: #0a1628; color: #c9a96e; font-family: var(--font-serif); }
+.evaluation-owner h3 { overflow: hidden; color: #0a1628; font-size: 13px; text-overflow: ellipsis; white-space: nowrap; }
+.evaluation-owner p { color: #737d8d; font-size: 10px; }
+.evaluation-owner small { color: #9a6d2d; font-size: 8px; }
+.evaluation-current-status { display: grid; gap: 6px; justify-items: start; }
+.evaluation-current-status small { color: #657083; font-size: 8px; font-weight: 600; letter-spacing: .8px; text-transform: uppercase; }
+.evaluation-current-status b { padding: 5px 10px; background: rgba(201,169,110,.14); color: #8b6428; font-size: 9px; }
+.evaluation-current-status b[data-status="Aprobada"], .evaluation-current-status b[data-status="Contactada"] { background: #e5f3eb; color: #34704d; }
+.evaluation-current-status b[data-status="Rechazada"], .evaluation-current-status b[data-status="Cancelada"] { background: #f5e8e6; color: #97534b; }
+.admin-evaluation-row > label { display: grid; gap: 6px; color: #657083; font-size: 8px; font-weight: 600; letter-spacing: .8px; text-transform: uppercase; }
+.admin-evaluation-row select { min-height: 37px; border: 1px solid rgba(10,22,40,.14); background: #fff; padding: 7px 9px; color: #0a1628; }
+.admin-evaluation-row .gold-button:disabled { opacity: .5; cursor: not-allowed; }
 @media (max-width: 1150px) { .admin-user-row { grid-template-columns: 1fr; } .admin-values { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 1000px) { .admin-complaint-row { grid-template-columns: 1fr 1fr; }.complaint-detail { grid-column: 1 / -1; } }
+@media (max-width: 1000px) { .admin-complaint-row, .admin-evaluation-row { grid-template-columns: 1fr 1fr; }.complaint-detail { grid-column: 1 / -1; } }
 @media (max-width: 700px) { .admin-values { grid-template-columns: 1fr; } .payment-history-row { grid-template-columns: 1fr 1fr; gap: 8px; } }
 @media (max-width: 750px) { .payment-method-form, .payment-method-list { grid-template-columns: 1fr; }.payment-methods-heading { flex-direction: column; } }
 @media (max-width: 800px) { .payment-overview, .plans, .advisor-grid, .profile-fields { grid-template-columns: 1fr; } .item-list article { align-items: flex-start; padding: 16px 0; } .advisor-grid { gap: 14px; } }
-@media (max-width: 520px) { .portal-section-card { padding: 22px 18px; } .data-head, .complaint-history-head { display: none; } .complaint-history-row { grid-template-columns: 1fr; gap: 7px; }.chat-messages p { width: 92%; } .admin-user-row, .admin-complaint-row { grid-template-columns: 1fr; }.complaint-detail { grid-column: auto; }.admin-user { grid-column: auto; }.admin-heading { flex-direction: column; } }
+@media (max-width: 520px) { .portal-section-card { padding: 22px 18px; } .data-head, .complaint-history-head { display: none; } .complaint-history-row { grid-template-columns: 1fr; gap: 7px; }.chat-messages p { width: 92%; } .admin-user-row, .admin-complaint-row, .admin-evaluation-row { grid-template-columns: 1fr; }.complaint-detail { grid-column: auto; }.admin-user { grid-column: auto; }.admin-heading { flex-direction: column; } }
 
 .case-view { gap: 18px; }
 .case-overview { padding: 26px; }

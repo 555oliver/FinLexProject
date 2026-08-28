@@ -562,6 +562,11 @@ outline: none; transition: border-color var(--transition-fast);
 }
 .cta-form input::placeholder { color: rgba(255,255,255,0.4); }
 .cta-form input:focus { border-color: var(--gold); }
+.cta-form .btn-gold:disabled { opacity: .52; cursor: not-allowed; transform: none; }
+.cta-message { max-width: 680px; margin-top: 12px; padding: 10px 13px; border-radius: 3px; font-size: 13px; line-height: 1.5; }
+.cta-message--success { border: 1px solid rgba(58,160,96,.35); background: rgba(58,160,96,.12); color: #bde8ca; }
+.cta-message--error { border: 1px solid rgba(234,132,122,.35); background: rgba(185,65,52,.16); color: #ffd2cc; }
+.sr-only { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0,0,0,0) !important; white-space: nowrap !important; border: 0 !important; }
 /* ========== FOOTER ========== */
 .footer {
 background: var(--navy); color: rgba(255,255,255,0.5); border-top: 1px solid var(--border-light);
