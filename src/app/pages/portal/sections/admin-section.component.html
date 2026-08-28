@@ -6,7 +6,20 @@
     <div class="admin-users">
       @for (user of users(); track user.id) {
         <article class="admin-user-row">
-          <div class="admin-user"><span>{{ user.names.charAt(0).toUpperCase() }}</span><div><h3>{{ user.names }}</h3><p>{{ user.email }}</p><small>{{ user.role === 'admin' ? 'Administrador' : 'Usuario' }}</small></div></div>
+          <div class="admin-user">
+            <div class="admin-user-avatar">
+              @if (user.profileImage) {
+                <img [src]="user.profileImage" [alt]="'Foto de ' + user.names">
+              } @else {
+                <span>{{ user.names.charAt(0).toUpperCase() }}</span>
+              }
+            </div>
+            <div class="admin-user-info">
+              <h3>{{ user.names }}</h3>
+              <p [title]="user.email">{{ user.email }}</p>
+              <small>{{ user.role === 'admin' ? 'Administrador' : 'Usuario' }}</small>
+            </div>
+          </div>
           <div class="admin-values">
             <label>Saldo en recuperación<div class="money-input"><span>€</span><input type="number" min="0" step="0.01" [(ngModel)]="user.recoveryBalanceValue"></div></label>
             <label>Fondos recuperados<div class="money-input"><span>€</span><input type="number" min="0" step="0.01" [(ngModel)]="user.recoveredFundsValue"></div></label>
