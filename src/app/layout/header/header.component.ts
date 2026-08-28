@@ -15,8 +15,14 @@ export class HeaderComponent {
   menuOpen = false;
   userMenuOpen = false;
 
-  toggleMenu(): void { this.menuOpen = !this.menuOpen; }
-  closeMenu(): void { this.menuOpen = false; }
+  toggleMenu(): void {
+    this.menuOpen = !this.menuOpen;
+    if (!this.menuOpen) this.closeUserMenu();
+  }
+  closeMenu(): void {
+    this.menuOpen = false;
+    this.closeUserMenu();
+  }
 
   toggleUserMenu(event: MouseEvent): void {
     event.stopPropagation();
@@ -28,6 +34,7 @@ export class HeaderComponent {
   }
 
   logout(): void {
+    this.menuOpen = false;
     this.closeUserMenu();
     this.auth.logout();
     void this.router.navigate(['/portal/login']);

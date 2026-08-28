@@ -63,10 +63,19 @@
 <a (click)="closeMenu()" routerLink="/portal" routerLinkActive="mobile-nav-active">Portal Cliente</a>
 <a (click)="closeMenu()" routerLink="/evaluacion-privada" routerLinkActive="mobile-nav-active" [routerLinkActiveOptions]="{ exact: true }">Evaluación Privada</a>
 @if (auth.currentUser(); as currentUser) {
-<a class="mobile-user-link" (click)="closeMenu()" routerLink="/portal/perfil">
+<div class="mobile-user-menu">
+<button type="button" class="mobile-user-link" (click)="toggleUserMenu($event)" aria-haspopup="menu" [attr.aria-expanded]="userMenuOpen" aria-controls="mobileUserDropdown">
   @if (currentUser.profileImage) { <img [src]="currentUser.profileImage" alt=""> }
   @else { <span aria-hidden="true">{{ currentUser.names.charAt(0).toUpperCase() }}</span> }
   <strong>{{ currentUser.names }}</strong>
-</a>
+  <svg class="mobile-user-chevron" aria-hidden="true" viewBox="0 0 16 16"><path d="m4 6 4 4 4-4"/></svg>
+</button>
+@if (userMenuOpen) {
+<div id="mobileUserDropdown" class="mobile-user-dropdown" role="menu">
+  <a routerLink="/portal/perfil" role="menuitem" (click)="closeMenu()">Perfil</a>
+  <button type="button" role="menuitem" (click)="logout()">Cerrar sesión</button>
+</div>
+}
+</div>
 }
 </div>

@@ -280,10 +280,18 @@ background: var(--gold-light);
 outline: 2px solid rgba(255,255,255,0.85);
 outline-offset: 3px;
 }
-.mobile-nav .mobile-user-link { display: flex; align-items: center; gap: 10px; border: 1px solid rgba(201,169,110,.32); text-transform: none; }
+.mobile-user-menu { width: min(100%, 280px); display: grid; }
+.mobile-nav .mobile-user-link { width: 100%; min-height: 54px; padding: 8px 12px; border: 1px solid rgba(201,169,110,.32); border-radius: 6px; display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,.035); color: var(--white); cursor: pointer; text-transform: none; }
 .mobile-user-link img, .mobile-user-link > span { width: 34px; height: 34px; flex: 0 0 34px; border: 1px solid var(--gold); border-radius: 50%; object-fit: cover; }
 .mobile-user-link > span { display: grid; place-items: center; color: var(--gold); font-family: var(--font-serif); }
-.mobile-user-link strong { max-width: 190px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mobile-user-link strong { min-width: 0; flex: 1; overflow: hidden; font-size: 13px; text-align: left; text-overflow: ellipsis; white-space: nowrap; }
+.mobile-user-chevron { width: 16px; height: 16px; flex: 0 0 16px; fill: none; stroke: var(--gold-light); stroke-width: 1.6; transition: transform var(--transition-fast); }
+.mobile-user-link[aria-expanded="true"] .mobile-user-chevron { transform: rotate(180deg); }
+.mobile-user-dropdown { padding: 6px; border: 1px solid rgba(201,169,110,.25); border-top: 0; border-radius: 0 0 6px 6px; display: grid; gap: 4px; background: rgba(255,255,255,.05); }
+.mobile-nav .mobile-user-dropdown a, .mobile-nav .mobile-user-dropdown button { width: 100%; min-height: 46px; padding: 0 14px; border: 0; border-radius: 4px; display: flex; align-items: center; justify-content: center; background: transparent; color: var(--white); font: 600 13px var(--font-sans); text-decoration: none; text-transform: none; cursor: pointer; }
+.mobile-nav .mobile-user-dropdown a:hover, .mobile-nav .mobile-user-dropdown a:focus-visible { background: rgba(201,169,110,.18); color: var(--white); }
+.mobile-nav .mobile-user-dropdown button { color: #ffc5bd; }
+.mobile-nav .mobile-user-dropdown button:hover, .mobile-nav .mobile-user-dropdown button:focus-visible { background: rgba(185,65,52,.2); outline: none; }
 .mobile-nav .close-btn { position: absolute; top: 24px; right: 24px; background: none; border: none; color: var(--white); font-size: 32px; cursor: pointer; }
 /* ========== HERO ========== */
 .hero {
