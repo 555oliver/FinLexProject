@@ -1,29 +1,46 @@
-<section class="advisor-grid">
-  <aside class="advisor-card">
-    <span class="advisor-avatar">EV</span>
-    <h2>Dra. Elena Vargas</h2>
-    <p>Abogada · Derecho financiero</p>
-    <dl>
-      <div><dt>Email:</dt><dd>e.vargas@finlexgroup.com</dd></div>
-      <div><dt>Tel:</dt><dd>+34 912 345 678</dd></div>
-      <div><dt>Horario:</dt><dd>Lun–Vie, 9:00–18:00 CET</dd></div>
-    </dl>
-    <button class="gold-button full" type="button">Videollamada</button>
-    <button class="outline-button full" type="button">Agendar cita</button>
+@if (isAdmin) {
+<section class="advisor-admin-layout">
+  <aside class="advisor-inbox">
+    <header><div><span>Mensajería</span><h2>Conversaciones</h2></div><button type="button" (click)="loadConversations()" aria-label="Actualizar conversaciones">↻</button></header>
+    @if (error()) { <p class="chat-error" role="alert">{{ error() }}</p> }
+    @if (loading() && conversations().length === 0) { <p class="chat-empty">Cargando conversaciones…</p> }
+    @for (conversation of conversations(); track conversation.id) {
+      <button type="button" class="conversation-row" [class.active]="selectedConversation()?.id === conversation.id" (click)="selectConversation(conversation)">
+        @if (conversation.user.profileImage) { <img [src]="conversation.user.profileImage" alt=""> }
+        @else { <span>{{ conversation.user.names.charAt(0).toUpperCase() }}</span> }
+        <div><strong>{{ conversation.user.names }}</strong><small>{{ conversation.lastMessage || conversation.user.email }}</small><time>{{ time(conversation.lastMessageAt) }}</time></div>
+        @if (conversation.unreadCount > 0) { <b>{{ conversation.unreadCount }}</b> }
+      </button>
+    } @empty { @if (!loading()) { <p class="chat-empty">Aún no hay mensajes de usuarios.</p> } }
   </aside>
 
-  <div class="chat-card chatbot-card">
-    <header><span></span><div>Asistente virtual FinLex<small>En línea · Respuesta automática</small></div></header>
-    <div class="chat-messages" #chatMessages aria-live="polite">
-      @for (message of messages(); track message.id) {
-        <p [class.advisor-message]="message.author === 'bot'" [class.client-message]="message.author === 'user'">{{ message.text }}</p>
-      }
-      @if (sending()) { <p class="advisor-message typing-message"><i></i><i></i><i></i><span class="sr-only">El asistente está escribiendo</span></p> }
-    </div>
-    <form class="chat-composer" (ngSubmit)="sendMessage()">
-      <input type="text" maxlength="1000" autocomplete="off" placeholder="Escriba su mensaje..." aria-label="Mensaje para el asistente" [value]="messageText()" (input)="updateMessage($event)" [disabled]="sending()">
-      <button class="gold-button" type="submit" [disabled]="!messageText().trim() || sending()">{{ sending() ? 'Enviando…' : 'Enviar' }}</button>
-    </form>
-    <p class="chat-disclaimer">Orientación general. No reemplaza la asesoría profesional de su caso.</p>
+  <div class="chat-card advisor-real-chat">
+    @if (selectedConversation(); as conversation) {
+      <header><span></span><div>{{ conversation.user.names }}<small>{{ conversation.user.email }}</small></div><button class="chat-refresh" type="button" (click)="refresh()">Actualizar</button></header>
+      <div class="chat-messages" #chatMessages aria-live="polite">
+        @for (message of messages(); track message.id) {
+          <div class="chat-message-wrap" [class.own]="message.senderRole === 'admin'"><p [class.advisor-message]="message.senderRole === 'user'" [class.client-message]="message.senderRole === 'admin'">{{ message.body }}</p><time>{{ time(message.createdAt) }}</time></div>
+        } @empty { @if (!loading()) { <p class="chat-empty">Inicie la conversación con este usuario.</p> } }
+      </div>
+      <form class="chat-composer" (ngSubmit)="sendMessage()"><input maxlength="2000" autocomplete="off" placeholder="Escriba una respuesta..." [value]="messageText()" (input)="updateMessage($event)" [disabled]="sending()"><button class="gold-button" type="submit" [disabled]="!messageText().trim() || sending()">{{ sending() ? 'Enviando…' : 'Responder' }}</button></form>
+    } @else {
+      <div class="chat-select-empty"><span>F</span><h2>Mensajes de usuarios</h2><p>Seleccione una conversación para revisar y responder.</p></div>
+    }
   </div>
 </section>
+} @else {
+<section class="advisor-grid">
+  <aside class="advisor-card"><span class="advisor-avatar">EV</span><h2>Equipo asesor FinLex</h2><p>Atención personalizada</p><dl><div><dt>Canal:</dt><dd>Mensajería segura</dd></div><div><dt>Horario:</dt><dd>Lun–Vie, 9:00–18:00</dd></div></dl><button class="outline-button full" type="button" (click)="refresh()">Actualizar mensajes</button></aside>
+  <div class="chat-card advisor-real-chat">
+    <header><span></span><div>Conversación con su asesor<small>Las respuestas serán enviadas por el equipo FinLex</small></div><button class="chat-refresh" type="button" (click)="refresh()">Actualizar</button></header>
+    <div class="chat-messages" #chatMessages aria-live="polite">
+      @for (message of messages(); track message.id) {
+        <div class="chat-message-wrap" [class.own]="message.senderRole === 'user'"><p [class.advisor-message]="message.senderRole === 'admin'" [class.client-message]="message.senderRole === 'user'">{{ message.body }}</p><time>{{ time(message.createdAt) }}</time></div>
+      } @empty { @if (!loading()) { <div class="chat-welcome"><strong>Bienvenido, {{ auth.currentUser()?.names }}</strong><p>Escriba su consulta y un administrador podrá responderle desde el portal.</p></div> } }
+    </div>
+    @if (error()) { <p class="chat-error" role="alert">{{ error() }}</p> }
+    <form class="chat-composer" (ngSubmit)="sendMessage()"><input maxlength="2000" autocomplete="off" placeholder="Escriba su mensaje..." aria-label="Mensaje para su asesor" [value]="messageText()" (input)="updateMessage($event)" [disabled]="sending()"><button class="gold-button" type="submit" [disabled]="!messageText().trim() || sending()">{{ sending() ? 'Enviando…' : 'Enviar' }}</button></form>
+    <p class="chat-disclaimer">Canal privado entre usted y el equipo administrador de FinLex.</p>
+  </div>
+</section>
+}

@@ -199,7 +199,7 @@
             <button type="button" [class.active]="activePortalTab() === 'payments'" (click)="setPortalTab('payments')">Pagos</button>
             <button type="button" [class.active]="activePortalTab() === 'complaints'" (click)="setPortalTab('complaints')">Quejas</button>
             }
-            <button type="button" [class.active]="activePortalTab() === 'advisor'" (click)="setPortalTab('advisor')">Asesor</button>
+            <button type="button" [class.active]="activePortalTab() === 'advisor'" (click)="setPortalTab('advisor')">Asesor @if (auth.currentUser()?.role === 'admin' && auth.pendingAdminMessages() > 0) { <b class="admin-nav-badge">{{ auth.pendingAdminMessages() }}</b> }</button>
             <button type="button" [class.active]="activePortalTab() === 'profile'" (click)="setPortalTab('profile')">Perfil</button>
             <button class="logout-link" type="button" (click)="logout()">Salir</button>
           </nav>

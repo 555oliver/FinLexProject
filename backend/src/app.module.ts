@@ -11,7 +11,6 @@ import { DocumentsModule } from './documents/documents.module';
 import { UserDocument } from './documents/user-document.entity';
 import { User } from './users/user.entity';
 import { UsersModule } from './users/users.module';
-import { ChatbotModule } from './chatbot/chatbot.module';
 import { PaymentSummary1724600000005 } from './database/migrations/1724600000005-payment-summary';
 import { PaymentHistory } from './payments/payment-history.entity';
 import { PaymentsModule } from './payments/payments.module';
@@ -30,6 +29,10 @@ import { ProfileImage1724600000012 } from './database/migrations/1724600000012-p
 import { ConfidentialEvaluation } from './confidential-evaluations/confidential-evaluation.entity';
 import { ConfidentialEvaluationsModule } from './confidential-evaluations/confidential-evaluations.module';
 import { ConfidentialEvaluations1724600000013 } from './database/migrations/1724600000013-confidential-evaluations';
+import { AdvisorConversation } from './advisor-messages/advisor-conversation.entity';
+import { AdvisorMessage } from './advisor-messages/advisor-message.entity';
+import { AdvisorMessagesModule } from './advisor-messages/advisor-messages.module';
+import { AdvisorMessages1724600000014 } from './database/migrations/1724600000014-advisor-messages';
 
 @Module({
   imports: [
@@ -39,20 +42,20 @@ import { ConfidentialEvaluations1724600000013 } from './database/migrations/1724
       useFactory: (config: ConfigService) => ({
         type: 'postgres',
         url: config.get<string>('DATABASE_URL') ?? config.getOrThrow<string>('NETLIFY_DB_URL'),
-        entities: [User, UserDocument, PaymentHistory, PaymentMethod, Complaint, CaseRecord, ConfidentialEvaluation],
+        entities: [User, UserDocument, PaymentHistory, PaymentMethod, Complaint, CaseRecord, ConfidentialEvaluation, AdvisorConversation, AdvisorMessage],
         synchronize: false,
         migrationsRun: !config.get<string>('NETLIFY_DB_URL'),
-        migrations: [InitialSchema1724600000000, UserFinancialSummary1724600000001, UserProfile1724600000002, UserDocuments1724600000003, EmailVerification1724600000004, PaymentSummary1724600000005, FixEncodingAndPaymentStatus1724600000006, Complaints1724600000007, PasswordReset1724600000008, PaymentMethods1724600000009, Cases1724600000010, MultipleCases1724600000011, ProfileImage1724600000012, ConfidentialEvaluations1724600000013],
+        migrations: [InitialSchema1724600000000, UserFinancialSummary1724600000001, UserProfile1724600000002, UserDocuments1724600000003, EmailVerification1724600000004, PaymentSummary1724600000005, FixEncodingAndPaymentStatus1724600000006, Complaints1724600000007, PasswordReset1724600000008, PaymentMethods1724600000009, Cases1724600000010, MultipleCases1724600000011, ProfileImage1724600000012, ConfidentialEvaluations1724600000013, AdvisorMessages1724600000014],
       }),
     }),
     UsersModule,
     AuthModule,
     DocumentsModule,
-    ChatbotModule,
     PaymentsModule,
     ComplaintsModule,
     CasesModule,
     ConfidentialEvaluationsModule,
+    AdvisorMessagesModule,
   ],
 })
 export class AppModule {}

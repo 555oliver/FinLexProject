@@ -5,6 +5,9 @@ import { LoadingService } from '../services/loading.service';
 
 export const loadingInterceptor: HttpInterceptorFn = (request, next) => {
   const loadingService = inject(LoadingService);
+  if (request.headers.has('X-Finlex-Silent')) {
+    return next(request.clone({ headers: request.headers.delete('X-Finlex-Silent') }));
+  }
 
   loadingService.show();
 

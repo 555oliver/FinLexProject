@@ -62,11 +62,6 @@ export interface UserDocument {
   createdAt: string;
 }
 
-export interface ChatbotResponse {
-  reply: string;
-  createdAt: string;
-}
-
 export interface PaymentHistory {
   id: string;
   concept: string;
@@ -121,6 +116,24 @@ export interface ConfidentialEvaluation {
   updatedAt: string;
 }
 
+export interface AdvisorMessage {
+  id: string;
+  conversationId: string;
+  senderId: string;
+  senderRole: 'user' | 'admin';
+  body: string;
+  readAt: string | null;
+  createdAt: string;
+}
+
+export interface AdvisorConversation {
+  id: string;
+  user: { id: string; names: string; email: string; profileImage: string | null };
+  lastMessage: string;
+  lastMessageAt: string;
+  unreadCount: number;
+}
+
 interface PersistedSession {
   accessToken: string;
   user: AuthUser;
@@ -139,6 +152,7 @@ export class AuthService {
   readonly pendingAdminEvaluations = signal(0);
   readonly pendingAdminCases = signal(0);
   readonly pendingAdminComplaints = signal(0);
+  readonly pendingAdminMessages = signal(0);
 
   constructor() {
     this.restoreSession();
@@ -205,10 +219,6 @@ export class AuthService {
     const formData = new FormData();
     formData.append('file', file);
     return this.http.post<UserDocument>(`${this.apiBaseUrl}/documents`, formData, { headers: this.authorizationHeader() });
-  }
-
-  sendChatMessage(message: string): Observable<ChatbotResponse> {
-    return this.http.post<ChatbotResponse>(`${this.apiBaseUrl}/chatbot/message`, { message }, { headers: this.authorizationHeader() });
   }
 
   listPaymentHistory(): Observable<PaymentHistory[]> {
@@ -291,6 +301,7 @@ export class AuthService {
     this.listConfidentialEvaluations().subscribe({ error: () => undefined });
     this.listAllCases().subscribe({ error: () => undefined });
     this.listAllComplaints().subscribe({ error: () => undefined });
+    this.listAdvisorConversations().subscribe({ error: () => undefined });
   }
 
   syncPendingEvaluations(items: ConfidentialEvaluation[]): void {
@@ -305,6 +316,35 @@ export class AuthService {
     this.pendingAdminComplaints.set(items.filter(item => item.status === 'En revisión').length);
   }
 
+  syncPendingAdvisorMessages(items: AdvisorConversation[]): void {
+    this.pendingAdminMessages.set(items.reduce((total, item) => total + item.unreadCount, 0));
+  }
+
+  listMyAdvisorMessages(silent = false): Observable<AdvisorMessage[]> {
+    return this.http.get<AdvisorMessage[]>(`${this.apiBaseUrl}/advisor-messages/mine`, { headers: this.advisorHeaders(silent) });
+  }
+
+  sendAdvisorMessage(body: string): Observable<AdvisorMessage> {
+    return this.http.post<AdvisorMessage>(`${this.apiBaseUrl}/advisor-messages/mine`, { body }, { headers: this.authorizationHeader() });
+  }
+
+  listAdvisorConversations(silent = false): Observable<AdvisorConversation[]> {
+    return this.http.get<AdvisorConversation[]>(`${this.apiBaseUrl}/advisor-messages/admin/conversations`, { headers: this.advisorHeaders(silent) })
+      .pipe(tap(items => this.syncPendingAdvisorMessages(items)));
+  }
+
+  listAdvisorConversationMessages(userId: string, silent = false): Observable<AdvisorMessage[]> {
+    return this.http.get<AdvisorMessage[]>(`${this.apiBaseUrl}/advisor-messages/admin/conversations/${userId}`, { headers: this.advisorHeaders(silent) });
+  }
+
+  replyAdvisorConversation(userId: string, body: string): Observable<AdvisorMessage> {
+    return this.http.post<AdvisorMessage>(`${this.apiBaseUrl}/advisor-messages/admin/conversations/${userId}`, { body }, { headers: this.authorizationHeader() });
+  }
+
+  private advisorHeaders(silent: boolean): Record<string, string> {
+    return { ...this.authorizationHeader(), ...(silent ? { 'X-Finlex-Silent': 'true' } : {}) };
+  }
+
   logout(): void {
     this.token.set(null);
     this.currentUser.set(null);
@@ -312,6 +352,7 @@ export class AuthService {
     this.pendingAdminEvaluations.set(0);
     this.pendingAdminCases.set(0);
     this.pendingAdminComplaints.set(0);
+    this.pendingAdminMessages.set(0);
     localStorage.removeItem(this.sessionStorageKey);
   }
 

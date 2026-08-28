@@ -1,57 +1,102 @@
-import { ChangeDetectionStrategy, Component, ElementRef, inject, signal, ViewChild } from '@angular/core';
-import { AuthService } from '../../../core/services/auth.service';
+import { ChangeDetectionStrategy, Component, ElementRef, inject, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
-interface ChatMessage {
-  id: number;
-  author: 'bot' | 'user';
-  text: string;
-}
+import { AdvisorConversation, AdvisorMessage, AuthService } from '../../../core/services/auth.service';
 
 @Component({ selector: 'app-advisor-section', standalone: true, imports: [FormsModule], templateUrl: './advisor-section.component.html', styleUrl: './portal-sections.css', changeDetection: ChangeDetectionStrategy.OnPush })
-export class AdvisorSectionComponent {
-  private readonly auth = inject(AuthService);
-  private nextMessageId = 2;
+export class AdvisorSectionComponent implements OnInit, OnDestroy {
+  readonly auth = inject(AuthService);
+  readonly isAdmin = this.auth.currentUser()?.role === 'admin';
   @ViewChild('chatMessages') private chatMessages?: ElementRef<HTMLDivElement>;
-
+  readonly conversations = signal<AdvisorConversation[]>([]);
+  readonly selectedConversation = signal<AdvisorConversation | null>(null);
+  readonly messages = signal<AdvisorMessage[]>([]);
   readonly messageText = signal('');
+  readonly loading = signal(true);
   readonly sending = signal(false);
-  readonly messages = signal<ChatMessage[]>([{
-    id: 1,
-    author: 'bot',
-    text: `Hola, ${this.auth.currentUser()?.names ?? ''}. Soy el asistente virtual de FinLex. ¿En qué puedo ayudarle hoy?`,
-  }]);
+  readonly error = signal('');
+  private refreshTimer?: ReturnType<typeof setInterval>;
 
-  updateMessage(event: Event): void {
-    this.messageText.set((event.target as HTMLInputElement).value);
+  ngOnInit(): void {
+    this.isAdmin ? this.loadConversations() : this.loadUserMessages();
+    this.refreshTimer = setInterval(() => this.refreshSilently(), 12000);
+  }
+
+  ngOnDestroy(): void { if (this.refreshTimer) clearInterval(this.refreshTimer); }
+
+  updateMessage(event: Event): void { this.messageText.set((event.target as HTMLInputElement).value); }
+
+  loadConversations(): void {
+    this.loading.set(true); this.error.set('');
+    this.auth.listAdvisorConversations().subscribe({
+      next: items => { this.conversations.set(items); this.loading.set(false); },
+      error: () => { this.error.set('No fue posible cargar las conversaciones.'); this.loading.set(false); },
+    });
+  }
+
+  selectConversation(conversation: AdvisorConversation): void {
+    this.selectedConversation.set(conversation); this.loading.set(true); this.error.set('');
+    this.auth.listAdvisorConversationMessages(conversation.user.id).subscribe({
+      next: messages => {
+        this.messages.set(messages); this.loading.set(false);
+        this.conversations.update(items => items.map(item => item.id === conversation.id ? { ...item, unreadCount: 0 } : item));
+        this.auth.syncPendingAdvisorMessages(this.conversations()); this.scrollToLatest();
+      },
+      error: () => { this.error.set('No fue posible abrir la conversación.'); this.loading.set(false); },
+    });
+  }
+
+  loadUserMessages(): void {
+    this.loading.set(true); this.error.set('');
+    this.auth.listMyAdvisorMessages().subscribe({
+      next: messages => { this.messages.set(messages); this.loading.set(false); this.scrollToLatest(); },
+      error: () => { this.error.set('No fue posible cargar sus mensajes.'); this.loading.set(false); },
+    });
   }
 
   sendMessage(): void {
-    const text = this.messageText().trim();
-    if (!text || this.sending()) return;
-    this.messages.update(messages => [...messages, { id: this.nextMessageId++, author: 'user', text }]);
-    this.messageText.set('');
-    this.sending.set(true);
-    this.scrollToLatest();
-
-    this.auth.sendChatMessage(text).subscribe({
-      next: response => {
-        this.messages.update(messages => [...messages, { id: this.nextMessageId++, author: 'bot', text: response.reply }]);
-        this.sending.set(false);
-        this.scrollToLatest();
+    const body = this.messageText().trim();
+    if (!body || this.sending()) return;
+    this.sending.set(true); this.error.set('');
+    const request = this.isAdmin
+      ? this.auth.replyAdvisorConversation(this.selectedConversation()!.user.id, body)
+      : this.auth.sendAdvisorMessage(body);
+    request.subscribe({
+      next: message => {
+        this.messages.update(items => [...items, message]); this.messageText.set(''); this.sending.set(false); this.scrollToLatest();
+        if (this.isAdmin) this.loadConversationsSilently();
       },
-      error: () => {
-        this.messages.update(messages => [...messages, { id: this.nextMessageId++, author: 'bot', text: 'No pude responder en este momento. Por favor, inténtelo nuevamente.' }]);
-        this.sending.set(false);
-        this.scrollToLatest();
-      },
+      error: () => { this.error.set('No fue posible enviar el mensaje.'); this.sending.set(false); },
     });
   }
 
-  private scrollToLatest(): void {
-    setTimeout(() => {
-      const element = this.chatMessages?.nativeElement;
-      if (element) element.scrollTop = element.scrollHeight;
-    });
+  refresh(): void {
+    if (this.isAdmin) {
+      const selected = this.selectedConversation();
+      selected ? this.selectConversation(selected) : this.loadConversations();
+    } else this.loadUserMessages();
   }
+
+  time(value: string): string { return new Intl.DateTimeFormat('es-CO', { dateStyle: 'short', timeStyle: 'short' }).format(new Date(value)); }
+
+  private loadConversationsSilently(): void {
+    this.auth.listAdvisorConversations(true).subscribe({ next: items => this.conversations.set(items), error: () => undefined });
+  }
+
+  private refreshSilently(): void {
+    if (this.isAdmin) {
+      this.auth.listAdvisorConversations(true).subscribe({
+        next: conversations => {
+          this.conversations.set(conversations);
+          const selected = this.selectedConversation();
+          if (!selected) return;
+          this.auth.listAdvisorConversationMessages(selected.user.id, true).subscribe({ next: messages => { this.messages.set(messages); this.scrollToLatest(); }, error: () => undefined });
+        },
+        error: () => undefined,
+      });
+      return;
+    }
+    this.auth.listMyAdvisorMessages(true).subscribe({ next: messages => { this.messages.set(messages); this.scrollToLatest(); }, error: () => undefined });
+  }
+
+  private scrollToLatest(): void { setTimeout(() => { const element = this.chatMessages?.nativeElement; if (element) element.scrollTop = element.scrollHeight; }); }
 }
