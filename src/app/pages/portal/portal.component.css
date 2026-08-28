@@ -68,7 +68,7 @@ form { display: grid; gap: 20px; }
 .success-action:focus-visible { outline: 2px solid #0a1628; outline-offset: 3px; }
 @keyframes modal-in { from { opacity: 0; transform: translateY(12px) scale(.98); } to { opacity: 1; transform: none; } }
 .security-note { display: flex; justify-content: center; gap: 8px; color: #8b9099; font-size: 11px; margin-top: 22px; }
-.security-note span { color: #a0804a; }
+.security-note span { color: #18864b; font-size: 14px; font-weight: 800; line-height: 1; }
 @media (min-width: 1051px) {
   .portal-auth-panel:has(#register-names) { padding-block: 20px; }
   .auth-card:has(#register-names) .auth-brand { margin-bottom: 12px; }

@@ -112,7 +112,7 @@
           </form>
         }
         @if (message()) { <p class="auth-message" role="status">{{ message() }}</p> }
-        <p class="security-note"><span>◇</span> Sus datos serán tratados de forma confidencial.</p>
+        <p class="security-note"><span aria-hidden="true">✓</span> Sus datos serán tratados de forma confidencial.</p>
       </div>
       @if (registrationSuccess()) {
         <div class="success-modal-backdrop" role="presentation">
