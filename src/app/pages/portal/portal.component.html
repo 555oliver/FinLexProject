@@ -205,6 +205,16 @@
           </nav>
         </header>
 
+        @if (auth.currentUser()?.role === 'admin' && activePortalTab() !== 'profile') {
+          <header class="backoffice-heading">
+            <span aria-hidden="true"></span>
+            <div>
+              <small>Área administrativa</small>
+              <h1>BackOffice</h1>
+            </div>
+          </header>
+        }
+
         @if (activePortalTab() === 'summary') {
           <main class="portal-summary">
             <section class="summary-cards" aria-label="Resumen del caso">

@@ -109,6 +109,12 @@ form { display: grid; gap: 20px; }
 .portal-navigation button:focus-visible { outline: 2px solid #c9a96e; outline-offset: 2px; }
 .admin-nav-badge { min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; display: inline-grid; place-items: center; background: #c58c32; color: #fff; font-size: 9px; font-weight: 800; line-height: 1; box-shadow: 0 3px 9px rgba(160,112,37,.28); }
 .portal-navigation button.active .admin-nav-badge { background: #fff; color: #8a6122; }
+.backoffice-heading { display: flex; align-items: center; gap: 14px; margin-top: 24px; padding: 0 28px; }
+.backoffice-heading > span { width: 34px; height: 1px; flex: 0 0 34px; background: #c9a96e; }
+.backoffice-heading div { display: grid; gap: 2px; }
+.backoffice-heading small { color: #a77730; font-size: 8px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
+.backoffice-heading h1 { margin: 0; color: #0a1628; font: 400 25px var(--font-serif); line-height: 1.1; }
+.backoffice-heading + .portal-summary { padding-top: 18px; }
 .portal-summary { display: grid; gap: 20px; padding-top: 32px; }
 .summary-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .summary-card { min-height: 152px; padding: 25px 24px; border: 1px solid rgba(10,22,40,.1); background: #fff; }
@@ -169,6 +175,7 @@ form { display: grid; gap: 20px; }
 .case-timeline p { color: #747e8f; font-size: 11px; line-height: 1.55; }
 @media (max-width: 640px) { .case-heading { flex-direction: column; } .case-status { align-self: flex-start; } .case-overview, .case-timeline-panel { padding: 22px 18px; } .case-timeline { padding-left: 23px; } .case-timeline li { min-height: 104px; } }
 @media (max-width: 980px) { .portal-toolbar { align-items: flex-start; flex-direction: column; } .portal-navigation { width: 100%; padding-bottom: 5px; } .summary-cards { grid-template-columns: 1fr; } }
+@media (max-width: 520px) { .backoffice-heading { margin-top: 20px; padding: 0 18px; }.backoffice-heading h1 { font-size: 22px; }.backoffice-heading + .portal-summary { padding-top: 14px; } }
 @media (max-width: 640px) { .portal-auth-page:has(.portal-dashboard) { padding-top: 74px; } .portal-auth-panel:has(.portal-dashboard) { padding: 0 12px 24px; } .portal-toolbar { padding: 16px; } .portal-summary { padding-top: 16px; } .dashboard-panel { padding: 22px 18px; } .activity-head { display: none; } .activity-empty { padding: 4px 0; } .step-row { align-items: flex-start; flex-direction: column; gap: 12px; } .success-modal { padding: 34px 24px; } }
 @media (max-width: 1050px) { .portal-auth-page { grid-template-columns: 1fr; padding-top: 80px; } .portal-auth-visual { min-height: 420px; align-items: center; } }
 @media (max-width: 640px) { .portal-auth-page { padding-top: 64px; } .portal-auth-visual { min-height: 340px; padding: 44px 24px; } .visual-content ul { display: none; } .portal-auth-panel { padding: 38px 20px 56px; } .form-grid { grid-template-columns: 1fr; } .full { grid-column: auto; } .auth-tabs button { padding-inline: 8px; font-size: 11px; } }
