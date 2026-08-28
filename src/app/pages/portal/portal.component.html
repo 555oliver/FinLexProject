@@ -190,11 +190,15 @@
               <button type="button" [class.active]="activePortalTab() === 'admin'" (click)="setPortalTab('admin')">Administración</button>
               <button type="button" [class.active]="activePortalTab() === 'adminComplaints'" (click)="setPortalTab('adminComplaints')">Quejas usuarios @if (auth.pendingAdminComplaints() > 0) { <b class="admin-nav-badge">{{ auth.pendingAdminComplaints() }}</b> }</button>
             }
+            @if (auth.currentUser()?.role !== 'admin') {
             <button type="button" [class.active]="activePortalTab() === 'summary'" (click)="setPortalTab('summary')">Resumen</button>
             <button type="button" [class.active]="activePortalTab() === 'case'" (click)="setPortalTab('case')">Mi caso</button>
+            }
             <button type="button" [class.active]="activePortalTab() === 'solutions'" (click)="setPortalTab('solutions')">Soluciones</button>
+            @if (auth.currentUser()?.role !== 'admin') {
             <button type="button" [class.active]="activePortalTab() === 'payments'" (click)="setPortalTab('payments')">Pagos</button>
             <button type="button" [class.active]="activePortalTab() === 'complaints'" (click)="setPortalTab('complaints')">Quejas</button>
+            }
             <button type="button" [class.active]="activePortalTab() === 'advisor'" (click)="setPortalTab('advisor')">Asesor</button>
             <button type="button" [class.active]="activePortalTab() === 'profile'" (click)="setPortalTab('profile')">Perfil</button>
             <button class="logout-link" type="button" (click)="logout()">Salir</button>

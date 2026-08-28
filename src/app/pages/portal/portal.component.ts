@@ -137,6 +137,10 @@ export class PortalPageComponent {
         void this.router.navigate(['/portal/resumen']);
         return;
       }
+      if (this.auth.currentUser()?.role === 'admin' && (tab === 'summary' || tab === 'case' || tab === 'payments' || tab === 'complaints')) {
+        void this.router.navigate(['/portal/administracion']);
+        return;
+      }
       this.activePortalTab.set(tab);
       if (tab === 'summary') this.loadDocuments();
     });
@@ -182,6 +186,7 @@ export class PortalPageComponent {
 
   setPortalTab(tab: PortalTab): void {
     if ((tab === 'admin' || tab === 'adminComplaints' || tab === 'adminCases' || tab === 'adminEvaluations') && this.auth.currentUser()?.role !== 'admin') return;
+    if (this.auth.currentUser()?.role === 'admin' && (tab === 'summary' || tab === 'case' || tab === 'payments' || tab === 'complaints')) return;
     void this.router.navigate(['/portal', this.tabToSection[tab]]);
   }
 
