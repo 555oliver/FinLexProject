@@ -136,6 +136,9 @@ export class AuthService {
   private readonly token = signal<string | null>(null);
   readonly currentUser = signal<AuthUser | null>(null);
   readonly isAuthenticated = signal(false);
+  readonly pendingAdminEvaluations = signal(0);
+  readonly pendingAdminCases = signal(0);
+  readonly pendingAdminComplaints = signal(0);
 
   constructor() {
     this.restoreSession();
@@ -225,7 +228,8 @@ export class AuthService {
   }
 
   listAllComplaints(): Observable<Complaint[]> {
-    return this.http.get<Complaint[]>(`${this.apiBaseUrl}/complaints/admin`, { headers: this.authorizationHeader() });
+    return this.http.get<Complaint[]>(`${this.apiBaseUrl}/complaints/admin`, { headers: this.authorizationHeader() })
+      .pipe(tap(items => this.syncPendingComplaints(items)));
   }
 
   updateComplaintStatus(id: string, status: ComplaintStatus): Observable<Complaint> {
@@ -261,7 +265,8 @@ export class AuthService {
   }
 
   listAllCases(): Observable<UserCase[]> {
-    return this.http.get<UserCase[]>(`${this.apiBaseUrl}/cases/admin`, { headers: this.authorizationHeader() });
+    return this.http.get<UserCase[]>(`${this.apiBaseUrl}/cases/admin`, { headers: this.authorizationHeader() })
+      .pipe(tap(items => this.syncPendingCases(items)));
   }
 
   updateCasePhase(id: string, currentPhase: number): Observable<UserCase> {
@@ -273,17 +278,40 @@ export class AuthService {
   }
 
   listConfidentialEvaluations(): Observable<ConfidentialEvaluation[]> {
-    return this.http.get<ConfidentialEvaluation[]>(`${this.apiBaseUrl}/confidential-evaluations/admin`, { headers: this.authorizationHeader() });
+    return this.http.get<ConfidentialEvaluation[]>(`${this.apiBaseUrl}/confidential-evaluations/admin`, { headers: this.authorizationHeader() })
+      .pipe(tap(items => this.syncPendingEvaluations(items)));
   }
 
   updateConfidentialEvaluationStatus(id: string, status: ConfidentialEvaluationStatus): Observable<ConfidentialEvaluation> {
     return this.http.patch<ConfidentialEvaluation>(`${this.apiBaseUrl}/confidential-evaluations/${id}/status`, { status }, { headers: this.authorizationHeader() });
   }
 
+  refreshAdminNotifications(): void {
+    if (this.currentUser()?.role !== 'admin') return;
+    this.listConfidentialEvaluations().subscribe({ error: () => undefined });
+    this.listAllCases().subscribe({ error: () => undefined });
+    this.listAllComplaints().subscribe({ error: () => undefined });
+  }
+
+  syncPendingEvaluations(items: ConfidentialEvaluation[]): void {
+    this.pendingAdminEvaluations.set(items.filter(item => item.status === 'Solicitada').length);
+  }
+
+  syncPendingCases(items: UserCase[]): void {
+    this.pendingAdminCases.set(items.filter(item => item.currentPhase === 0).length);
+  }
+
+  syncPendingComplaints(items: Complaint[]): void {
+    this.pendingAdminComplaints.set(items.filter(item => item.status === 'En revisión').length);
+  }
+
   logout(): void {
     this.token.set(null);
     this.currentUser.set(null);
     this.isAuthenticated.set(false);
+    this.pendingAdminEvaluations.set(0);
+    this.pendingAdminCases.set(0);
+    this.pendingAdminComplaints.set(0);
     localStorage.removeItem(this.sessionStorageKey);
   }
 

@@ -185,10 +185,10 @@
           </div>
           <nav class="portal-navigation" aria-label="Navegación del portal">
             @if (auth.currentUser()?.role === 'admin') {
-              <button type="button" [class.active]="activePortalTab() === 'adminEvaluations'" (click)="setPortalTab('adminEvaluations')">Evaluación confidencial</button>
-              <button type="button" [class.active]="activePortalTab() === 'adminCases'" (click)="setPortalTab('adminCases')">Casos usuarios</button>
+              <button type="button" [class.active]="activePortalTab() === 'adminEvaluations'" (click)="setPortalTab('adminEvaluations')">Evaluación confidencial @if (auth.pendingAdminEvaluations() > 0) { <b class="admin-nav-badge">{{ auth.pendingAdminEvaluations() }}</b> }</button>
+              <button type="button" [class.active]="activePortalTab() === 'adminCases'" (click)="setPortalTab('adminCases')">Casos usuarios @if (auth.pendingAdminCases() > 0) { <b class="admin-nav-badge">{{ auth.pendingAdminCases() }}</b> }</button>
               <button type="button" [class.active]="activePortalTab() === 'admin'" (click)="setPortalTab('admin')">Administración</button>
-              <button type="button" [class.active]="activePortalTab() === 'adminComplaints'" (click)="setPortalTab('adminComplaints')">Quejas usuarios</button>
+              <button type="button" [class.active]="activePortalTab() === 'adminComplaints'" (click)="setPortalTab('adminComplaints')">Quejas usuarios @if (auth.pendingAdminComplaints() > 0) { <b class="admin-nav-badge">{{ auth.pendingAdminComplaints() }}</b> }</button>
             }
             <button type="button" [class.active]="activePortalTab() === 'summary'" (click)="setPortalTab('summary')">Resumen</button>
             <button type="button" [class.active]="activePortalTab() === 'case'" (click)="setPortalTab('case')">Mi caso</button>

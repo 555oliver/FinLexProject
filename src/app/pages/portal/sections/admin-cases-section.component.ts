@@ -22,7 +22,7 @@ export class AdminCasesSectionComponent implements OnInit {
   save(caseData: EditableCase): void {
     caseData.saving = true; caseData.saved = false; this.cases.set([...this.cases()]);
     this.auth.updateCasePhase(caseData.id, Number(caseData.selectedPhase)).subscribe({
-      next: updated => { Object.assign(caseData, updated); caseData.saving = false; caseData.saved = true; this.cases.set([...this.cases()]); },
+      next: updated => { Object.assign(caseData, updated); caseData.saving = false; caseData.saved = true; this.cases.set([...this.cases()]); this.auth.syncPendingCases(this.cases()); },
       error: () => { caseData.saving = false; this.error.set('No fue posible actualizar la fase del caso.'); this.cases.set([...this.cases()]); },
     });
   }

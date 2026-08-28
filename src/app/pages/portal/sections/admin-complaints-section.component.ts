@@ -21,7 +21,7 @@ export class AdminComplaintsSectionComponent implements OnInit {
   save(complaint: EditableComplaint): void {
     complaint.saving = true; complaint.saved = false; this.complaints.set([...this.complaints()]);
     this.auth.updateComplaintStatus(complaint.id, complaint.selectedStatus).subscribe({
-      next: updated => { complaint.status = updated.status; complaint.saving = false; complaint.saved = true; this.complaints.set([...this.complaints()]); },
+      next: updated => { complaint.status = updated.status; complaint.saving = false; complaint.saved = true; this.complaints.set([...this.complaints()]); this.auth.syncPendingComplaints(this.complaints()); },
       error: () => { complaint.saving = false; this.error.set('No fue posible actualizar la queja.'); this.complaints.set([...this.complaints()]); },
     });
   }

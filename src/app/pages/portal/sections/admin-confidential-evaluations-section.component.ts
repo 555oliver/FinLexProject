@@ -52,6 +52,7 @@ export class AdminConfidentialEvaluationsSectionComponent implements OnInit {
         evaluation.saving = false;
         evaluation.saved = true;
         this.evaluations.set([...this.evaluations()]);
+        this.auth.syncPendingEvaluations(this.evaluations());
       },
       error: () => {
         evaluation.saving = false;

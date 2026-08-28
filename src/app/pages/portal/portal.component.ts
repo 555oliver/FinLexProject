@@ -55,6 +55,7 @@ export class PortalPageComponent {
   readonly uploadingDocument = signal(false);
   readonly documentMessage = signal('');
   private registeredEmail = '';
+  private adminNotificationsLoaded = false;
   private countries: Country[] = [];
   private readonly sectionToTab: Record<string, PortalTab> = {
     administracion: 'admin', 'quejas-usuarios': 'adminComplaints', 'casos-usuarios': 'adminCases', 'evaluaciones-confidenciales': 'adminEvaluations', resumen: 'summary', 'mi-caso': 'case', soluciones: 'solutions', pagos: 'payments',
@@ -123,8 +124,13 @@ export class PortalPageComponent {
         return;
       }
       if (!this.auth.isAuthenticated()) {
+        this.adminNotificationsLoaded = false;
         void this.router.navigate(['/portal/login']);
         return;
+      }
+      if (this.auth.currentUser()?.role === 'admin' && !this.adminNotificationsLoaded) {
+        this.adminNotificationsLoaded = true;
+        this.auth.refreshAdminNotifications();
       }
       const tab = this.sectionToTab[section] ?? 'summary';
       if ((tab === 'admin' || tab === 'adminComplaints' || tab === 'adminCases' || tab === 'adminEvaluations') && this.auth.currentUser()?.role !== 'admin') {
