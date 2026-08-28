@@ -26,11 +26,11 @@
         <b [attr.data-status]="evaluation.status">{{ evaluation.status }}</b>
       </div>
       <label>Nuevo estado
-        <select [(ngModel)]="evaluation.selectedStatus" [disabled]="evaluation.saving">
+        <select [(ngModel)]="evaluation.selectedStatus" [disabled]="!!evaluation.saving">
           @for (status of statuses; track status) { <option [ngValue]="status">{{ status }}</option> }
         </select>
       </label>
-      <button class="gold-button" type="button" [disabled]="evaluation.saving || evaluation.selectedStatus === evaluation.status" (click)="save(evaluation)">
+      <button class="gold-button" type="button" [disabled]="!!evaluation.saving || evaluation.selectedStatus === evaluation.status" (click)="save(evaluation)">
         {{ evaluation.saving ? 'Guardando…' : evaluation.saved ? 'Actualizada ✓' : 'Actualizar' }}
       </button>
     </article>
