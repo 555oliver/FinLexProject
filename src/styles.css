@@ -81,6 +81,9 @@ transform: translateY(0);
 .animate-delay-3 { transition-delay: 0.3s; }
 .animate-delay-4 { transition-delay: 0.4s; }
 .animate-delay-5 { transition-delay: 0.5s; }
+@media (prefers-reduced-motion: reduce) {
+.animate-on-scroll { opacity: 1; transform: none; transition: none; }
+}
 /* ========== HEADER ========== */
 .header {
 position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
