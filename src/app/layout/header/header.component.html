@@ -28,13 +28,13 @@
 <!-- Mobile Menu -->
 <div class="mobile-nav" id="mobileNav" [class.active]="menuOpen">
 <button type="button" class="close-btn" (click)="toggleMenu()" aria-label="Cerrar menú de navegación">&times;</button>
-<a (click)="closeMenu()" routerLink="/inicio">Inicio</a>
-<a (click)="closeMenu()" routerLink="/services">Servicios</a>
-<a (click)="closeMenu()" routerLink="/products">Productos</a>
-<a (click)="closeMenu()" routerLink="/about">Nosotros</a>
-<a (click)="closeMenu()" routerLink="/testimonials">Testimonios</a>
-<a (click)="closeMenu()" routerLink="/contact">Contacto</a>
-<a (click)="closeMenu()" routerLink="/legal">Legal</a>
-<a (click)="closeMenu()" routerLink="/portal">Portal Cliente</a>
-<a (click)="closeMenu()" routerLink="/evaluacion-privada">Evaluación Privada</a>
+<a (click)="closeMenu()" routerLink="/inicio" routerLinkActive="mobile-nav-active" [routerLinkActiveOptions]="{ exact: true }">Inicio</a>
+<a (click)="closeMenu()" routerLink="/services" routerLinkActive="mobile-nav-active">Servicios</a>
+<a (click)="closeMenu()" routerLink="/products" routerLinkActive="mobile-nav-active">Productos</a>
+<a (click)="closeMenu()" routerLink="/about" routerLinkActive="mobile-nav-active">Nosotros</a>
+<a (click)="closeMenu()" routerLink="/testimonials" routerLinkActive="mobile-nav-active">Testimonios</a>
+<a (click)="closeMenu()" routerLink="/contact" routerLinkActive="mobile-nav-active">Contacto</a>
+<a (click)="closeMenu()" routerLink="/legal" routerLinkActive="mobile-nav-active">Legal</a>
+<a (click)="closeMenu()" routerLink="/portal" routerLinkActive="mobile-nav-active">Portal Cliente</a>
+<a (click)="closeMenu()" routerLink="/evaluacion-privada" routerLinkActive="mobile-nav-active" [routerLinkActiveOptions]="{ exact: true }">Evaluación Privada</a>
 </div>

@@ -228,6 +228,20 @@ border-radius: 6px; transition: color var(--transition-fast), background var(--t
 .mobile-nav a:hover, .mobile-nav a:focus-visible {
 color: #fff8e8; background: rgba(201,169,110,0.18); outline: none;
 }
+.mobile-nav a.mobile-nav-active {
+color: var(--navy);
+background: var(--gold);
+border: 1px solid var(--gold-light);
+box-shadow: 0 5px 18px rgba(201,169,110,0.24);
+font-weight: 700;
+}
+.mobile-nav a.mobile-nav-active:hover,
+.mobile-nav a.mobile-nav-active:focus-visible {
+color: var(--navy);
+background: var(--gold-light);
+outline: 2px solid rgba(255,255,255,0.85);
+outline-offset: 3px;
+}
 .mobile-nav .close-btn { position: absolute; top: 24px; right: 24px; background: none; border: none; color: var(--white); font-size: 32px; cursor: pointer; }
 /* ========== HERO ========== */
 .hero {
