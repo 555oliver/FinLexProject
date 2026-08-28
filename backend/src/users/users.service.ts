@@ -122,18 +122,21 @@ export class UsersService implements OnModuleInit {
   async updatePaymentSummary(id: string, dto: UpdatePaymentSummaryDto): Promise<User> {
     return this.dataSource.transaction(async manager => {
       const user = await manager.findOneByOrFail(User, { id });
-      const pendingFees = Number(user.pendingFees) + dto.pendingFees;
-      const totalPaid = Number(user.totalPaid) + dto.totalPaid;
+      const currentPendingFees = Number(user.pendingFees);
+      const currentTotalPaid = Number(user.totalPaid);
+      const pendingFees = Math.max(0, currentPendingFees + dto.pendingFees);
+      const totalPaid = Math.max(0, currentTotalPaid + dto.totalPaid);
+      const appliedTotalPaidAdjustment = totalPaid - currentTotalPaid;
       await manager.update(User, id, {
         pendingFees: pendingFees.toFixed(2),
         totalPaid: totalPaid.toFixed(2),
         activePaymentPlan: dto.activePaymentPlan,
       });
-      if (dto.totalPaid > 0) {
+      if (appliedTotalPaidAdjustment !== 0) {
         await manager.save(PaymentHistory, manager.create(PaymentHistory, {
           userId: id,
-          concept: 'Pago',
-          amount: dto.totalPaid.toFixed(2),
+          concept: appliedTotalPaidAdjustment > 0 ? 'Pago' : 'Ajuste de pago',
+          amount: appliedTotalPaidAdjustment.toFixed(2),
           status: 'Pagado',
         }));
       }
