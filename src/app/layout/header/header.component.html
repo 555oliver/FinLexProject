@@ -20,14 +20,29 @@
 <button class="btn-gold" style="padding:10px 20px;" routerLink="/portal" routerLinkActive="btn-gold-solid">Portal Cliente</button>
 <button class="btn-gold" style="padding:10px 20px;" routerLink="/evaluacion-privada" routerLinkActive="btn-gold-solid" [routerLinkActiveOptions]="{ exact: true }">Evaluación Privada</button>
 @if (auth.currentUser(); as currentUser) {
-<a class="header-user" routerLink="/portal/perfil" aria-label="Abrir perfil de {{ currentUser.names }}">
+<div class="header-user-menu">
+<button type="button" class="header-user" (click)="toggleUserMenu($event)" aria-haspopup="menu" [attr.aria-expanded]="userMenuOpen" aria-controls="headerUserDropdown">
   @if (currentUser.profileImage) {
     <img [src]="currentUser.profileImage" alt="">
   } @else {
     <span aria-hidden="true">{{ currentUser.names.charAt(0).toUpperCase() }}</span>
   }
   <strong>{{ currentUser.names }}</strong>
-</a>
+  <svg class="header-user-chevron" aria-hidden="true" viewBox="0 0 16 16"><path d="m4 6 4 4 4-4"/></svg>
+</button>
+@if (userMenuOpen) {
+<div id="headerUserDropdown" class="header-user-dropdown" role="menu">
+  <a routerLink="/portal/perfil" role="menuitem" (click)="closeUserMenu()">
+    <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg>
+    Perfil
+  </a>
+  <button type="button" role="menuitem" (click)="logout()">
+    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M10 17l5-5-5-5M15 12H3M14 3h5a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-5"/></svg>
+    Cerrar sesión
+  </button>
+</div>
+}
+</div>
 }
 </div>
 <button type="button" class="mobile-menu-btn" (click)="toggleMenu()" aria-controls="mobileNav" [attr.aria-expanded]="menuOpen" [attr.aria-label]="menuOpen ? 'Cerrar menú de navegación' : 'Abrir menú de navegación'">
