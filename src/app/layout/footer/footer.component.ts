@@ -18,6 +18,12 @@ export class FooterComponent {
   readonly success = signal('');
   readonly error = signal('');
 
+  onEmailChange(value: string): void {
+    this.email = value;
+    this.error.set('');
+    this.success.set('');
+  }
+
   requestEvaluation(): void {
     const email = (this.auth.currentUser()?.email ?? this.email).trim().toLowerCase();
     if (!email || this.submitting()) return;

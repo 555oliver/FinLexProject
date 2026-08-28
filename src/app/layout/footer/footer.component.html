@@ -8,10 +8,14 @@
 <form class="cta-form" #evaluationForm="ngForm" (ngSubmit)="requestEvaluation()" novalidate>
 <label class="sr-only" for="confidential-evaluation-email">Correo electrónico</label>
 @if (auth.currentUser(); as currentUser) {
+<div class="cta-field">
 <input id="confidential-evaluation-email" name="authenticatedEmail" type="email" [value]="currentUser.email" disabled aria-describedby="authenticated-email-note">
+</div>
 } @else {
-<input id="confidential-evaluation-email" name="email" type="email" [(ngModel)]="email" #emailControl="ngModel" required email autocomplete="email" placeholder="Su correo electrónico" [disabled]="submitting()">
+<div class="cta-field">
+<input id="confidential-evaluation-email" name="email" type="email" [ngModel]="email" (ngModelChange)="onEmailChange($event)" #emailControl="ngModel" required email autocomplete="email" placeholder="Su correo electrónico" [disabled]="submitting()">
 @if (emailControl.invalid && emailControl.touched) { <p class="cta-field-error" role="alert">Ingrese un correo electrónico válido.</p> }
+</div>
 }
 <button type="submit" class="btn-gold btn-gold-solid" [disabled]="evaluationForm.invalid || submitting()">{{ submitting() ? 'Enviando…' : 'Solicitar evaluación privada →' }}</button>
 </form>
