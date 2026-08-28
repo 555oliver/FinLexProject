@@ -109,8 +109,9 @@ form { display: grid; gap: 20px; }
 .portal-navigation button:focus-visible { outline: 2px solid #c9a96e; outline-offset: 2px; }
 .admin-nav-badge { min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; display: inline-grid; place-items: center; background: #c58c32; color: #fff; font-size: 9px; font-weight: 800; line-height: 1; box-shadow: 0 3px 9px rgba(160,112,37,.28); }
 .portal-navigation button.active .admin-nav-badge { background: #fff; color: #8a6122; }
-.backoffice-heading { display: flex; align-items: center; gap: 14px; margin-top: 24px; padding: 0 28px; }
+.backoffice-heading { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 24px; padding: 0 28px; text-align: center; }
 .backoffice-heading > span { width: 34px; height: 1px; flex: 0 0 34px; background: #c9a96e; }
+.backoffice-heading::after { width: 34px; height: 1px; flex: 0 0 34px; background: #c9a96e; content: ''; }
 .backoffice-heading div { display: grid; gap: 2px; }
 .backoffice-heading small { color: #a77730; font-size: 8px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
 .backoffice-heading h1 { margin: 0; color: #0a1628; font: 400 25px var(--font-serif); line-height: 1.1; }
