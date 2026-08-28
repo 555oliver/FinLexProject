@@ -20,14 +20,14 @@
 <button class="btn-gold" style="padding:10px 20px;" routerLink="/portal" routerLinkActive="btn-gold-solid">Portal Cliente</button>
 <button class="btn-gold" style="padding:10px 20px;" routerLink="/evaluacion-privada" routerLinkActive="btn-gold-solid" [routerLinkActiveOptions]="{ exact: true }">Evaluación Privada</button>
 </div>
-<button class="mobile-menu-btn" (click)="toggleMenu()">
+<button type="button" class="mobile-menu-btn" (click)="toggleMenu()" aria-controls="mobileNav" [attr.aria-expanded]="menuOpen" [attr.aria-label]="menuOpen ? 'Cerrar menú de navegación' : 'Abrir menú de navegación'">
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
 </button>
 </div>
 </header>
 <!-- Mobile Menu -->
 <div class="mobile-nav" id="mobileNav" [class.active]="menuOpen">
-<button class="close-btn" (click)="toggleMenu()">&times;</button>
+<button type="button" class="close-btn" (click)="toggleMenu()" aria-label="Cerrar menú de navegación">&times;</button>
 <a (click)="closeMenu()" routerLink="/inicio">Inicio</a>
 <a (click)="closeMenu()" routerLink="/services">Servicios</a>
 <a (click)="closeMenu()" routerLink="/products">Productos</a>
