@@ -294,7 +294,7 @@ background: rgba(201,169,110,0.15); color: var(--gold); border: 1px solid rgba(2
 .section-light { background: var(--offwhite); }
 .section-white { background: var(--white); }
 .section-dark { background: var(--navy); color: var(--white); }
-.container { max-width: 1280px; margin: 0 auto; }
+.container { width: 100%; max-width: 1280px; min-width: 0; margin: 0 auto; }
 .section-label {
 display: inline-flex; align-items: center; gap: 12px;
 font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
@@ -313,6 +313,8 @@ line-height: 1.15; color: var(--navy); letter-spacing: -0.3px; margin-bottom: 20
 font-size: 17px; font-weight: 300; color: var(--gray); max-width: 560px; line-height: 1.7;
 }
 .section-desc.white { color: rgba(255,255,255,0.6); }
+.methodology-grid, .methodology-details-grid { min-width: 0; }
+.methodology-grid > *, .methodology-details-grid > * { min-width: 0; }
 /* ========== STATS BAR ========== */
 .stats-bar {
 background: var(--white); border-bottom: 1px solid var(--border-dark);
@@ -695,6 +697,8 @@ font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercas
 .stats-bar { padding: 32px 24px; }
 .stats-grid { grid-template-columns: 1fr 1fr; gap: 24px; }
 .stat-item:not(:last-child)::after { display: none; }
+.methodology-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+.methodology-details-grid { grid-template-columns: 1fr !important; }
 }
 @media (max-width: 640px) {
 .footer-grid { grid-template-columns: 1fr; }
@@ -703,4 +707,41 @@ font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercas
 .header { padding: 0 20px; }
 .header-inner { height: 64px; }
 .login-wrap { margin: 80px 16px; padding: 32px 24px; }
+.header { padding: 0 16px; }
+.logo { gap: 10px; }
+.logo-icon { width: 38px; height: 38px; font-size: 18px; }
+.logo-name { font-size: 20px; letter-spacing: 1.5px; }
+.logo-tagline { font-size: 8px; }
+.mobile-menu-btn { width: 42px; height: 42px; display: grid; place-items: center; }
+.section, .stats-bar { padding-inline: 20px; }
+.section-title { font-size: clamp(30px, 10vw, 39px); overflow-wrap: anywhere; }
+.section-label { max-width: 100%; gap: 9px; font-size: 10px; letter-spacing: 2px; }
+.section-label .line { width: 28px; flex: 0 0 28px; }
+.methodology-grid { grid-template-columns: 1fr !important; gap: 12px !important; margin-bottom: 44px !important; }
+.methodology-grid > div { min-height: 0; padding: 24px 20px !important; }
+.methodology-details-grid { grid-template-columns: 1fr !important; gap: 38px !important; }
+.services-detail-grid, .contact-page-grid, .about-grid, .leadership-grid { grid-template-columns: 1fr !important; width: 100%; }
+.services-detail-grid { gap: 42px !important; }
+.services-detail-grid > div { min-width: 0; }
+.services-detail-grid p, .services-detail-grid li { font-size: 14px !important; line-height: 1.75 !important; overflow-wrap: anywhere; }
+.leadership-grid { gap: 16px !important; }
+.leadership-grid .portal-card { min-height: 0; width: 100%; padding: 30px 22px !important; }
+.products-grid, .reviews-grid, .services-grid { gap: 16px; margin-top: 34px; }
+.product-header, .product-body, .product-footer, .review-card, .service-card { padding-left: 20px; padding-right: 20px; }
+.product-footer { align-items: flex-start; gap: 14px; flex-direction: column; }
+.product-footer .btn-gold { width: 100%; justify-content: center; }
+.cta-section { padding: 64px 20px; }
+.cta-content { width: 100%; gap: 34px; }
+.cta-left { min-width: 0; }
+.cta-left h2 { font-size: clamp(31px, 10vw, 39px); overflow-wrap: anywhere; }
+.cta-left p { font-size: 14px; }
+.cta-form { width: 100%; flex-direction: column; }
+.cta-form input, .cta-form .btn-gold { width: 100%; min-width: 0; }
+.cta-form .btn-gold { min-height: 48px; justify-content: center; padding-inline: 16px; white-space: normal; text-align: center; }
+.cta-content > div:last-child { width: 100%; justify-content: flex-start !important; }
+.cta-content .btn-white { width: 100%; min-width: 0; justify-content: center; padding-inline: 16px; white-space: normal; text-align: center; }
+.footer { padding: 56px 20px 28px; }
+.footer-grid { gap: 34px; margin-bottom: 42px; }
+.inner-page-hero, .inner-page-intro, .legal-page-shell { padding-inline: 20px !important; }
+.inner-page-hero h1 { font-size: clamp(34px, 11vw, 46px) !important; overflow-wrap: anywhere; }
 }
