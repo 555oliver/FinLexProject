@@ -19,6 +19,16 @@
 <div class="header-actions">
 <button class="btn-gold" style="padding:10px 20px;" routerLink="/portal" routerLinkActive="btn-gold-solid">Portal Cliente</button>
 <button class="btn-gold" style="padding:10px 20px;" routerLink="/evaluacion-privada" routerLinkActive="btn-gold-solid" [routerLinkActiveOptions]="{ exact: true }">Evaluación Privada</button>
+@if (auth.currentUser(); as currentUser) {
+<a class="header-user" routerLink="/portal/perfil" aria-label="Abrir perfil de {{ currentUser.names }}">
+  @if (currentUser.profileImage) {
+    <img [src]="currentUser.profileImage" alt="">
+  } @else {
+    <span aria-hidden="true">{{ currentUser.names.charAt(0).toUpperCase() }}</span>
+  }
+  <strong>{{ currentUser.names }}</strong>
+</a>
+}
 </div>
 <button type="button" class="mobile-menu-btn" (click)="toggleMenu()" aria-controls="mobileNav" [attr.aria-expanded]="menuOpen" [attr.aria-label]="menuOpen ? 'Cerrar menú de navegación' : 'Abrir menú de navegación'">
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
@@ -37,4 +47,11 @@
 <a (click)="closeMenu()" routerLink="/legal" routerLinkActive="mobile-nav-active">Legal</a>
 <a (click)="closeMenu()" routerLink="/portal" routerLinkActive="mobile-nav-active">Portal Cliente</a>
 <a (click)="closeMenu()" routerLink="/evaluacion-privada" routerLinkActive="mobile-nav-active" [routerLinkActiveOptions]="{ exact: true }">Evaluación Privada</a>
+@if (auth.currentUser(); as currentUser) {
+<a class="mobile-user-link" (click)="closeMenu()" routerLink="/portal/perfil">
+  @if (currentUser.profileImage) { <img [src]="currentUser.profileImage" alt=""> }
+  @else { <span aria-hidden="true">{{ currentUser.names.charAt(0).toUpperCase() }}</span> }
+  <strong>{{ currentUser.names }}</strong>
+</a>
+}
 </div>

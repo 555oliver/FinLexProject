@@ -12,14 +12,14 @@ import { AuthService } from '../../core/services/auth.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FooterComponent {
-  private readonly auth = inject(AuthService);
+  readonly auth = inject(AuthService);
   email = '';
   readonly submitting = signal(false);
   readonly success = signal('');
   readonly error = signal('');
 
   requestEvaluation(): void {
-    const email = this.email.trim().toLowerCase();
+    const email = (this.auth.currentUser()?.email ?? this.email).trim().toLowerCase();
     if (!email || this.submitting()) return;
     this.submitting.set(true);
     this.success.set('');
@@ -28,7 +28,7 @@ export class FooterComponent {
     this.auth.requestConfidentialEvaluation(email).subscribe({
       next: () => {
         this.submitting.set(false);
-        this.email = '';
+        if (!this.auth.isAuthenticated()) this.email = '';
         this.success.set('Solicitud enviada correctamente. Un asesor revisará su evaluación confidencial.');
       },
       error: (response: HttpErrorResponse) => {

@@ -199,6 +199,11 @@ white-space: nowrap; transform: none;
 .header-actions .btn-gold:not(.btn-gold-solid):hover {
 background: var(--gold); color: var(--navy); border-color: var(--gold);
 }
+.header-user { max-width: 170px; display: flex; align-items: center; gap: 9px; color: var(--white); text-decoration: none; }
+.header-user img, .header-user > span { width: 34px; height: 34px; flex: 0 0 34px; border: 1px solid var(--gold); border-radius: 50%; object-fit: cover; }
+.header-user > span { display: grid; place-items: center; background: rgba(255,255,255,.05); color: var(--gold); font-family: var(--font-serif); }
+.header-user strong { overflow: hidden; font-size: 11px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.header-user:focus-visible { border-radius: 4px; outline: 2px solid var(--gold-light); outline-offset: 4px; }
 .btn-gold {
 display: inline-flex; align-items: center; gap: 8px;
 padding: 12px 28px; border-radius: 2px; border: 1.5px solid var(--gold);
@@ -228,7 +233,8 @@ transition: all var(--transition-smooth);
 .mobile-menu-btn { display: none; background: none; border: none; cursor: pointer; color: var(--white); }
 .mobile-nav {
 position: fixed; inset: 0; z-index: 2000; background: var(--navy);
-display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 32px;
+display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: clamp(12px, 2.6vh, 24px);
+padding: 78px 20px 36px; overflow-y: auto; overscroll-behavior: contain;
 opacity: 0; pointer-events: none; transition: opacity 0.4s;
 }
 .mobile-nav.open, .mobile-nav.active { opacity: 1; pointer-events: all; }
@@ -264,6 +270,10 @@ background: var(--gold-light);
 outline: 2px solid rgba(255,255,255,0.85);
 outline-offset: 3px;
 }
+.mobile-nav .mobile-user-link { display: flex; align-items: center; gap: 10px; border: 1px solid rgba(201,169,110,.32); text-transform: none; }
+.mobile-user-link img, .mobile-user-link > span { width: 34px; height: 34px; flex: 0 0 34px; border: 1px solid var(--gold); border-radius: 50%; object-fit: cover; }
+.mobile-user-link > span { display: grid; place-items: center; color: var(--gold); font-family: var(--font-serif); }
+.mobile-user-link strong { max-width: 190px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .mobile-nav .close-btn { position: absolute; top: 24px; right: 24px; background: none; border: none; color: var(--white); font-size: 32px; cursor: pointer; }
 /* ========== HERO ========== */
 .hero {
@@ -566,6 +576,9 @@ outline: none; transition: border-color var(--transition-fast);
 .cta-message { max-width: 680px; margin-top: 12px; padding: 10px 13px; border-radius: 3px; font-size: 13px; line-height: 1.5; }
 .cta-message--success { border: 1px solid rgba(58,160,96,.35); background: rgba(58,160,96,.12); color: #bde8ca; }
 .cta-message--error { border: 1px solid rgba(234,132,122,.35); background: rgba(185,65,52,.16); color: #ffd2cc; }
+.cta-form input:disabled { border-color: rgba(201,169,110,.28); background: rgba(255,255,255,.08); color: rgba(255,255,255,.78); cursor: not-allowed; opacity: 1; }
+.cta-field-error { flex-basis: 100%; color: #ffd2cc; font-size: 12px; }
+.cta-auth-email-note { display: block; margin-top: 8px; color: rgba(255,255,255,.55); font-size: 11px; }
 .sr-only { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0,0,0,0) !important; white-space: nowrap !important; border: 0 !important; }
 /* ========== FOOTER ========== */
 .footer {

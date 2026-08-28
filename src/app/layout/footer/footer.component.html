@@ -7,10 +7,15 @@
 <p>Solicite una evaluación confidencial y personalizada. Nuestros especialistas analizarán su situación sin compromiso.</p>
 <form class="cta-form" #evaluationForm="ngForm" (ngSubmit)="requestEvaluation()" novalidate>
 <label class="sr-only" for="confidential-evaluation-email">Correo electrónico</label>
+@if (auth.currentUser(); as currentUser) {
+<input id="confidential-evaluation-email" name="authenticatedEmail" type="email" [value]="currentUser.email" disabled aria-describedby="authenticated-email-note">
+} @else {
 <input id="confidential-evaluation-email" name="email" type="email" [(ngModel)]="email" #emailControl="ngModel" required email autocomplete="email" placeholder="Su correo electrónico" [disabled]="submitting()">
+@if (emailControl.invalid && emailControl.touched) { <p class="cta-field-error" role="alert">Ingrese un correo electrónico válido.</p> }
+}
 <button type="submit" class="btn-gold btn-gold-solid" [disabled]="evaluationForm.invalid || submitting()">{{ submitting() ? 'Enviando…' : 'Solicitar evaluación privada →' }}</button>
 </form>
-@if (emailControl.invalid && emailControl.touched) { <p class="cta-message cta-message--error" role="alert">Ingrese un correo electrónico válido.</p> }
+@if (auth.isAuthenticated()) { <small id="authenticated-email-note" class="cta-auth-email-note">Usaremos el correo asociado a su cuenta.</small> }
 @if (error()) { <p class="cta-message cta-message--error" role="alert">{{ error() }}</p> }
 @if (success()) { <p class="cta-message cta-message--success" role="status">✓ {{ success() }}</p> }
 </div>
