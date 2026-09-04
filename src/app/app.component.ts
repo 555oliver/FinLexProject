@@ -38,8 +38,8 @@ import { GlobalLoadingComponent } from './core/components/global-loading/global-
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements AfterViewChecked, OnDestroy {
-  /** Agregue aquí el número con código de país, únicamente con dígitos. Ejemplo: 573001234567. */
-  private readonly whatsAppBusinessNumber = '';
+  /** Número empresarial en formato internacional, únicamente con dígitos. */
+  private readonly whatsAppBusinessNumber = '447898607381';
   readonly whatsAppNoticeOpen = signal(false);
 
   private readonly observedAttribute = 'data-finlex-animation-observed';
