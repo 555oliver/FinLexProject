@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, ServiceUnavailableException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as nodemailer from 'nodemailer';
 import { Transporter } from 'nodemailer';
@@ -26,7 +26,8 @@ export class MailService {
       return;
     }
     const safeName = this.escapeHtml(names);
-    await this.transporter.sendMail({
+    try {
+      await this.transporter.sendMail({
       from: this.config.get('MAIL_FROM', 'FinLex Group <soporte@finlex.group.com>'),
       to: email,
       subject: 'Verifique su correo — FinLex Group',
@@ -54,7 +55,12 @@ export class MailService {
           <p style="font-size:12px;color:#6b7280">Este enlace vence en 24 horas. Si no creó esta cuenta, ignore este mensaje.</p>
         </div>
       </div>`,
-    });
+      });
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : String(error);
+      this.logger.error(`No fue posible enviar el correo de verificación: ${detail}`);
+      throw new ServiceUnavailableException('La cuenta fue creada, pero no pudimos enviar el correo de verificación. Verifique que el remitente SMTP esté autorizado e inténtelo más tarde.');
+    }
   }
 
   async sendPasswordResetEmail(email: string, names: string, resetUrl: string): Promise<void> {

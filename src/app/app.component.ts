@@ -1,4 +1,5 @@
-import { AfterViewChecked, ChangeDetectionStrategy, Component, OnDestroy, signal } from '@angular/core';
+import { AfterViewChecked, ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { RouterOutlet } from '@angular/router';
 import { FooterComponent } from './layout/footer/footer.component';
 import { HeaderComponent } from './layout/header/header.component';
@@ -8,6 +9,21 @@ import { GlobalLoadingComponent } from './core/components/global-loading/global-
   selector: 'app-root',
   imports: [HeaderComponent, RouterOutlet, FooterComponent, GlobalLoadingComponent],
   template: `
+    @if (maintenanceChecking() || maintenance().active) {
+      <section class="maintenance-screen" role="main" aria-live="polite">
+        <div class="maintenance-brand" aria-label="FinLex Group"><span>F</span><div><strong>FinLex</strong><small>Group</small></div></div>
+        @if (maintenanceChecking()) {
+          <div class="maintenance-loader" aria-label="Comprobando disponibilidad"></div>
+          <p>Comprobando disponibilidad…</p>
+        } @else {
+          <div class="maintenance-status"><i></i> Mantenimiento programado</div>
+          <h1>{{ maintenance().title }}</h1>
+          <p>{{ maintenance().message }}</p>
+          <button type="button" (click)="checkMaintenance()" [disabled]="maintenanceChecking()">Comprobar nuevamente <span>→</span></button>
+          <small>Gracias por su paciencia. Equipo FinLex.</small>
+        }
+      </section>
+    }
     <app-global-loading />
     <app-header />
     <main><router-outlet /></main>
@@ -37,10 +53,14 @@ import { GlobalLoadingComponent } from './core/components/global-loading/global-
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent implements AfterViewChecked, OnDestroy {
+export class AppComponent implements AfterViewChecked, OnDestroy, OnInit {
+  private readonly http = inject(HttpClient);
   /** Número empresarial en formato internacional, únicamente con dígitos. */
   private readonly whatsAppBusinessNumber = '447898607381';
   readonly whatsAppNoticeOpen = signal(false);
+  readonly maintenanceChecking = signal(true);
+  readonly maintenance = signal({ active: false, title: 'Estamos mejorando para usted', message: 'Realizamos labores de mantenimiento. Estaremos disponibles nuevamente muy pronto.' });
+  private readonly apiBase = window.location.hostname === 'localhost' ? 'http://localhost:3000/api' : '/api';
 
   private readonly observedAttribute = 'data-finlex-animation-observed';
   private readonly animationObserver = typeof IntersectionObserver === 'undefined'
@@ -52,6 +72,19 @@ export class AppComponent implements AfterViewChecked, OnDestroy {
           observer.unobserve(entry.target);
         }
       }, { threshold: 0.08, rootMargin: '0px 0px -24px' });
+
+  ngOnInit(): void { this.checkMaintenance(); }
+
+  checkMaintenance(): void {
+    this.maintenanceChecking.set(true);
+    this.http.get<{ active: boolean; title?: string; message?: string }>(`${this.apiBase}/maintenance`).subscribe({
+      next: status => {
+        this.maintenance.set({ active: status.active, title: status.title || 'Estamos mejorando para usted', message: status.message || 'Realizamos labores de mantenimiento. Estaremos disponibles nuevamente muy pronto.' });
+        this.maintenanceChecking.set(false);
+      },
+      error: () => { this.maintenance.set({ ...this.maintenance(), active: false }); this.maintenanceChecking.set(false); },
+    });
+  }
 
   ngAfterViewChecked(): void {
     const pendingElements = document.querySelectorAll<HTMLElement>(

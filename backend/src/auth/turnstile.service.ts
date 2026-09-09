@@ -16,8 +16,14 @@ export class TurnstileService {
     if (!secret) throw new ServiceUnavailableException('La protección CAPTCHA no está configurada.');
     if (!token) throw new BadRequestException('Complete la verificación de seguridad.');
     const body = new URLSearchParams({ secret, response: token });
-    const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', { method: 'POST', body });
-    const result = await response.json() as { success?: boolean; action?: string };
+    let result: { success?: boolean; action?: string };
+    try {
+      const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', { method: 'POST', body });
+      if (!response.ok) throw new Error(`Siteverify respondió ${response.status}`);
+      result = await response.json() as { success?: boolean; action?: string };
+    } catch {
+      throw new ServiceUnavailableException('No fue posible completar la verificación de seguridad. Inténtelo nuevamente en unos minutos.');
+    }
     if (!result.success || (result.action && result.action !== expectedAction)) {
       throw new BadRequestException('La verificación de seguridad venció o no es válida. Inténtelo nuevamente.');
     }
