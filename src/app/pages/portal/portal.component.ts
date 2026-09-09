@@ -83,7 +83,7 @@ export class PortalPageComponent {
   readonly registerForm = this.fb.nonNullable.group({
     names: ['', [Validators.required, Validators.minLength(2)]],
     email: ['', [Validators.required, Validators.email]],
-    username: ['', [Validators.required, Validators.minLength(4)]],
+    username: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(80), Validators.pattern(/^[a-zA-Z0-9._-]+$/)]],
     password: ['', [Validators.required, Validators.minLength(8)]],
     countryCode: ['', Validators.required],
     phone: ['', [Validators.required, Validators.pattern(/^[0-9\s-]{6,18}$/)]],
@@ -289,6 +289,15 @@ export class PortalPageComponent {
   hasError(form: 'login' | 'register', field: string): boolean {
     const control = form === 'login' ? this.loginForm.get(field) : this.registerForm.get(field);
     return !!control && control.invalid && (control.touched || control.dirty);
+  }
+
+  usernameErrorMessage(): string {
+    const errors = this.registerForm.controls.username.errors;
+    if (errors?.['required']) return 'Ingrese un nombre de usuario.';
+    if (errors?.['minlength']) return 'El usuario debe tener al menos 4 caracteres.';
+    if (errors?.['maxlength']) return 'El usuario no puede superar los 80 caracteres.';
+    if (errors?.['pattern']) return 'Use únicamente letras, números, puntos, guiones o guiones bajos. No use espacios ni el símbolo @.';
+    return 'Ingrese un nombre de usuario válido.';
   }
 
   continueToLogin(): void {

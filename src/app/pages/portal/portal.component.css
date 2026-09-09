@@ -36,6 +36,8 @@ form { display: grid; gap: 20px; }
 .password-control button:focus-visible { outline: 2px solid #c9a96e; outline-offset: 1px; }
 .eye-icon { font-size: 21px; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 22; }
 .auth-field small, .standalone-error { color: #a13d3d; font-size: 11px; }
+.auth-field .field-help { color: #7b8492; }
+.auth-field .field-error { color: #a13d3d; }
 .phone-control { display: grid; grid-template-columns: auto 1fr; align-items: stretch; }
 .phone-prefix { display: flex; align-items: center; min-width: 94px; padding: 0 12px; border: 1px solid rgba(10,22,40,.16); border-right: 0; border-radius: 6px 0 0 6px; background: #ebe8e1; color: #263348; font-size: 13px; white-space: nowrap; }
 .phone-control input { border-radius: 0 6px 6px 0; }
