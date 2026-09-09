@@ -32,7 +32,21 @@ export class MailService {
       subject: 'Verifique su correo — FinLex Group',
       text: `Hola ${names}. Confirme su correo abriendo este enlace: ${verificationUrl}. El enlace vence en 24 horas.`,
       html: `<div style="font-family:Arial,sans-serif;max-width:560px;margin:auto;color:#0a1628">
-        <div style="border-top:4px solid #c9a96e;padding:32px;border-left:1px solid #e5e1d8;border-right:1px solid #e5e1d8;border-bottom:1px solid #e5e1d8">
+        <div style="height:4px;background:#c9a96e;font-size:0;line-height:0">&nbsp;</div>
+        <div style="padding:18px 32px;background:#0a1628">
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td style="vertical-align:middle">
+                <div style="width:42px;height:42px;border:1px solid #c9a96e;border-radius:50%;color:#c9a96e;font:20px/42px Georgia,serif;text-align:center">F</div>
+              </td>
+              <td style="padding-left:14px;vertical-align:middle">
+                <div style="color:#ffffff;font:600 24px/25px Georgia,serif;letter-spacing:1px">FinLex</div>
+                <div style="padding-top:3px;color:#c9a96e;font:700 8px/10px Arial,sans-serif;letter-spacing:3px;text-transform:uppercase">Group</div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div style="padding:32px;border-left:1px solid #e5e1d8;border-right:1px solid #e5e1d8;border-bottom:1px solid #e5e1d8">
           <h1 style="font-family:Georgia,serif;font-weight:400">Confirme su correo</h1>
           <p>Hola ${safeName}, gracias por registrarse en FinLex Group.</p>
           <p>Para activar su cuenta, confirme que este correo le pertenece:</p>
