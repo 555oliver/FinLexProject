@@ -27,7 +27,7 @@ export class MailService {
     }
     const safeName = this.escapeHtml(names);
     await this.transporter.sendMail({
-      from: this.config.get('MAIL_FROM', 'FinLex Group <no-reply@finlex.local>'),
+      from: this.config.get('MAIL_FROM', 'FinLex Group <soporte@finlex.group.com>'),
       to: email,
       subject: 'Verifique su correo — FinLex Group',
       text: `Hola ${names}. Confirme su correo abriendo este enlace: ${verificationUrl}. El enlace vence en 24 horas.`,
@@ -50,7 +50,7 @@ export class MailService {
     }
     const safeName = this.escapeHtml(names);
     await this.transporter.sendMail({
-      from: this.config.get('MAIL_FROM', 'FinLex Group <no-reply@finlex.local>'),
+      from: this.config.get('MAIL_FROM', 'FinLex Group <soporte@finlex.group.com>'),
       to: email,
       subject: 'Cambie su clave — FinLex Group',
       text: `Hola ${names}. Abra este enlace para crear una nueva clave: ${resetUrl}. El enlace vence en una hora.`,
