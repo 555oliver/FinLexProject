@@ -9,4 +9,5 @@ export class RegisterDto {
   @IsString() @Matches(/^\+[0-9]{1,7}$/) dialCode: string;
   @IsString() @Matches(/^[0-9\s-]{6,18}$/) phone: string;
   @IsBoolean() @Equals(true, { message: 'Debe aceptar los términos y condiciones.' }) termsAccepted: boolean;
+  @IsString() @IsNotEmpty() captchaToken: string;
 }

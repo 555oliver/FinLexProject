@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ViewChild, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -17,6 +17,7 @@ import { AdminComplaintsSectionComponent } from './sections/admin-complaints-sec
 import { CaseSectionComponent } from './sections/case-section.component';
 import { AdminCasesSectionComponent } from './sections/admin-cases-section.component';
 import { AdminConfidentialEvaluationsSectionComponent } from './sections/admin-confidential-evaluations-section.component';
+import { TurnstileComponent } from '../../core/components/turnstile/turnstile.component';
 
 type PortalMode = 'login' | 'register' | 'forgot' | 'reset';
 type PortalTab = 'admin' | 'adminComplaints' | 'adminCases' | 'adminEvaluations' | 'summary' | 'case' | 'solutions' | 'payments' | 'complaints' | 'advisor' | 'profile';
@@ -24,12 +25,15 @@ type PortalTab = 'admin' | 'adminComplaints' | 'adminCases' | 'adminEvaluations'
 @Component({
   selector: 'app-portal-page',
   standalone: true,
-  imports: [AsyncPipe, ReactiveFormsModule, RouterLink, AdminSectionComponent, AdminComplaintsSectionComponent, AdminCasesSectionComponent, AdminConfidentialEvaluationsSectionComponent, CaseSectionComponent, SolutionsSectionComponent, PaymentsSectionComponent, ComplaintsSectionComponent, AdvisorSectionComponent, ProfileSectionComponent],
+  imports: [AsyncPipe, ReactiveFormsModule, RouterLink, TurnstileComponent, AdminSectionComponent, AdminComplaintsSectionComponent, AdminCasesSectionComponent, AdminConfidentialEvaluationsSectionComponent, CaseSectionComponent, SolutionsSectionComponent, PaymentsSectionComponent, ComplaintsSectionComponent, AdvisorSectionComponent, ProfileSectionComponent],
   templateUrl: './portal.component.html',
   styleUrl: './portal.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PortalPageComponent {
+  @ViewChild('loginCaptcha') loginCaptcha?: TurnstileComponent;
+  @ViewChild('registerCaptcha') registerCaptcha?: TurnstileComponent;
+  @ViewChild('forgotCaptcha') forgotCaptcha?: TurnstileComponent;
   private readonly rememberedEmailKey = 'finlex.rememberedEmail';
   private readonly fb = inject(FormBuilder);
   private readonly countryService = inject(CountryService);
@@ -54,6 +58,9 @@ export class PortalPageComponent {
   readonly documents = signal<UserDocument[]>([]);
   readonly uploadingDocument = signal(false);
   readonly documentMessage = signal('');
+  readonly loginCaptchaToken = signal('');
+  readonly registerCaptchaToken = signal('');
+  readonly forgotCaptchaToken = signal('');
   private registeredEmail = '';
   private adminNotificationsLoaded = false;
   private countries: Country[] = [];
@@ -172,10 +179,11 @@ export class PortalPageComponent {
   submitForgotPassword(): void {
     this.forgotPasswordForm.markAllAsTouched();
     if (this.forgotPasswordForm.invalid) return;
+    if (!this.forgotCaptchaToken()) { this.message.set('Complete la verificación de seguridad.'); return; }
     this.submitting.set(true); this.message.set('');
-    this.auth.forgotPassword(this.forgotPasswordForm.controls.email.value).subscribe({
+    this.auth.forgotPassword(this.forgotPasswordForm.controls.email.value, this.forgotCaptchaToken()).subscribe({
       next: () => { this.submitting.set(false); this.forgotPasswordSuccess.set(true); },
-      error: (error: HttpErrorResponse) => { this.submitting.set(false); this.message.set(this.apiMessage(error, 'No fue posible procesar la solicitud.')); },
+      error: (error: HttpErrorResponse) => { this.submitting.set(false); this.forgotCaptcha?.reset(); this.message.set(this.apiMessage(error, 'No fue posible procesar la solicitud.')); },
     });
   }
 
@@ -223,16 +231,17 @@ export class PortalPageComponent {
     this.loginForm.markAllAsTouched();
     if (this.loginForm.invalid) return;
     const { email, password, rememberEmail, termsAccepted } = this.loginForm.getRawValue();
+    if (!this.loginCaptchaToken()) { this.message.set('Complete la verificación de seguridad.'); return; }
     this.submitting.set(true);
     this.message.set('');
-    this.auth.login(email, password, termsAccepted).subscribe({
+    this.auth.login(email, password, termsAccepted, this.loginCaptchaToken()).subscribe({
       next: () => {
         this.submitting.set(false);
         if (rememberEmail) localStorage.setItem(this.rememberedEmailKey, email.trim().toLowerCase());
         else localStorage.removeItem(this.rememberedEmailKey);
         void this.navigateAfterLogin();
       },
-      error: (error: HttpErrorResponse) => { this.submitting.set(false); this.message.set(this.apiMessage(error, 'No fue posible iniciar sesión.')); },
+      error: (error: HttpErrorResponse) => { this.submitting.set(false); this.loginCaptcha?.reset(); this.message.set(this.apiMessage(error, 'No fue posible iniciar sesión.')); },
     });
   }
 
@@ -242,15 +251,16 @@ export class PortalPageComponent {
     const value = this.registerForm.getRawValue();
     const country = this.selectedCountry();
     if (!country?.dialCode) { this.message.set('El país seleccionado no tiene un indicativo disponible.'); return; }
+    if (!this.registerCaptchaToken()) { this.message.set('Complete la verificación de seguridad.'); return; }
     this.submitting.set(true);
     this.message.set('');
-    this.auth.register({ ...value, dialCode: country.dialCode }).subscribe({
+    this.auth.register({ ...value, dialCode: country.dialCode, captchaToken: this.registerCaptchaToken() }).subscribe({
       next: () => {
         this.submitting.set(false);
         this.registeredEmail = value.email;
         this.registrationSuccess.set(true);
       },
-      error: (error: HttpErrorResponse) => { this.submitting.set(false); this.message.set(this.apiMessage(error, 'No fue posible crear la cuenta.')); },
+      error: (error: HttpErrorResponse) => { this.submitting.set(false); this.registerCaptcha?.reset(); this.message.set(this.apiMessage(error, 'No fue posible crear la cuenta.')); },
     });
   }
 

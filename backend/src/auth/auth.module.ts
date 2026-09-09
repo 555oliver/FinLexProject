@@ -10,6 +10,7 @@ import { JwtStrategy } from './jwt.strategy';
 import { RolesGuard } from './roles.guard';
 import { AuthService } from './auth.service';
 import { MailModule } from '../mail/mail.module';
+import { TurnstileService } from './turnstile.service';
 
 @Module({
   imports: [UsersModule, MailModule, PassportModule, JwtModule.registerAsync({
@@ -17,6 +18,6 @@ import { MailModule } from '../mail/mail.module';
     useFactory: (config: ConfigService) => ({ secret: config.getOrThrow('JWT_SECRET'), signOptions: { expiresIn: config.get('JWT_EXPIRES_IN', '1h') } }),
   })],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, { provide: APP_GUARD, useClass: JwtAuthGuard }, { provide: APP_GUARD, useClass: RolesGuard }],
+  providers: [AuthService, TurnstileService, JwtStrategy, { provide: APP_GUARD, useClass: JwtAuthGuard }, { provide: APP_GUARD, useClass: RolesGuard }],
 })
 export class AuthModule {}

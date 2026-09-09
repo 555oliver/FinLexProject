@@ -38,6 +38,7 @@ export interface RegisterRequest {
   countryCode: string;
   dialCode: string;
   termsAccepted: boolean;
+  captchaToken: string;
 }
 
 export interface RegistrationResponse {
@@ -159,8 +160,8 @@ export class AuthService {
     if (this.isAuthenticated()) this.refreshCurrentUser().subscribe({ error: () => undefined });
   }
 
-  login(email: string, password: string, termsAccepted: boolean): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiBaseUrl}/auth/login`, { email, password, termsAccepted }).pipe(tap(response => this.setSession(response)));
+  login(email: string, password: string, termsAccepted: boolean, captchaToken: string): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiBaseUrl}/auth/login`, { email, password, termsAccepted, captchaToken }).pipe(tap(response => this.setSession(response)));
   }
 
   register(request: RegisterRequest): Observable<RegistrationResponse> {
@@ -254,8 +255,8 @@ export class AuthService {
     return this.http.post<{ message: string }>(`${this.apiBaseUrl}/auth/reset-password`, { token, password });
   }
 
-  forgotPassword(email: string): Observable<{ message: string }> {
-    return this.http.post<{ message: string }>(`${this.apiBaseUrl}/auth/forgot-password`, { email });
+  forgotPassword(email: string, captchaToken: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.apiBaseUrl}/auth/forgot-password`, { email, captchaToken });
   }
 
   listPaymentMethods(): Observable<PaymentMethod[]> {
