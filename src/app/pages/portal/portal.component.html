@@ -90,7 +90,7 @@
             </div>
             <label class="terms-check">
               <input type="checkbox" formControlName="termsAccepted">
-              <span>Acepto los <a routerLink="/legal">términos y condiciones</a> y el tratamiento de mis datos.</span>
+              <span>Acepto las <a href="/politicas/condiciones-generales.pdf" target="_blank" rel="noopener" (click)="$event.stopPropagation()">condiciones generales</a> y la <a href="/politicas/politica-privacidad.pdf" target="_blank" rel="noopener" (click)="$event.stopPropagation()">política de privacidad</a>, y conozco las políticas de <a href="/politicas/politica-aml-kyc.pdf" target="_blank" rel="noopener" (click)="$event.stopPropagation()">AML/KYC</a> y <a href="/politicas/politica-divulgacion-riesgos.pdf" target="_blank" rel="noopener" (click)="$event.stopPropagation()">riesgos</a>.</span>
             </label>
             @if (hasError('register', 'termsAccepted')) { <small class="standalone-error">Debe aceptar los términos para registrarse.</small> }
             <app-turnstile #registerCaptcha action="register" (tokenChange)="registerCaptchaToken.set($event)" />
