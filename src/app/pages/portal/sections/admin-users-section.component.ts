@@ -14,6 +14,7 @@ export class AdminUsersSectionComponent implements OnInit {
   readonly users = signal<AuthUser[]>([]);
   readonly loading = signal(true);
   readonly deletingId = signal<string | null>(null);
+  readonly userPendingDeletion = signal<AuthUser | null>(null);
   readonly error = signal('');
   readonly success = signal('');
 
@@ -30,14 +31,26 @@ export class AdminUsersSectionComponent implements OnInit {
     });
   }
 
-  remove(user: AuthUser): void {
-    if (!window.confirm(`¿Desea eliminar la cuenta de ${user.names}? Esta acción no se puede deshacer.`)) return;
+  requestDeletion(user: AuthUser): void {
+    if (this.deletingId()) return;
+    this.userPendingDeletion.set(user);
+  }
+
+  cancelDeletion(): void {
+    if (this.deletingId()) return;
+    this.userPendingDeletion.set(null);
+  }
+
+  confirmDeletion(): void {
+    const user = this.userPendingDeletion();
+    if (!user || this.deletingId()) return;
     this.error.set('');
     this.success.set('');
     this.deletingId.set(user.id);
     this.auth.deleteUser(user.id).pipe(finalize(() => this.deletingId.set(null))).subscribe({
       next: response => {
         this.users.update(users => users.filter(item => item.id !== user.id));
+        this.userPendingDeletion.set(null);
         this.success.set(response.message);
       },
       error: () => this.error.set(`No fue posible eliminar a ${user.names}.`),

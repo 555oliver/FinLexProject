@@ -24,7 +24,7 @@
           </div>
           <div class="registered-user-actions">
             <button class="user-edit-button" type="button" aria-label="Editar usuario (próximamente)" title="Disponible próximamente">Editar</button>
-            <button class="user-delete-button" type="button" [disabled]="deletingId() === user.id" (click)="remove(user)">{{ deletingId() === user.id ? 'Eliminando…' : 'Eliminar' }}</button>
+            <button class="user-delete-button" type="button" [disabled]="deletingId() !== null" (click)="requestDeletion(user)">Eliminar</button>
           </div>
         </article>
       } @empty {
@@ -33,3 +33,29 @@
     </div>
   }
 </section>
+
+@if (userPendingDeletion(); as user) {
+  <div class="user-delete-modal-backdrop" role="presentation" (click)="cancelDeletion()">
+    <section class="user-delete-modal" role="alertdialog" aria-modal="true" aria-labelledby="delete-user-title" aria-describedby="delete-user-description" (click)="$event.stopPropagation()">
+      <button class="user-delete-modal-close" type="button" aria-label="Cerrar confirmación" [disabled]="deletingId() !== null" (click)="cancelDeletion()">×</button>
+      <div class="user-delete-modal-icon" aria-hidden="true">!</div>
+      <span class="user-delete-modal-label">Confirmar eliminación</span>
+      <h2 id="delete-user-title">¿Eliminar esta cuenta?</h2>
+      <p id="delete-user-description">Se eliminará permanentemente la cuenta de <strong>{{ user.names }}</strong> y su información relacionada.</p>
+      <div class="user-delete-modal-user">
+        <div class="registered-user-avatar">
+          @if (user.profileImage) { <img [src]="user.profileImage" alt=""> }
+          @else { <span>{{ initials(user.names) }}</span> }
+        </div>
+        <div><strong>{{ user.names }}</strong><small>{{ user.email }}</small></div>
+      </div>
+      <p class="user-delete-warning">Esta acción no se puede deshacer.</p>
+      <div class="user-delete-modal-actions">
+        <button class="user-delete-cancel" type="button" [disabled]="deletingId() !== null" (click)="cancelDeletion()">Conservar cuenta</button>
+        <button class="user-delete-confirm" type="button" [disabled]="deletingId() !== null" (click)="confirmDeletion()">
+          {{ deletingId() ? 'Eliminando…' : 'Sí, eliminar cuenta' }}
+        </button>
+      </div>
+    </section>
+  </div>
+}
