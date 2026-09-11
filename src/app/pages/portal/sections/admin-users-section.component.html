@@ -1,0 +1,35 @@
+<section class="portal-section-card admin-users-management">
+  <header class="admin-heading">
+    <div><span>Gestión de accesos</span><h2>Usuarios registrados</h2><p>Consulte y administre las cuentas registradas en la plataforma.</p></div>
+    <b>{{ users().length }} usuarios</b>
+  </header>
+
+  @if (error()) { <p class="section-message error">{{ error() }}</p> }
+  @if (success()) { <p class="section-message success">{{ success() }}</p> }
+
+  @if (loading()) {
+    <p class="section-empty">Cargando usuarios…</p>
+  } @else {
+    <div class="registered-users-list">
+      @for (user of users(); track user.id) {
+        <article class="registered-user-item">
+          <div class="registered-user-avatar">
+            @if (user.profileImage) { <img [src]="user.profileImage" alt=""> }
+            @else { <span>{{ initials(user.names) }}</span> }
+          </div>
+          <div class="registered-user-details">
+            <h3>{{ user.names }}</h3>
+            <p>{{ user.email }}</p>
+            <small>Usuario</small>
+          </div>
+          <div class="registered-user-actions">
+            <button class="user-edit-button" type="button" aria-label="Editar usuario (próximamente)" title="Disponible próximamente">Editar</button>
+            <button class="user-delete-button" type="button" [disabled]="deletingId() === user.id" (click)="remove(user)">{{ deletingId() === user.id ? 'Eliminando…' : 'Eliminar' }}</button>
+          </div>
+        </article>
+      } @empty {
+        <p class="section-empty">No hay usuarios registrados.</p>
+      }
+    </div>
+  }
+</section>

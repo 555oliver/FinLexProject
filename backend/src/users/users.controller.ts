@@ -19,6 +19,13 @@ export class UsersController {
     return this.usersService.listSafe();
   }
 
+  @Delete(':id')
+  @Roles(Role.Admin)
+  async removeRegisteredUser(@Param('id', ParseUUIDPipe) id: string) {
+    await this.usersService.removeRegisteredUser(id);
+    return { message: 'Usuario eliminado correctamente.' };
+  }
+
   @Get('me')
   getMyProfile(@Req() request: Request & { user: AuthUser }) {
     return this.usersService.findById(request.user.id);

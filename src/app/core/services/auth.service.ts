@@ -177,6 +177,10 @@ export class AuthService {
     return this.http.get<AuthUser[]>(`${this.apiBaseUrl}/users`, { headers: this.authorizationHeader() });
   }
 
+  deleteUser(userId: string): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${this.apiBaseUrl}/users/${userId}`, { headers: this.authorizationHeader() });
+  }
+
   updateFinancialSummary(userId: string, recoveryBalance: number, recoveredFunds: number): Observable<AuthUser> {
     return this.http.patch<AuthUser>(`${this.apiBaseUrl}/users/${userId}/financial-summary`, { recoveryBalance, recoveredFunds }, { headers: this.authorizationHeader() });
   }

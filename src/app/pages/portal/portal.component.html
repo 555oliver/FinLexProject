@@ -190,6 +190,7 @@
             @if (auth.currentUser()?.role === 'admin') {
               <button type="button" [class.active]="activePortalTab() === 'adminEvaluations'" (click)="setPortalTab('adminEvaluations')">Evaluación confidencial @if (auth.pendingAdminEvaluations() > 0) { <b class="admin-nav-badge">{{ auth.pendingAdminEvaluations() }}</b> }</button>
               <button type="button" [class.active]="activePortalTab() === 'adminCases'" (click)="setPortalTab('adminCases')">Casos usuarios @if (auth.pendingAdminCases() > 0) { <b class="admin-nav-badge">{{ auth.pendingAdminCases() }}</b> }</button>
+              <button type="button" [class.active]="activePortalTab() === 'adminUsers'" (click)="setPortalTab('adminUsers')">Usuarios</button>
               <button type="button" [class.active]="activePortalTab() === 'admin'" (click)="setPortalTab('admin')">Administración</button>
               <button type="button" [class.active]="activePortalTab() === 'adminComplaints'" (click)="setPortalTab('adminComplaints')">Quejas usuarios @if (auth.pendingAdminComplaints() > 0) { <b class="admin-nav-badge">{{ auth.pendingAdminComplaints() }}</b> }</button>
             }
@@ -287,6 +288,8 @@
           <main class="portal-summary"><app-admin-confidential-evaluations-section /></main>
         } @else if (activePortalTab() === 'adminCases' && auth.currentUser()?.role === 'admin') {
           <main class="portal-summary"><app-admin-cases-section /></main>
+        } @else if (activePortalTab() === 'adminUsers' && auth.currentUser()?.role === 'admin') {
+          <main class="portal-summary"><app-admin-users-section /></main>
         } @else if (activePortalTab() === 'admin' && auth.currentUser()?.role === 'admin') {
           <main class="portal-summary"><app-admin-section /></main>
         } @else if (activePortalTab() === 'adminComplaints' && auth.currentUser()?.role === 'admin') {

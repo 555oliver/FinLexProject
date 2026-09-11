@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, OnModuleInit } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
@@ -97,6 +97,13 @@ export class UsersService implements OnModuleInit {
 
   listSafe(): Promise<User[]> {
     return this.users.find({ order: { createdAt: 'DESC' } });
+  }
+
+  async removeRegisteredUser(id: string): Promise<void> {
+    const result = await this.users.delete({ id, role: Role.User });
+    if (!result.affected) {
+      throw new NotFoundException('El usuario no existe o no puede eliminarse.');
+    }
   }
 
   async markTermsAccepted(id: string): Promise<void> {

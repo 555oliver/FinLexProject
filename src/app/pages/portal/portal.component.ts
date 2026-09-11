@@ -17,15 +17,16 @@ import { AdminComplaintsSectionComponent } from './sections/admin-complaints-sec
 import { CaseSectionComponent } from './sections/case-section.component';
 import { AdminCasesSectionComponent } from './sections/admin-cases-section.component';
 import { AdminConfidentialEvaluationsSectionComponent } from './sections/admin-confidential-evaluations-section.component';
+import { AdminUsersSectionComponent } from './sections/admin-users-section.component';
 import { TurnstileComponent } from '../../core/components/turnstile/turnstile.component';
 
 type PortalMode = 'login' | 'register' | 'forgot' | 'reset';
-type PortalTab = 'admin' | 'adminComplaints' | 'adminCases' | 'adminEvaluations' | 'summary' | 'case' | 'solutions' | 'payments' | 'complaints' | 'advisor' | 'profile';
+type PortalTab = 'admin' | 'adminUsers' | 'adminComplaints' | 'adminCases' | 'adminEvaluations' | 'summary' | 'case' | 'solutions' | 'payments' | 'complaints' | 'advisor' | 'profile';
 
 @Component({
   selector: 'app-portal-page',
   standalone: true,
-  imports: [AsyncPipe, ReactiveFormsModule, RouterLink, TurnstileComponent, AdminSectionComponent, AdminComplaintsSectionComponent, AdminCasesSectionComponent, AdminConfidentialEvaluationsSectionComponent, CaseSectionComponent, SolutionsSectionComponent, PaymentsSectionComponent, ComplaintsSectionComponent, AdvisorSectionComponent, ProfileSectionComponent],
+  imports: [AsyncPipe, ReactiveFormsModule, RouterLink, TurnstileComponent, AdminSectionComponent, AdminUsersSectionComponent, AdminComplaintsSectionComponent, AdminCasesSectionComponent, AdminConfidentialEvaluationsSectionComponent, CaseSectionComponent, SolutionsSectionComponent, PaymentsSectionComponent, ComplaintsSectionComponent, AdvisorSectionComponent, ProfileSectionComponent],
   templateUrl: './portal.component.html',
   styleUrl: './portal.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -65,11 +66,11 @@ export class PortalPageComponent {
   private adminNotificationsLoaded = false;
   private countries: Country[] = [];
   private readonly sectionToTab: Record<string, PortalTab> = {
-    administracion: 'admin', 'quejas-usuarios': 'adminComplaints', 'casos-usuarios': 'adminCases', 'evaluaciones-confidenciales': 'adminEvaluations', resumen: 'summary', 'mi-caso': 'case', soluciones: 'solutions', pagos: 'payments',
+    administracion: 'admin', usuarios: 'adminUsers', 'quejas-usuarios': 'adminComplaints', 'casos-usuarios': 'adminCases', 'evaluaciones-confidenciales': 'adminEvaluations', resumen: 'summary', 'mi-caso': 'case', soluciones: 'solutions', pagos: 'payments',
     quejas: 'complaints', asesor: 'advisor', perfil: 'profile',
   };
   private readonly tabToSection: Record<PortalTab, string> = {
-    admin: 'administracion', adminComplaints: 'quejas-usuarios', adminCases: 'casos-usuarios', adminEvaluations: 'evaluaciones-confidenciales', summary: 'resumen', case: 'mi-caso', solutions: 'soluciones', payments: 'pagos',
+    admin: 'administracion', adminUsers: 'usuarios', adminComplaints: 'quejas-usuarios', adminCases: 'casos-usuarios', adminEvaluations: 'evaluaciones-confidenciales', summary: 'resumen', case: 'mi-caso', solutions: 'soluciones', payments: 'pagos',
     complaints: 'quejas', advisor: 'asesor', profile: 'perfil',
   };
 
@@ -140,7 +141,7 @@ export class PortalPageComponent {
         this.auth.refreshAdminNotifications();
       }
       const tab = this.sectionToTab[section] ?? 'summary';
-      if ((tab === 'admin' || tab === 'adminComplaints' || tab === 'adminCases' || tab === 'adminEvaluations') && this.auth.currentUser()?.role !== 'admin') {
+      if ((tab === 'admin' || tab === 'adminUsers' || tab === 'adminComplaints' || tab === 'adminCases' || tab === 'adminEvaluations') && this.auth.currentUser()?.role !== 'admin') {
         void this.router.navigate(['/portal/resumen']);
         return;
       }
@@ -193,7 +194,7 @@ export class PortalPageComponent {
   }
 
   setPortalTab(tab: PortalTab): void {
-    if ((tab === 'admin' || tab === 'adminComplaints' || tab === 'adminCases' || tab === 'adminEvaluations') && this.auth.currentUser()?.role !== 'admin') return;
+    if ((tab === 'admin' || tab === 'adminUsers' || tab === 'adminComplaints' || tab === 'adminCases' || tab === 'adminEvaluations') && this.auth.currentUser()?.role !== 'admin') return;
     if (this.auth.currentUser()?.role === 'admin' && (tab === 'summary' || tab === 'case' || tab === 'payments' || tab === 'complaints')) return;
     void this.router.navigate(['/portal', this.tabToSection[tab]]);
   }
